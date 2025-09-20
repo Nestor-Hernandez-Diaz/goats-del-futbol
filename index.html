@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Enciclopedia de los mejores jugadores de fútbol de todos los tiempos" />
+  <meta name="keywords" content="fútbol, Messi, Cristiano Ronaldo, Neymar, GOAT, mejores jugadores" />
+  <meta name="author" content="Nestor Hernández Díaz"/>
+  <title>GOATs del Fútbol | Los Mejores de la Historia</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Font Awesome para iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Favicon -->
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/x-icon" />
+</head>
+<body>
+  <!-- Barra de navegación principal -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="index.html">GOATs del Fútbol</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Inicio</a></li>
+        <li><a href="pages/messi.html">Messi</a></li>
+        <li><a href="pages/ronaldo.html">Cristiano</a></li>
+        <li><a href="pages/neymar.html">Neymar</a></li>
+        <li><a href="#comparacion">Comparativa</a></li>
+        <li><a href="#about">Sobre el Proyecto</a></li>
+      </ul>
+      <div class="burger-menu">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section / Banner Principal -->
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Los GOATs del Fútbol Mundial</h1>
+      <p class="hero-subtitle">Descubre la historia, logros y legado de los mejores jugadores de todos los tiempos</p>
+      <a href="#featured-players" class="cta-button">Explorar Leyendas</a>
+    </div>
+    <div class="hero-overlay"></div>
+  </header>
+
+  <main id="home">
+    <!-- Sección de Introducción -->
+    <section class="intro-section">
+      <div class="container">
+        <h2 class="section-title">¿Qué hace a un GOAT?</h2>
+        <div class="intro-content">
+          <div class="intro-text">
+            <p>En el mundo del fútbol, el término "GOAT" (Greatest Of All Time) representa a aquellos jugadores que han trascendido el deporte con su talento excepcional, consistencia y capacidad para cambiar la historia del juego.</p>
+            <p>Este proyecto explora la vida, carrera y legado de tres jugadores considerados entre los mejores de todos los tiempos: Lionel Messi, Cristiano Ronaldo y Neymar Jr.</p>
+          </div>
+          <div class="intro-stats">
+            <div class="stat-item">
+              <span class="stat-number">13</span>
+              <span class="stat-label">Balones de Oro combinados</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">2000+</span>
+              <span class="stat-label">Goles en su carrera</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">60+</span>
+              <span class="stat-label">Trofeos colectivos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Jugadores Destacados -->
+    <section id="featured-players" class="players-section">
+      <div class="container">
+        <h2 class="section-title">Leyendas del Fútbol</h2>
+        <div class="players-container">
+          <article class="player-card" data-player="messi">
+            <div class="card-image-container">
+              <img src="assets/images/messi-profile.png" alt="Lionel Messi - Imagen principal del perfil" class="player-image" />
+              <div class="country-flag">
+                <img src="assets/icons/argentina.svg" alt="Bandera de Argentina - Icono de nacionalidad" />
+              </div>
+            </div>
+            <div class="card-content">
+              <h3 class="player-name">Lionel Messi</h3>
+              <p class="player-nickname">"La Pulga"</p>
+              <div class="player-highlights">
+                <span class="highlight">8× Balón de Oro</span>
+                <span class="highlight">1× Mundial</span>
+                <span class="highlight">4× Champions</span>
+              </div>
+              <p class="player-description">El mago argentino que revolucionó el fútbol con su técnica inigualable y visión de juego extraordinaria.</p>
+              <a href="pages/messi.html" class="player-link">Ver perfil completo</a>
+            </div>
+          </article>
+
+          <article class="player-card" data-player="ronaldo">
+            <div class="card-image-container">
+              <img src="assets/images/ronaldo-profile.png" alt="Cristiano Ronaldo - Imagen principal del perfil" class="player-image" />
+              <div class="country-flag">
+                <img src="assets/icons/portugal.svg" alt="Bandera de Portugal - Icono de nacionalidad" />
+              </div>
+            </div>
+            <div class="card-content">
+              <h3 class="player-name">Cristiano Ronaldo</h3>
+              <p class="player-nickname">"CR7"</p>
+              <div class="player-highlights">
+                <span class="highlight">5× Balón de Oro</span>
+                <span class="highlight">5× Champions</span>
+                <span class="highlight">1× Eurocopa</span>
+              </div>
+              <p class="player-description">El atleta perfecto, símbolo de dedicación y mentalidad ganadora que ha conquistado las ligas más importantes del mundo.</p>
+              <a href="pages/ronaldo.html" class="player-link">Ver perfil completo</a>
+            </div>
+          </article>
+
+          <article class="player-card" data-player="neymar">
+            <div class="card-image-container">
+              <img src="assets/images/neymar-profile.png" alt="Neymar Jr - Imagen principal del perfil" class="player-image" />
+              <div class="country-flag">
+                <img src="assets/icons/brasil.svg" alt="Bandera de Brasil - Icono de nacionalidad" />
+              </div>
+            </div>
+            <div class="card-content">
+              <h3 class="player-name">Neymar Jr</h3>
+              <p class="player-nickname">"O Ney"</p>
+              <div class="player-highlights">
+                <span class="highlight">1× Champions</span>
+                <span class="highlight">1× Oro Olímpico</span>
+                <span class="highlight">2× Copa América</span>
+              </div>
+              <p class="player-description">El brasileño que combina el jogo bonito con efectividad, llevando la magia y el espectáculo a otro nivel.</p>
+              <a href="pages/neymar.html" class="player-link">Ver perfil completo</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+      <!-- Sección de Comparativa -->
+      <section id="comparacion" class="comparison-section">
+        <div class="container">
+          <h2 class="section-title">Comparativa de Leyendas</h2>
+          <p class="section-description">Analizamos los números y logros de estos tres gigantes del fútbol mundial</p>
+          
+          <div class="comparison-table-container">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Categoría</th>
+                  <th>
+                    <img src="assets/icons/messi-icon.png" alt="Messi" class="player-icon" />
+                    <span>Messi</span>
+                  </th>
+                  <th>
+                    <img src="assets/icons/ronaldo-icon.png" alt="Ronaldo" class="player-icon" />
+                    <span>Cristiano</span>
+                  </th>
+                  <th>
+                    <img src="assets/icons/neymar-icon.png" alt="Neymar" class="player-icon" />
+                    <span>Neymar</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Goles en carrera</td>
+                  <td>800+</td>
+                  <td>850+</td>
+                  <td>400+</td>
+                </tr>
+                <tr>
+                  <td>Asistencias</td>
+                  <td>350+</td>
+                  <td>230+</td>
+                  <td>200+</td>
+                </tr>
+                <tr>
+                  <td>Balones de Oro</td>
+                  <td>8</td>
+                  <td>5</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Champions League</td>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td>Mundiales</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Títulos de Liga</td>
+                  <td>11</td>
+                  <td>7</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>Goles en un año</td>
+                  <td>91 (2012)</td>
+                  <td>69 (2013)</td>
+                  <td>39 (2015)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de Galería -->
+      <section class="gallery-section">
+        <div class="container">
+          <h2 class="section-title">Galería de Momentos</h2>
+          <p class="section-description">Imágenes icónicas que han definido la carrera de estos tres fenómenos</p>
+          
+          <div class="gallery-grid">
+            <div class="gallery-item">
+              <img src="assets/images/messi-copa-mundial.jpg" alt="Lionel Messi levantando la Copa del Mundo FIFA 2022 en Qatar - Momento histórico de celebración" />
+              <div class="gallery-caption">Messi levantando la Copa del Mundo 2022</div>
+            </div>
+            <div class="gallery-item">
+              <img src="assets/images/ronaldo-eurocopa.jpg" alt="Cristiano Ronaldo celebrando con el trofeo de la Eurocopa 2016 en Francia - Victoria histórica con Portugal" />
+              <div class="gallery-caption">Ronaldo celebrando la Eurocopa 2016</div>
+            </div>
+            <div class="gallery-item">
+              <img src="assets/images/neymar-psg.jpg" alt="Neymar Jr celebrando un gol con la camiseta del Paris Saint-Germain - Expresión de alegría y triunfo" />
+              <div class="gallery-caption">Neymar celebrando un gol con el PSG</div>
+            </div>
+            <div class="gallery-item">
+              <img src="assets/images/messi-barcelona.jpg" alt="Lionel Messi celebrando un gol con la camiseta azulgrana del FC Barcelona - Era dorada en el Camp Nou" />
+              <div class="gallery-caption">Messi celebrando un gol con el Barcelona</div>
+            </div>
+            <div class="gallery-item">
+              <img src="assets/images/ronaldo-real-madrid.jpg" alt="Cristiano Ronaldo celebrando la Champions League con la camiseta blanca del Real Madrid - Rey de Europa" />
+              <div class="gallery-caption">Ronaldo celebrando la Champions con el Real Madrid</div>
+            </div>
+            <div class="gallery-item">
+              <img src="assets/images/neymar-brasil.jpg" alt="Neymar Jr representando a la selección brasileña con la camiseta amarilla - Orgullo nacional y pasión futbolística" />
+              <div class="gallery-caption">Neymar representando a la selección brasileña</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de Línea de Tiempo -->
+      <section class="timeline-section">
+        <div class="container">
+          <h2 class="section-title">Evolución de Leyendas</h2>
+          <p class="section-description">El camino recorrido por estos tres fenómenos a lo largo de sus carreras</p>
+          
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">2004-2005</div>
+              <div class="timeline-content">
+                <h3>Inicios Profesionales</h3>
+                <p>Messi debuta con el Barcelona, Cristiano brilla en el Manchester United y Neymar comienza a destacar en las categorías inferiores del Santos.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">2008-2009</div>
+              <div class="timeline-content">
+                <h3>Consolidación</h3>
+                <p>Messi gana su primer Balón de Oro, Cristiano se traslada al Real Madrid por un récord mundial y Neymar se consolida como la nueva estrella del fútbol brasileño.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">2013-2014</div>
+              <div class="timeline-content">
+                <h3>Era Dorada</h3>
+                <p>El tridente MSN (Messi, Suárez, Neymar) comienza a formarse en el Barcelona, mientras Cristiano alcanza su mejor nivel en el Real Madrid.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">2017-2018</div>
+              <div class="timeline-content">
+                <h3>Nuevos Horizontes</h3>
+                <p>Neymar se convierte en el fichaje más caro de la historia al unirse al PSG, Cristiano sigue dominando la Champions y Messi continúa batiendo récords en España.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">2022-2023</div>
+              <div class="timeline-content">
+                <h3>Legado Eterno</h3>
+                <p>Messi finalmente gana el Mundial con Argentina, Cristiano se traslada al fútbol árabe tras su paso por la Juventus y el Manchester United, y Neymar continúa su carrera en el PSG antes de su traslado a Arabia Saudita.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección Sobre el Proyecto -->
+      <section id="about" class="about-section">
+        <div class="container">
+          <h2 class="section-title">Sobre el Proyecto</h2>
+          <div class="about-content">
+            <div class="about-text">
+              <p>Este proyecto fue desarrollado como parte del curso de LP2, con el objetivo de crear una enciclopedia digital sobre los mejores jugadores de fútbol de la era moderna.</p>
+              <p>La página utiliza HTML5, CSS3 y posteriormente se implementarán funcionalidades con JavaScript para ofrecer una experiencia interactiva y educativa sobre estos tres fenómenos del deporte rey.</p>
+              <p>Todas las estadísticas e información presentadas han sido recopiladas de fuentes oficiales y actualizadas hasta 2023.</p>
+            </div>
+            <div class="about-author">
+              <img src="assets/images/autor.jpg" alt="Fotografía profesional del desarrollador del proyecto - Estudiante de programación" class="author-image" />
+              <h3>Desarrollado por</h3>
+              <p>Nestor Hernández Díaz</p>
+              <p>Estudiante de Ing. Sistemas e Informática</p>
+              <div class="social-links">
+                <a href="https://github.com/Nestor-Hernandez-Diaz" class="social-link">GitHub</a>
+                <a href="https://www.linkedin.com/in/nestor-hernandez-diaz" class="social-link">LinkedIn</a>
+                <a href="https://portafolio-nestor-hernandez.netlify.app/" class="social-link">Portfolio</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h3>GOATs del Fútbol</h3>
+            <p>Explorando el legado de las leyendas</p>
+          </div>
+          <div class="footer-links">
+            <h4>Enlaces Rápidos</h4>
+            <ul>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="pages/messi.html">Messi</a></li>
+              <li><a href="pages/ronaldo.html">Cristiano</a></li>
+              <li><a href="pages/neymar.html">Neymar</a></li>
+              <li><a href="#comparacion">Comparativa</a></li>
+            </ul>
+          </div>
+          <div class="footer-resources">
+            <h4>Recursos</h4>
+            <ul>
+              <li><a href="#">Fuentes de Información</a></li>
+              <li><a href="#">Galería Completa</a></li>
+              <li><a href="#">Estadísticas Detalladas</a></li>
+              <li><a href="#">Momentos Históricos</a></li>
+            </ul>
+          </div>
+          <div class="footer-newsletter">
+            <h4>Mantente Informado</h4>
+            <p>Suscríbete para recibir actualizaciones sobre el mundo del fútbol</p>
+            <form class="newsletter-form">
+              <input type="email" placeholder="Tu correo electrónico" required />
+              <button type="submit">Suscribirse</button>
+            </form>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2023 GOATs del Fútbol. Proyecto académico para el curso de LP2.</p>
+          <p>Todas las marcas y logotipos pertenecen a sus respectivos dueños.</p>
+        </div>
+      </div>
+    </footer>
+
+</body>
+</html>
