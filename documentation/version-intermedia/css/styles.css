@@ -1,0 +1,602 @@
+/* ===== VERSIÓN INTERMEDIA CSS - PROYECTO GOATS DEL FÚTBOL ===== */
+/* Esta versión incluye características intermedias como animaciones, efectos y mejor diseño */
+
+/* Variables CSS extendidas */
+:root {
+    --color-primario: #1a1a1a;
+    --color-secundario: #333;
+    --color-acento: #ffd700;
+    --color-acento-hover: #e6c200;
+    --color-texto: #fff;
+    --color-texto-secundario: #ccc;
+    --color-fondo: #000;
+    --color-fondo-card: #2a2a2a;
+    --fuente-principal: 'Arial', sans-serif;
+    --fuente-titulo: 'Arial Black', sans-serif;
+    --sombra-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --sombra-hover: 0 12px 48px rgba(255, 215, 0, 0.2);
+    --transicion-suave: all 0.3s ease;
+    --border-radius: 15px;
+}
+
+/* Reset mejorado */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos del cuerpo mejorados */
+body {
+    font-family: var(--fuente-principal);
+    background: linear-gradient(135deg, var(--color-fondo) 0%, #1a1a1a 100%);
+    color: var(--color-texto);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Contenedor principal */
+.contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header mejorado */
+.encabezado {
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    border-bottom: 2px solid var(--color-acento);
+    transition: var(--transicion-suave);
+}
+
+.navegacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--fuente-titulo);
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--color-acento);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    transition: var(--transicion-suave);
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.5);
+}
+
+.menu-navegacion {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.menu-navegacion a {
+    color: var(--color-texto);
+    text-decoration: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    transition: var(--transicion-suave);
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-navegacion a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+    transition: var(--transicion-suave);
+}
+
+.menu-navegacion a:hover::before {
+    left: 100%;
+}
+
+.menu-navegacion a:hover {
+    color: var(--color-acento);
+    background-color: rgba(255, 215, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Menú hamburguesa mejorado */
+.menu-hamburguesa {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--color-texto);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: var(--transicion-suave);
+}
+
+.menu-hamburguesa:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+    color: var(--color-acento);
+}
+
+/* Sección hero mejorada */
+.seccion-hero {
+    background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-primario) 100%);
+    padding: 140px 0 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.seccion-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.titulo-hero {
+    font-family: var(--fuente-titulo);
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-acento);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    animation: fadeInUp 1s ease-out;
+    position: relative;
+    z-index: 1;
+}
+
+.subtitulo-hero {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    color: var(--color-texto-secundario);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    position: relative;
+    z-index: 1;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Secciones principales mejoradas */
+.seccion-principal {
+    padding: 80px 0;
+    position: relative;
+}
+
+.titulo-seccion {
+    font-family: var(--fuente-titulo);
+    font-size: 2.8rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--color-acento);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.titulo-seccion::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-acento), transparent);
+}
+
+/* Introducción mejorada */
+.introduccion {
+    background: linear-gradient(135deg, var(--color-primario) 0%, #2a2a2a 100%);
+    position: relative;
+}
+
+.contenido-introduccion {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeInUp 1s ease-out;
+}
+
+.descripcion-introduccion {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--color-texto-secundario);
+}
+
+/* Tarjetas de jugadores mejoradas */
+.seccion-jugadores {
+    background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-primario) 100%);
+}
+
+.contenedor-tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    justify-items: center;
+}
+
+.tarjeta-jugador {
+    background: var(--color-fondo-card);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: var(--sombra-card);
+    transition: var(--transicion-suave);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.tarjeta-jugador::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-acento), #e6c200, var(--color-acento));
+}
+
+.tarjeta-jugador:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--sombra-hover);
+    border-color: var(--color-acento);
+}
+
+.imagen-jugador {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    display: block;
+    border: 4px solid var(--color-acento);
+    transition: var(--transicion-suave);
+    object-fit: cover;
+}
+
+.tarjeta-jugador:hover .imagen-jugador {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.nombre-jugador {
+    font-family: var(--fuente-titulo);
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-acento);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.posicion-jugador {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--color-texto-secundario);
+    font-weight: 500;
+}
+
+.descripcion-jugador {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--color-texto-secundario);
+}
+
+/* Enlaces mejorados */
+.enlace-jugador {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--color-acento), #e6c200);
+    color: var(--color-fondo);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: var(--transicion-suave);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.enlace-jugador::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: var(--transicion-suave);
+}
+
+.enlace-jugador:hover::before {
+    left: 100%;
+}
+
+.enlace-jugador:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    background: linear-gradient(135deg, #e6c200, var(--color-acento));
+}
+
+/* Páginas individuales de jugadores mejoradas */
+.hero-jugador {
+    background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-primario) 100%);
+    padding: 140px 0 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-jugador::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.nombre-jugador-hero {
+    font-family: var(--fuente-titulo);
+    font-size: 3.5rem;
+    color: var(--color-acento);
+    margin-bottom: 1rem;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    animation: fadeInUp 1s ease-out;
+    position: relative;
+    z-index: 1;
+}
+
+.subtitulo-jugador {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    color: var(--color-texto-secundario);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    position: relative;
+    z-index: 1;
+}
+
+/* Biografía mejorada */
+.biografia {
+    background: linear-gradient(135deg, var(--color-primario) 0%, #2a2a2a 100%);
+    padding: 80px 0;
+}
+
+.contenido-biografia {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.texto-biografia {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    color: var(--color-texto-secundario);
+}
+
+/* Secciones de contenido mejoradas */
+.seccion-contenido {
+    padding: 80px 0;
+    position: relative;
+}
+
+.seccion-contenido:nth-child(even) {
+    background: linear-gradient(135deg, var(--color-primario) 0%, #2a2a2a 100%);
+}
+
+.seccion-contenido:nth-child(odd) {
+    background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-primario) 100%);
+}
+
+/* Listas mejoradas */
+.lista-logros {
+    list-style: none;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.lista-logros li {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--color-acento);
+    transition: var(--transicion-suave);
+    position: relative;
+}
+
+.lista-logros li:hover {
+    transform: translateX(10px);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.08));
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+}
+
+/* Footer mejorado */
+.pie-pagina {
+    background: linear-gradient(135deg, var(--color-primario) 0%, #0a0a0a 100%);
+    padding: 60px 0 40px;
+    text-align: center;
+    border-top: 3px solid var(--color-acento);
+    position: relative;
+}
+
+.pie-pagina::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-acento), transparent);
+}
+
+.contenido-footer {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.titulo-footer {
+    font-family: var(--fuente-titulo);
+    font-size: 1.8rem;
+    color: var(--color-acento);
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.descripcion-footer {
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    color: var(--color-texto-secundario);
+    font-size: 1.1rem;
+}
+
+.derechos-autor {
+    font-size: 1rem;
+    opacity: 0.8;
+    border-top: 1px solid var(--color-secundario);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+    color: var(--color-texto-secundario);
+}
+
+/* Responsive mejorado */
+@media (max-width: 768px) {
+    .menu-navegacion {
+        display: none;
+    }
+    
+    .menu-hamburguesa {
+        display: block;
+    }
+    
+    .titulo-hero {
+        font-size: 2.5rem;
+    }
+    
+    .nombre-jugador-hero {
+        font-size: 2.5rem;
+    }
+    
+    .contenedor-tarjetas {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .tarjeta-jugador {
+        max-width: 400px;
+    }
+    
+    .imagen-jugador {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contenedor {
+        padding: 0 15px;
+    }
+    
+    .titulo-hero {
+        font-size: 2rem;
+    }
+    
+    .titulo-seccion {
+        font-size: 2.2rem;
+    }
+    
+    .nombre-jugador-hero {
+        font-size: 2rem;
+    }
+    
+    .tarjeta-jugador {
+        padding: 2rem;
+    }
+    
+    .imagen-jugador {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .enlace-jugador {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Efectos adicionales para elementos interactivos */
+.tarjeta-jugador,
+.enlace-jugador,
+.menu-navegacion a {
+    cursor: pointer;
+}
+
+/* Animación de entrada para las tarjetas */
+.tarjeta-jugador {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.tarjeta-jugador:nth-child(1) { animation-delay: 0.1s; }
+.tarjeta-jugador:nth-child(2) { animation-delay: 0.2s; }
+.tarjeta-jugador:nth-child(3) { animation-delay: 0.3s; }

@@ -1,0 +1,336 @@
+/* ===== VERSIÓN BÁSICA CSS - PROYECTO GOATS DEL FÚTBOL ===== */
+/* Esta versión incluye solo los estilos fundamentales para funcionalidad básica */
+
+/* Variables CSS básicas */
+:root {
+    --color-primario: #1a1a1a;
+    --color-secundario: #333;
+    --color-acento: #ffd700;
+    --color-texto: #fff;
+    --color-fondo: #000;
+    --fuente-principal: Arial, sans-serif;
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos del cuerpo */
+body {
+    font-family: var(--fuente-principal);
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+}
+
+/* Contenedor principal */
+.contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header básico */
+.encabezado {
+    background-color: var(--color-primario);
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.navegacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-acento);
+}
+
+.menu-navegacion {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.menu-navegacion a {
+    color: var(--color-texto);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+.menu-navegacion a:hover {
+    color: var(--color-acento);
+}
+
+/* Menú hamburguesa (oculto en versión básica) */
+.menu-hamburguesa {
+    display: none;
+}
+
+/* Sección hero básica */
+.seccion-hero {
+    background-color: var(--color-secundario);
+    padding: 120px 0 80px;
+    text-align: center;
+}
+
+.titulo-hero {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--color-acento);
+}
+
+.subtitulo-hero {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* Secciones principales */
+.seccion-principal {
+    padding: 60px 0;
+}
+
+.titulo-seccion {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--color-acento);
+}
+
+/* Introducción */
+.introduccion {
+    background-color: var(--color-primario);
+}
+
+.contenido-introduccion {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.descripcion-introduccion {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Tarjetas de jugadores básicas */
+.seccion-jugadores {
+    background-color: var(--color-secundario);
+}
+
+.contenedor-tarjetas {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tarjeta-jugador {
+    background-color: var(--color-primario);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.imagen-jugador {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: block;
+}
+
+.nombre-jugador {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-acento);
+}
+
+.posicion-jugador {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.descripcion-jugador {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Enlaces básicos */
+.enlace-jugador {
+    display: inline-block;
+    background-color: var(--color-acento);
+    color: var(--color-fondo);
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.enlace-jugador:hover {
+    background-color: #e6c200;
+}
+
+/* Páginas individuales de jugadores */
+.hero-jugador {
+    background-color: var(--color-secundario);
+    padding: 120px 0 80px;
+    text-align: center;
+}
+
+.nombre-jugador-hero {
+    font-size: 3rem;
+    color: var(--color-acento);
+    margin-bottom: 1rem;
+}
+
+.subtitulo-jugador {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* Biografía básica */
+.biografia {
+    background-color: var(--color-primario);
+    padding: 60px 0;
+}
+
+.contenido-biografia {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.texto-biografia {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+/* Secciones de contenido básicas */
+.seccion-contenido {
+    padding: 60px 0;
+}
+
+.seccion-contenido:nth-child(even) {
+    background-color: var(--color-primario);
+}
+
+.seccion-contenido:nth-child(odd) {
+    background-color: var(--color-secundario);
+}
+
+/* Listas básicas */
+.lista-logros {
+    list-style: none;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.lista-logros li {
+    background-color: rgba(255, 215, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+}
+
+/* Footer básico */
+.pie-pagina {
+    background-color: var(--color-primario);
+    padding: 40px 0;
+    text-align: center;
+    border-top: 2px solid var(--color-acento);
+}
+
+.contenido-footer {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.titulo-footer {
+    font-size: 1.5rem;
+    color: var(--color-acento);
+    margin-bottom: 1rem;
+}
+
+.descripcion-footer {
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.derechos-autor {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    border-top: 1px solid var(--color-secundario);
+    padding-top: 1rem;
+    margin-top: 2rem;
+}
+
+/* Responsive básico */
+@media (max-width: 768px) {
+    .menu-navegacion {
+        display: none;
+    }
+    
+    .menu-hamburguesa {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--color-texto);
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    
+    .titulo-hero {
+        font-size: 2rem;
+    }
+    
+    .contenedor-tarjetas {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .tarjeta-jugador {
+        width: 100%;
+        max-width: 350px;
+    }
+    
+    .nombre-jugador-hero {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contenedor {
+        padding: 0 15px;
+    }
+    
+    .titulo-hero {
+        font-size: 1.8rem;
+    }
+    
+    .titulo-seccion {
+        font-size: 2rem;
+    }
+    
+    .tarjeta-jugador {
+        padding: 1.5rem;
+    }
+    
+    .imagen-jugador {
+        width: 150px;
+        height: 150px;
+    }
+}

@@ -74,7 +74,7 @@ p {
    3. CONTENEDORES Y LAYOUT
    ======================================== */
 
-.contenedor {
+.container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -85,7 +85,7 @@ section {
   padding: 60px 0;
 }
 
-.titulo-seccion {
+.section-title {
   text-align: center;
   margin-bottom: 2.5rem;
   position: relative;
@@ -93,7 +93,7 @@ section {
   font-weight: 700;
 }
 
-.titulo-seccion::after {
+.section-title::after {
   content: '';
   display: block;
   width: 80px;
@@ -103,7 +103,7 @@ section {
   border-radius: 2px;
 }
 
-.descripcion-seccion {
+.section-description {
   text-align: center;
   max-width: 800px;
   margin: -1.5rem auto 2.5rem;
@@ -114,7 +114,7 @@ section {
    4. HEADER Y NAVEGACIÓN
    ======================================== */
 
-.navegacion-principal {  /*Ajusta toda la barra superior*/
+.main-nav {  /*Ajusta toda la barra superior*/
   position: fixed;
   top: 0;
   left: 0;
@@ -125,7 +125,7 @@ section {
   z-index: 1000;
 }
 
-.contenedor-navegacion {  /*Ajusta los links*/
+.nav-container {  /*Ajusta los links*/
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -135,7 +135,7 @@ section {
   position: relative;
 }
 
-.logotipo a {
+.logo a {
   color: white;
   font-size: 1.5rem;
   font-weight: 800;
@@ -145,13 +145,13 @@ section {
   letter-spacing: 1px;
 }
 
-.enlaces-navegacion {
+.nav-links {
   display: flex;
   list-style: none;
   gap: 2rem;
 }
 
-.enlaces-navegacion a {
+.nav-links a {
   color: white;
   text-decoration: none;
   font-weight: 600;
@@ -163,13 +163,13 @@ section {
   letter-spacing: 1px;
 }
 
-.enlaces-navegacion a:hover,
-.enlaces-navegacion a.activo {
+.nav-links a:hover,
+.nav-links a.active {
   color: var(--color-primary);
-  text-shadow: 0 0 8px rgba(0, 21, 255, 0.6);
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
 }
 
-.enlaces-navegacion a::after {
+.nav-links a::after {
   content: '';
   position: absolute;
   bottom: -3px;
@@ -180,13 +180,13 @@ section {
   transition: width 0.3s ease, box-shadow 0.3s ease;
 }
 
-.enlaces-navegacion a:hover::after,
-.enlaces-navegacion a.activo::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
   width: 100%;
   box-shadow: 0 0 10px var(--color-primary);
 }
 
-.menu-hamburguesa {
+.burger-menu {
   display: none;
   cursor: pointer;
   position: absolute;
@@ -195,9 +195,9 @@ section {
   transform: translateY(-50%);
 }
 
-.menu-hamburguesa .linea1,
-.menu-hamburguesa .linea2,
-.menu-hamburguesa .linea3 {
+.burger-menu .line1,
+.burger-menu .line2,
+.burger-menu .line3 {
   width: 25px;
   height: 3px;
   background: white;
@@ -206,7 +206,7 @@ section {
 }
 
 /* Checkbox completamente oculto para controlar el menú */
-.toggle-hamburguesa {
+.burger-toggle {
   display: none;
   opacity: 0;
   position: absolute;
@@ -217,7 +217,7 @@ section {
    5. HERO SECTION
    ======================================== */
 
-.seccion-hero {
+.hero-section {
   height: 100vh;
   min-height: 600px;
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../assets/images/goats-trio-bg.jpg');
@@ -231,20 +231,20 @@ section {
   margin-top: 60px;
 }
 
-.contenido-hero {
+.hero-content {
   max-width: 800px;
   padding: 0 2rem;
   z-index: 1;
 }
 
-.titulo-hero {
+.hero-title {
   font-size: 4rem;
   font-weight: bold;
   color: var(--color-text);
   margin-bottom: 1rem;
 }
 
-.subtitulo-hero {
+.hero-subtitle {
   font-size: 1.5rem;
   color: var(--color-text);
   margin-bottom: 2rem;
@@ -258,30 +258,30 @@ section {
    ======================================== */
 
 /* Intro Section */
-.seccion-introduccion {
+.intro-section {
   background-color: var(--color-dark);
 }
 
-.contenido-introduccion {
+.intro-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 3rem;
   align-items: center;
 }
 
-.texto-introduccion p {
+.intro-text p {
   margin-bottom: 1.5rem;
   line-height: 1.7;
   color: var(--color-text);
 }
 
-.estadisticas-introduccion {
+.intro-stats {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.elemento-estadistica {
+.stat-item {
   background: var(--color-primary);
   color: white;
   padding: 1.5rem;
@@ -290,7 +290,7 @@ section {
   box-shadow: var(--box-shadow);
 }
 
-.numero-estadistica {
+.stat-number {
   display: block;
   font-size: 2.5rem;
   font-weight: 700;
@@ -298,24 +298,24 @@ section {
   margin-bottom: 0.5rem;
 }
 
-.etiqueta-estadistica {
+.stat-label {
   font-size: 1rem;
 }
 
 /* Players Section */
-.seccion-jugadores {
+.players-section {
   background-color: var(--color-darker);
   padding: 3rem 0;
 }
 
-.contenedor-jugadores {
+.players-container {
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.tarjeta-jugador {
+.player-card {
   background: var(--color-dark);
   border-radius: var(--border-radius);
   border: 2px solid var(--color-primary);
@@ -326,20 +326,20 @@ section {
   position: relative;
 }
 
-.tarjeta-jugador:hover {
+.player-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 191, 255, 0.4);
   border-color: var(--color-primary);
 }
 
-.contenedor-imagen-tarjeta {
+.card-image-container {
   position: relative;
   height: 320px;
   overflow: hidden;
   border-bottom: 1px solid rgba(0, 191, 255, 0.3);
 }
 
-.imagen-jugador {
+.player-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -347,11 +347,11 @@ section {
   filter: contrast(1.1);
 }
 
-.tarjeta-jugador:hover .imagen-jugador {
+.player-card:hover .player-image {
   transform: scale(1.05);
 }
 
-.bandera-pais {
+.country-flag {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -362,19 +362,19 @@ section {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.bandera-pais img {
+.country-flag img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.contenido-tarjeta {
+.card-content {
   padding: 1.5rem;
   color: white;
   text-align: center;
 }
 
-.nombre-jugador {
+.player-name {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -383,7 +383,7 @@ section {
   letter-spacing: 1px;
 }
 
-.apodo-jugador {
+.player-nickname {
   font-size: 1rem;
   color: var(--color-primary);
   font-style: italic;
@@ -391,14 +391,14 @@ section {
   text-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
 }
 
-.destacados-jugador {
+.player-highlights {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.destacado {
+.highlight {
   background: var(--color-primary);
   color: white;
   padding: 0.3rem 0.6rem;
@@ -407,13 +407,13 @@ section {
   font-weight: 500;
 }
 
-.descripcion-jugador {
+.player-description {
   color: white;
   margin-bottom: 1.2rem;
   line-height: 1.4;
 }
 
-.enlace-jugador {
+.player-link {
   display: inline-block;
   background: var(--color-secondary);
   color: white;
@@ -424,7 +424,7 @@ section {
   transition: var(--transition-normal);
 }
 
-.enlace-jugador:hover {
+.player-link:hover {
   background: var(--color-accent);
   transform: translateY(-2px);
 }
@@ -433,11 +433,11 @@ section {
    7. PÁGINAS DE JUGADORES INDIVIDUALES
    ======================================== */
 
-.pagina-jugador {
+.player-page {
   padding-top: 60px;
 }
 
-.seccion-hero-jugador {
+.player-hero-section {
   height: 70vh;
   min-height: 500px;
   position: relative;
@@ -450,19 +450,19 @@ section {
   width: 100%;
 }
 
-.hero-messi {
+.messi-hero {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/messi-hero-bg.jpg');
 }
 
-.hero-ronaldo {
+.ronaldo-hero {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/ronaldo-hero-bg.jpg');
 }
 
-.hero-neymar {
+.neymar-hero {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/neymar-hero-bg.jpg');
 }
 
-.contenido-hero-jugador {
+.player-hero-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
@@ -478,7 +478,7 @@ section {
   min-height: 0;
 }
 
-.texto-hero-jugador {
+.player-hero-text {
   text-align: left;
   max-width: 100%;
   overflow: hidden;
@@ -489,7 +489,7 @@ section {
   flex: 1;
 }
 
-.titulo-hero-jugador {
+.player-hero-title {
   font-size: 3rem;
   margin-bottom: 0.5rem;
   color: white;
@@ -498,7 +498,7 @@ section {
   line-height: 1.1;
 }
 
-.subtitulo-hero-jugador {
+.player-hero-subtitle {
   font-size: 1.5rem;
   color: var(--color-secondary);
   margin-bottom: 2rem;
@@ -506,32 +506,32 @@ section {
   word-wrap: break-word;
 }
 
-.info-hero-jugador {
+.player-hero-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.elemento-info {
+.info-item {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.etiqueta-info {
+.info-label {
   font-size: 0.9rem;
   color: white;
   margin-bottom: 0.25rem;
 }
 
-.valor-info {
+.info-value {
   font-weight: 500;
   color: var(--color-secondary);
   word-wrap: break-word;
 }
 
-.cita-hero-jugador {
+.player-hero-quote {
   font-style: italic;
   border-left: 3px solid var(--color-secondary);
   padding-left: 1rem;
@@ -539,13 +539,13 @@ section {
   max-width: 100%;
 }
 
-.cita-hero-jugador blockquote {
+.player-hero-quote blockquote {
   font-size: 1.1rem;
   margin: 0;
   word-wrap: break-word;
 }
 
-.imagen-hero-jugador {
+.player-hero-image {
   text-align: center;
   display: flex;
   justify-content: center;
@@ -556,7 +556,7 @@ section {
   overflow: hidden;
 }
 
-.imagen-hero-jugador img {
+.player-hero-image img {
   max-height: 400px;
   max-width: 100%;
   width: auto;
@@ -568,34 +568,34 @@ section {
 }
 
 /* Biography Section */
-.seccion-biografia {
+.biography-section {
   background-color: var(--color-dark);
 }
 
-.contenido-biografia {
+.biography-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 3rem;
 }
 
-.texto-biografia h3 {
+.biography-text h3 {
   color: var(--color-primary);
   margin: 1.5rem 0 1rem;
 }
 
-.texto-biografia p {
+.biography-text p {
   margin-bottom: 1rem;
   line-height: 1.7;
   color: var(--color-text);
 }
 
-.barra-lateral-biografia {
+.biography-sidebar {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.tarjeta-perfil-jugador {
+.player-profile-card {
   background: var(--color-darker);
   border: 2px solid var(--color-primary);
   border-radius: var(--border-radius);
@@ -603,50 +603,50 @@ section {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
 }
 
-.imagen-perfil {
+.profile-image {
   height: 250px;
   overflow: hidden;
 }
 
-.imagen-perfil img {
+.profile-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.detalles-perfil {
+.profile-details {
   padding: 1.5rem;
   color: white;
 }
 
-.detalles-perfil h3 {
+.profile-details h3 {
   color: var(--color-primary);
   margin-bottom: 1rem;
   text-align: center;
 }
 
-.estadisticas-perfil {
+.profile-stats {
   list-style: none;
 }
 
-.estadisticas-perfil li {
+.profile-stats li {
   padding: 0.8rem 0;
   border-bottom: 1px solid #ddd;
   display: flex;
   flex-direction: column;
 }
 
-.estadisticas-perfil li:last-child {
+.profile-stats li:last-child {
   border-bottom: none;
 }
 
-.estadisticas-perfil li span:first-child {
+.profile-stats li span:first-child {
   font-weight: 600;
   color: var(--color-primary);
   font-size: 0.9rem;
 }
 
-.destacados-carrera {
+.career-highlights {
   background: var(--color-darker);
   border: 2px solid var(--color-primary);
   border-radius: var(--border-radius);
@@ -655,23 +655,23 @@ section {
   color: white;
 }
 
-.destacados-carrera h3 {
+.career-highlights h3 {
   color: var(--color-primary);
   margin-bottom: 1rem;
   text-align: center;
 }
 
-.lista-destacados {
+.highlights-list {
   list-style: none;
 }
 
-.lista-destacados li {
+.highlights-list li {
   display: flex;
   margin-bottom: 1rem;
   align-items: center;
 }
 
-.año-destacado {
+.highlight-year {
   background: var(--color-primary);
   color: white;
   padding: 0.3rem 0.6rem;
@@ -683,47 +683,47 @@ section {
   text-align: center;
 }
 
-.evento-destacado {
+.highlight-event {
   flex: 1;
 }
 
 /* Playing Style Section */
-.seccion-estilo-juego {
+.playing-style-section {
   background-color: var(--color-darker);
 }
 
-.contenido-estilo {
+.style-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: start;
 }
 
-.descripcion-estilo p {
+.style-description p {
   margin-bottom: 1rem;
   line-height: 1.7;
   color: var(--color-text);
 }
 
-.atributos-estilo {
+.style-attributes {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.atributo {
+.attribute {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.nombre-atributo {
+.attribute-name {
   width: 100px;
   font-weight: 600;
   color: var(--color-primary);
 }
 
-.barra-atributo {
+.attribute-bar {
   flex: 1;
   height: 10px;
   background: var(--color-darker);
@@ -732,13 +732,13 @@ section {
   overflow: hidden;
 }
 
-.relleno-atributo {
+.attribute-fill {
   height: 100%;
   background: var(--color-secondary);
   border-radius: 5px;
 }
 
-.valor-atributo {
+.attribute-value {
   width: 60px;
   text-align: right;
   font-weight: 600;
@@ -746,66 +746,66 @@ section {
 }
 
 /* Achievements Section */
-.seccion-logros {
+.achievements-section {
   background-color: var(--color-dark);
 }
 
-.contenido-logros {
+.achievements-content {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
 }
 
-.logros-clubes {
+.club-achievements {
   margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
 }
 
-.logotipo-club {
+.club-logo {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.logotipo-club img {
+.club-logo img {
   width: 80px;
   height: 80px;
   object-fit: contain;
   margin-bottom: 0.5rem;
 }
 
-.logotipo-club h4 {
+.club-logo h4 {
   color: var(--color-primary);
 }
 
-.logotipo-nacional {
+.national-logo {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.logotipo-nacional img {
+.national-logo img {
   width: 80px;
   height: 80px;
   object-fit: contain;
   margin-bottom: 0.5rem;
 }
 
-.lista-logros {
+.achievements-list {
   list-style: none;
 }
 
-.lista-logros li {
+.achievements-list li {
   padding: 0.5rem 0;
   border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
 }
 
-.lista-logros li:last-child {
+.achievements-list li:last-child {
   border-bottom: none;
 }
 
@@ -824,14 +824,14 @@ section {
   background-color: var(--color-darker);
 }
 
-.resumen-estadisticas {
+.statistics-summary {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
 
-.tarjeta-estadistica {
+.stat-card {
   background: var(--color-dark);
   border: 2px solid var(--color-primary);
   padding: 1.5rem;
@@ -842,7 +842,7 @@ section {
   transition: var(--transition-normal);
 }
 
-.tabla-estadisticas {
+.stats-table {
   width: 100%;
   border-collapse: collapse;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
@@ -852,46 +852,46 @@ section {
   overflow: hidden;
 }
 
-.tabla-estadisticas th,
-.tabla-estadisticas td {
+.stats-table th,
+.stats-table td {
   padding: 1rem;
   text-align: center;
   border-bottom: 1px solid rgba(0, 191, 255, 0.2);
   color: white;
 }
 
-.tabla-estadisticas thead {
+.stats-table thead {
   background-color: var(--color-primary);
   color: white;
 }
 
-.tabla-estadisticas tbody tr:nth-child(even) {
+.stats-table tbody tr:nth-child(even) {
   background-color: var(--color-darker);
 }
 
 /* Legacy Section */
-.seccion-legado {
+.legacy-section {
   background-color: var(--color-dark);
 }
 
-.contenido-legado {
+.legacy-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
 }
 
-.texto-legado p {
+.legacy-text p {
   margin-bottom: 1.5rem;
   line-height: 1.7;
   color: var(--color-text);
 }
 
-.citas-legado h3 {
+.legacy-quotes h3 {
   margin-bottom: 1.5rem;
   color: var(--color-primary);
 }
 
-.tarjeta-cita {
+.quote-card {
   background: var(--color-darker);
   border: 2px solid var(--color-primary);
   padding: 1.5rem;
@@ -902,18 +902,18 @@ section {
   color: white;
 }
 
-.tarjeta-cita:last-child {
+.quote-card:last-child {
   margin-bottom: 0;
 }
 
-.tarjeta-cita blockquote {
+.quote-card blockquote {
   font-style: italic;
   margin-bottom: 1rem;
   color: var(--color-text);
   line-height: 1.6;
 }
 
-.tarjeta-cita blockquote::before {
+.quote-card blockquote::before {
   content: '\201C';
   font-size: 2rem;
   color: var(--color-secondary);
@@ -922,7 +922,7 @@ section {
   left: 1rem;
 }
 
-.tarjeta-cita cite {
+.quote-card cite {
   display: block;
   text-align: right;
   font-weight: 600;
@@ -930,18 +930,18 @@ section {
 }
 
 /* Videos Section */
-.seccion-videos {
+.videos-section {
   background-color: var(--color-darker);
 }
 
-.cuadricula-videos {
+.video-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   margin-top: 2rem;
 }
 
-.elemento-video {
+.video-item {
   background: var(--color-dark);
   border: 2px solid var(--color-primary);
   border-radius: var(--border-radius);
@@ -949,25 +949,25 @@ section {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
 }
 
-.miniatura-video {
+.video-thumbnail {
   position: relative;
   height: 200px;
   overflow: hidden;
   cursor: pointer;
 }
 
-.miniatura-video img {
+.video-thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
 
-.elemento-video:hover .miniatura-video img {
+.video-item:hover .video-thumbnail img {
   transform: scale(1.05);
 }
 
-.boton-reproducir {
+.play-button {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -984,11 +984,11 @@ section {
   transition: var(--transition-normal);
 }
 
-.elemento-video:hover .boton-reproducir {
+.video-item:hover .play-button {
   background: var(--color-secondary);
 }
 
-.titulo-video {
+.video-title {
   padding: 1rem;
   font-size: 1rem;
   color: var(--color-primary);
@@ -1000,7 +1000,7 @@ section {
    ======================================== */
 
 /* Botones */
-.boton {
+.btn {
   display: inline-block;
   padding: 12px 24px;
   background: var(--color-primary);
@@ -1015,7 +1015,7 @@ section {
   font-size: 1rem;
 }
 
-.boton:hover {
+.btn:hover {
   background: var(--color-secondary);
   transform: translateY(-2px);
   box-shadow: var(--box-shadow);
@@ -1092,7 +1092,7 @@ section {
   font-size: 1.4rem;
 }
 
-.imagen-destacada {
+.featured-image {
   width: 100%;
   height: 400px;
   object-fit: cover;
@@ -1161,14 +1161,14 @@ section {
   background-color: var(--color-dark);
 }
 
-.cuadricula-galeria {
+.gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
 }
 
-.elemento-galeria {
+.gallery-item {
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--box-shadow);
@@ -1176,12 +1176,12 @@ section {
   position: relative;
 }
 
-.elemento-galeria:hover {
+.gallery-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-.elemento-galeria img {
+.gallery-item img {
   width: 100%;
   height: 220px;
   object-fit: cover;
@@ -1189,11 +1189,11 @@ section {
   transition: transform 0.5s ease;
 }
 
-.elemento-galeria:hover img {
+.gallery-item:hover img {
   transform: scale(1.05);
 }
 
-.leyenda-galeria {
+.gallery-caption {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -1206,7 +1206,7 @@ section {
   transition: transform 0.3s ease;
 }
 
-.elemento-galeria:hover .leyenda-galeria {
+.gallery-item:hover .gallery-caption {
   transform: translateY(0);
 }
 
@@ -1271,61 +1271,61 @@ section {
 }
 
 /* Footer */
-.pie-principal {
+.main-footer {
   background: var(--color-primary);
   color: white;
   padding: 4rem 0 2rem;
 }
 
-.contenido-pie {
+.footer-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 3rem;
   margin-bottom: 3rem;
 }
 
-.logotipo-pie h3 {
+.footer-logo h3 {
   color: var(--color-secondary);
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.enlaces-pie h4,
-.recursos-pie h4,
-.newsletter-pie h4 {
+.footer-links h4,
+.footer-resources h4,
+.footer-newsletter h4 {
   color: white;
   margin-bottom: 1.2rem;
   font-size: 1.2rem;
 }
 
-.enlaces-pie ul,
-.recursos-pie ul {
+.footer-links ul,
+.footer-resources ul {
   list-style: none;
 }
 
-.enlaces-pie li,
-.recursos-pie li {
+.footer-links li,
+.footer-resources li {
   margin-bottom: 0.8rem;
 }
 
-.enlaces-pie a,
-.recursos-pie a {
+.footer-links a,
+.footer-resources a {
   color: white;
   text-decoration: none;
   transition: var(--transition-normal);
 }
 
-.enlaces-pie a:hover,
-.recursos-pie a:hover {
+.footer-links a:hover,
+.footer-resources a:hover {
   color: var(--color-secondary);
 }
 
-.formulario-newsletter {
+.newsletter-form {
   display: flex;
   margin-top: 1rem;
 }
 
-.formulario-newsletter input {
+.newsletter-form input {
   flex: 1;
   padding: 0.8rem;
   border: none;
@@ -1333,7 +1333,7 @@ section {
   outline: none;
 }
 
-.formulario-newsletter button {
+.newsletter-form button {
   background: var(--color-secondary);
   color: white;
   border: none;
@@ -1343,11 +1343,11 @@ section {
   transition: var(--transition-normal);
 }
 
-.formulario-newsletter button:hover {
+.newsletter-form button:hover {
   background: var(--color-accent);
 }
 
-.pie-inferior {
+.footer-bottom {
   text-align: center;
   padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -1377,13 +1377,13 @@ section {
   }
 }
 
-.seccion {
+.section {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.seccion.visible {
+.section.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1394,30 +1394,30 @@ section {
 
 /* Pantallas grandes (desktops, menos de 1200px) */
 @media (max-width: 1200px) {
-  .contenedor {
+  .container {
     max-width: 960px;
   }
   
-  .cuadricula-galeria {
+  .gallery-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* Pantallas medianas (tablets, menos de 992px) */
 @media (max-width: 992px) {
-  .contenedor {
+  .container {
     max-width: 720px;
   }
   
-  .titulo-seccion {
+  .section-title {
     font-size: 2rem;
   }
   
-  .descripcion-seccion {
+  .section-description {
     font-size: 1rem;
   }
   
-  .contenedor-jugadores {
+  .players-container {
     grid-template-columns: repeat(2, 1fr);
   }
   
@@ -1426,7 +1426,7 @@ section {
     padding: 0.75rem;
   }
   
-  .cuadricula-galeria {
+  .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   
@@ -1443,77 +1443,77 @@ section {
     order: 1;
   }
   
-  .contenido-pie {
+  .footer-content {
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
   }
   
-  .pie-inferior {
+  .footer-bottom {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
   }
   
-  .contenido-hero-jugador {
+  .player-hero-content {
     grid-template-columns: 1fr;
     text-align: center;
     gap: 2rem;
     padding: 0 1rem;
   }
   
-  .texto-hero-jugador {
+  .player-hero-text {
     text-align: center;
     order: 2;
   }
   
-  .imagen-hero-jugador {
+  .player-hero-image {
     order: 1;
   }
   
-  .titulo-hero-jugador {
+  .player-hero-title {
     font-size: 2.5rem;
   }
   
-  .subtitulo-hero-jugador {
+  .player-hero-subtitle {
     font-size: 1.3rem;
   }
   
-  .info-hero-jugador {
+  .player-hero-info {
     justify-content: center;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
   
-  .cita-hero-jugador {
+  .player-hero-quote {
     max-width: 600px;
     margin: 1.5rem auto 0;
   }
   
-  .imagen-hero-jugador img {
+  .player-hero-image img {
     max-height: 350px;
   }
   
-  .contenido-estilo,
-  .contenido-biografia,
-  .contenido-legado {
+  .style-content,
+  .biography-content,
+  .legacy-content {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
   
-  .contenido-logros {
+  .achievements-content {
     grid-template-columns: 1fr;
   }
   
-  .contenido-introduccion {
+  .intro-content {
     grid-template-columns: 1fr;
   }
   
-  .cuadricula-videos {
+  .video-grid {
     grid-template-columns: 1fr 1fr;
   }
   
   /* Mostrar menú hamburguesa en tablets */
-  .enlaces-navegacion {
+  .nav-links {
     position: fixed;
     top: 70px;
     right: -100%;
@@ -1528,18 +1528,18 @@ section {
     z-index: 999;
   }
 
-  .toggle-hamburguesa:checked ~ .enlaces-navegacion {
+  .burger-toggle:checked ~ .nav-links {
     right: 0;
   }
 
-  .menu-hamburguesa {
+  .burger-menu {
     display: block;
   }
 }
 
 /* Pantallas pequeñas (móviles en landscape, menos de 768px) */
 @media (max-width: 768px) {
-  .contenedor {
+  .container {
     max-width: 540px;
     padding: 0 1rem;
   }
@@ -1548,24 +1548,24 @@ section {
     padding: 3rem 0;
   }
   
-  .titulo-seccion {
+  .section-title {
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
   }
   
-  .titulo-seccion::after {
+  .section-title::after {
     width: 60px;
     margin: 0.5rem auto;
   }
   
-  .contenedor-jugadores {
+  .players-container {
     grid-template-columns: 1fr;
     gap: 2rem;
     flex-direction: column;
     align-items: center;
   }
   
-  .tarjeta-jugador {
+  .player-card {
     max-width: 350px;
     margin: 0 auto;
     width: 100%;
@@ -1585,27 +1585,27 @@ section {
     height: 30px;
   }
   
-  .cuadricula-galeria {
+  .gallery-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
   
-  .contenido-pie {
+  .footer-content {
     grid-template-columns: 1fr;
     gap: 2rem;
     text-align: center;
   }
   
-  .formulario-newsletter {
+  .newsletter-form {
     max-width: 100%;
   }
   
-  .contenedor-navegacion {
+  .nav-container {
     padding: 1rem;
     justify-content: flex-start;
   }
   
-  .enlaces-navegacion {
+  .nav-links {
     position: fixed;
     top: 70px;
     right: -100%;
@@ -1621,23 +1621,23 @@ section {
   }
 
   /* Mostrar menú cuando el checkbox está marcado */
-  .toggle-hamburguesa:checked ~ .enlaces-navegacion {
+  .burger-toggle:checked ~ .nav-links {
     right: 0;
   }
 
-  .menu-hamburguesa {
+  .burger-menu {
     display: block;
   }
   
-  .titulo-hero {
+  .hero-title {
     font-size: 2.5rem;
   }
   
-  .resumen-estadisticas {
+  .statistics-summary {
     grid-template-columns: 1fr 1fr;
   }
   
-  .cuadricula-videos {
+  .video-grid {
     grid-template-columns: 1fr;
   }
   
@@ -1648,7 +1648,7 @@ section {
 
 /* Pantallas muy pequeñas (móviles en portrait, menos de 576px) */
 @media (max-width: 576px) {
-  .contenedor {
+  .container {
     padding: 0 0.75rem;
   }
   
@@ -1656,11 +1656,11 @@ section {
     padding: 2.5rem 0;
   }
   
-  .titulo-seccion {
+  .section-title {
     font-size: 1.5rem;
   }
   
-  .descripcion-seccion {
+  .section-description {
     font-size: 0.9rem;
   }
   
@@ -1680,7 +1680,7 @@ section {
   
 
   
-  .boton {
+  .btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
@@ -1690,146 +1690,146 @@ section {
     font-size: 1rem;
   }
   
-  .titulo-hero {
+  .hero-title {
     font-size: 2rem;
   }
   
-  .titulo-hero-jugador {
+  .player-hero-title {
     font-size: 2.2rem;
   }
   
-  .subtitulo-hero-jugador {
+  .player-hero-subtitle {
     font-size: 1.1rem;
   }
   
-  .contenido-hero-jugador {
+  .player-hero-content {
     padding: 0 1rem;
     gap: 1.5rem;
   }
   
-  .seccion-hero-jugador {
+  .player-hero-section {
     min-height: 400px;
     height: 60vh;
   }
   
-  .info-hero-jugador {
+  .player-hero-info {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
   
-  .imagen-hero-jugador img {
+  .player-hero-image img {
     max-height: 300px;
   }
   
-  .contenido-biografia {
+  .biography-content {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
   
-  .barra-lateral-biografia {
+  .biography-sidebar {
     order: -1;
   }
   
-  .imagen-perfil {
+  .profile-image {
     height: 200px;
   }
   
-  .detalles-perfil {
+  .profile-details {
     padding: 1rem;
   }
   
-  .destacados-carrera {
+  .career-highlights {
     padding: 1rem;
   }
   
-  .destacado-year {
+  .highlight-year {
     min-width: 50px;
     font-size: 0.8rem;
     padding: 0.2rem 0.4rem;
   }
   
-  .resumen-estadisticas {
+  .statistics-summary {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
   
-  .tarjeta-estadistica {
+  .stat-card {
     padding: 1rem;
   }
   
-  .tabla-estadisticas {
+  .stats-table {
     font-size: 0.8rem;
   }
   
-  .tabla-estadisticas th,
-  .tabla-estadisticas td {
+  .stats-table th,
+  .stats-table td {
     padding: 0.5rem 0.3rem;
   }
   
-  .cuadricula-galeria {
+  .gallery-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
   
-  .elemento-galeria img {
+  .gallery-item img {
     height: 180px;
   }
   
-  .leyenda-galeria {
+  .gallery-caption {
     font-size: 0.8rem;
     padding: 0.6rem;
   }
   
   /* Media queries específicas para móviles muy pequeños */
-  .seccion-hero-jugador {
+  .player-hero-section {
     min-height: 400px;
     height: 60vh;
   }
   
-  .contenido-hero-jugador {
+  .player-hero-content {
     padding: 0 0.5rem;
     gap: 1.5rem;
   }
   
-  .titulo-hero-jugador {
+  .player-hero-title {
     font-size: 1.8rem;
     line-height: 1.1;
     margin-bottom: 0.3rem;
   }
   
-  .subtitulo-hero-jugador {
+  .player-hero-subtitle {
     font-size: 1rem;
     margin-bottom: 1.5rem;
   }
   
-  .info-hero-jugador {
+  .player-hero-info {
     grid-template-columns: 1fr;
     gap: 0.6rem;
     margin-bottom: 1.5rem;
   }
   
-  .elemento-info {
+  .info-item {
     text-align: center;
   }
   
-  .etiqueta-info {
+  .info-label {
     font-size: 0.8rem;
   }
   
-  .valor-info {
+  .info-value {
     font-size: 0.9rem;
   }
   
-  .imagen-hero-jugador img {
+  .player-hero-image img {
     max-height: 250px;
   }
   
-  .cita-hero-jugador {
+  .player-hero-quote {
     padding-left: 0.8rem;
     margin-top: 1rem;
   }
   
-  .cita-hero-jugador blockquote {
+  .player-hero-quote blockquote {
     font-size: 0.9rem;
     line-height: 1.3;
   }
@@ -1837,140 +1837,140 @@ section {
 
 /* Media query para móviles muy pequeños (320px - 480px) */
 @media (max-width: 480px) {
-  .seccion-hero-jugador {
+  .player-hero-section {
     min-height: 350px;
     height: 55vh;
   }
   
-  .contenido-hero-jugador {
+  .player-hero-content {
     padding: 0 0.75rem;
     gap: 1rem;
   }
   
-  .titulo-hero-jugador {
+  .player-hero-title {
     font-size: 1.5rem;
     line-height: 1.2;
   }
   
-  .subtitulo-hero-jugador {
+  .player-hero-subtitle {
     font-size: 0.9rem;
     margin-bottom: 1rem;
   }
   
-  .info-hero-jugador {
+  .player-hero-info {
     gap: 0.5rem;
     margin-bottom: 1rem;
   }
   
-  .etiqueta-info {
+  .info-label {
     font-size: 0.75rem;
   }
   
-  .valor-info {
+  .info-value {
     font-size: 0.85rem;
   }
   
-  .imagen-hero-jugador img {
+  .player-hero-image img {
     max-height: 200px;
   }
   
-  .cita-hero-jugador {
+  .player-hero-quote {
     padding-left: 0.5rem;
     margin-top: 0.8rem;
   }
   
-  .cita-hero-jugador blockquote {
+  .player-hero-quote blockquote {
     font-size: 0.8rem;
     line-height: 1.4;
   }
   
   /* Ajustes adicionales para navegación en móviles pequeños */
-  .menu-hamburguesa {
+  .burger-menu {
     width: 20px;
     height: 20px;
   }
   
-  .menu-hamburguesa span {
+  .burger-menu span {
     height: 2px;
   }
   
-  .enlaces-navegacion {
+  .nav-links {
     padding: 1rem;
   }
   
-  .enlaces-navegacion a {
+  .nav-links a {
     font-size: 0.9rem;
     padding: 0.8rem 0;
   }
   
   /* Mejoras para secciones de biografía y estadísticas en móviles pequeños */
-  .contenido-biografia {
+  .biography-content {
     gap: 1rem;
   }
   
-  .texto-biografia h3 {
+  .biography-text h3 {
     font-size: 1.1rem;
     margin: 1rem 0 0.5rem;
   }
   
-  .texto-biografia p {
+  .biography-text p {
     font-size: 0.85rem;
     line-height: 1.5;
     margin-bottom: 0.8rem;
   }
   
-  .tarjeta-perfil-jugador {
+  .player-profile-card {
     padding: 1rem;
   }
   
-  .imagen-perfil {
+  .profile-image {
     height: 150px;
   }
   
-  .detalles-perfil h4 {
+  .profile-details h4 {
     font-size: 1rem;
   }
   
-  .detalles-perfil p {
+  .profile-details p {
     font-size: 0.8rem;
   }
   
-  .destacados-carrera {
+  .career-highlights {
     padding: 0.8rem;
   }
   
-  .destacado-year {
+  .highlight-year {
     font-size: 0.7rem;
     padding: 0.15rem 0.3rem;
     min-width: 40px;
   }
   
-  .resumen-estadisticas {
+  .statistics-summary {
     gap: 0.8rem;
   }
   
-  .tarjeta-estadistica {
+  .stat-card {
     padding: 0.8rem;
   }
   
-  .numero-estadistica {
+  .stat-number {
     font-size: 1.5rem;
   }
   
-  .etiqueta-estadistica {
+  .stat-label {
     font-size: 0.75rem;
   }
   
-  .tabla-estadisticas {
+  .stats-table {
     font-size: 0.75rem;
   }
   
-  .tabla-estadisticas th,
-  .tabla-estadisticas td {
+  .stats-table th,
+  .stats-table td {
     padding: 0.4rem 0.2rem;
   }
   
-  .titulo-seccion {
+  .section-title {
     font-size: 1.5rem;
   }
 }

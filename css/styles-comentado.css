@@ -1,0 +1,2644 @@
+/* ========================================
+   PROYECTO GOATS DEL FÚTBOL - ESTILOS COMENTADOS Y EXPLICADOS
+   ======================================== */
+
+/* ========================================
+   1. VARIABLES GLOBALES Y RESET
+   ======================================== */
+
+/* 
+   :root - Selector que define variables CSS globales (custom properties)
+   Estas variables pueden ser reutilizadas en todo el documento usando var(--nombre-variable)
+*/
+:root {
+  /* Colores principales del proyecto */
+  --color-primary: #0073ff;    /* Color azul cielo brillante - usado para elementos principales */
+  --color-secondary: #002594;  /* Color azul real más oscuro - usado para acentos y contrastes */
+  --color-accent: #00bfff;     /* Color azul accent - usado para efectos hover y transiciones */
+  --color-text: #ffffff;       /* Color blanco - usado para texto principal */
+  --color-dark: #121212;       /* Color casi negro - usado como fondo principal */
+  --color-darker: #0a0a0a;     /* Color negro más profundo - usado para fondos de contraste */
+  
+  /* Tipografías del proyecto */
+  --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Fuente principal para texto */
+  --font-heading: 'Montserrat', 'Segoe UI', sans-serif;             /* Fuente para títulos y encabezados */
+  
+  /* Valores reutilizables para diseño */
+  --border-radius: 8px;                           /* Radio de borde estándar para elementos redondeados */
+  --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);   /* Sombra estándar para elementos flotantes */
+  --transition-normal: all 0.3s ease;             /* Transición estándar para animaciones suaves */
+}
+
+/* 
+   Reset básico - Elimina márgenes y paddings por defecto del navegador
+   * = selector universal que aplica a todos los elementos
+*/
+* {
+  margin: 0;                    /* Elimina margen exterior por defecto */
+  padding: 0;                   /* Elimina relleno interior por defecto */
+  box-sizing: border-box;       /* Incluye padding y border en el cálculo del ancho/alto total */
+}
+
+/* 
+   Configuración del elemento html (raíz del documento)
+*/
+html {
+  scroll-behavior: smooth;      /* Hace que el scroll sea suave al navegar por anclas */
+}
+
+/* 
+   Configuración del elemento body (cuerpo del documento)
+*/
+body {
+  font-family: var(--font-primary);    /* Aplica la fuente principal definida en variables */
+  background: var(--color-dark);       /* Color de fondo principal */
+  color: var(--color-text);            /* Color de texto por defecto */
+  min-height: 100vh;                   /* Altura mínima del 100% del viewport (pantalla visible) */
+  line-height: 1.6;                    /* Espaciado entre líneas para mejor legibilidad */
+  overflow-x: hidden;                  /* Oculta scroll horizontal para evitar barras innecesarias */
+  /* Gradiente de fondo de arriba hacia abajo */
+  background-image: linear-gradient(to bottom, var(--color-darker), var(--color-dark));
+}
+
+/* ========================================
+   2. TIPOGRAFÍA BASE
+   ======================================== */
+
+/* 
+   Estilos para todos los encabezados (h1, h2, h3, h4, h5, h6)
+   Se aplican propiedades comunes a todos los niveles de títulos
+*/
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);    /* Fuente especial para encabezados */
+  color: var(--color-primary);         /* Color azul principal para títulos */
+  margin-bottom: 1rem;                 /* Espacio inferior de 1rem (16px aprox) */
+  line-height: 1.2;                    /* Espaciado entre líneas más compacto para títulos */
+}
+
+/* Tamaño específico para h1 (título principal) */
+h1 {
+  font-size: 2.5rem;           /* Tamaño de 2.5 veces el tamaño base (40px aprox) */
+  color: var(--color-text);    /* Color blanco para h1 (sobrescribe el color primary) */
+}
+
+/* Tamaño específico para h2 (subtítulos principales) */
+h2 {
+  font-size: 2rem;             /* Tamaño de 2 veces el tamaño base (32px aprox) */
+}
+
+/* Tamaño específico para h3 (subtítulos secundarios) */
+h3 {
+  font-size: 1.5rem;           /* Tamaño de 1.5 veces el tamaño base (24px aprox) */
+}
+
+/* 
+   Estilos para párrafos de texto
+*/
+p {
+  margin-bottom: 1rem;         /* Espacio inferior entre párrafos */
+  color: var(--color-text);    /* Color blanco para el texto */
+}
+
+/* ========================================
+   3. CONTENEDORES Y LAYOUT
+   ======================================== */
+
+/* 
+   Clase contenedor principal - Centra el contenido y limita el ancho máximo
+*/
+.contenedor {
+  width: 100%;                 /* Ocupa todo el ancho disponible */
+  max-width: 1200px;           /* Ancho máximo de 1200px para no exceder en pantallas grandes */
+  margin: 0 auto;              /* Centra horizontalmente el contenedor */
+  padding: 0 20px;             /* Relleno lateral de 20px para separación de bordes */
+}
+
+/* 
+   Estilos para todas las secciones del sitio
+*/
+section {
+  padding: 60px 0;             /* Relleno vertical de 60px arriba y abajo */
+}
+
+/* 
+   Clase para títulos de sección
+*/
+.titulo-seccion {
+  text-align: center;          /* Centra el texto horizontalmente */
+  margin-bottom: 2.5rem;       /* Espacio inferior de 2.5rem */
+  position: relative;          /* Posicionamiento relativo para el pseudo-elemento ::after */
+  color: var(--color-primary); /* Color azul principal */
+  font-weight: 700;            /* Peso de fuente bold (negrita) */
+}
+
+/* 
+   Pseudo-elemento ::after para crear una línea decorativa debajo del título
+*/
+.titulo-seccion::after {
+  content: '';                 /* Contenido vacío requerido para mostrar el pseudo-elemento */
+  display: block;              /* Se comporta como elemento de bloque */
+  width: 80px;                 /* Ancho de la línea decorativa */
+  height: 4px;                 /* Alto de la línea decorativa */
+  background: var(--color-secondary); /* Color azul secundario */
+  margin: 15px auto 0;         /* Margen: 15px arriba, centrado horizontalmente, 0 abajo */
+  border-radius: 2px;          /* Bordes redondeados sutiles */
+}
+
+/* 
+   Clase para descripciones de sección
+*/
+.descripcion-seccion {
+  text-align: center;          /* Centra el texto */
+  max-width: 800px;            /* Ancho máximo para mejor legibilidad */
+  margin: -1.5rem auto 2.5rem; /* Margen: -1.5rem arriba (reduce espacio), centrado, 2.5rem abajo */
+  color: var(--color-text);    /* Color blanco para el texto */
+}
+
+/* ========================================
+   4. HEADER Y NAVEGACIÓN
+   ======================================== */
+
+/* 
+   Barra de navegación principal - Fija en la parte superior
+*/
+.navegacion-principal {
+  position: fixed;             /* Posición fija - permanece en su lugar al hacer scroll */
+  top: 0;                      /* Posicionada en la parte superior */
+  left: 0;                     /* Posicionada en el borde izquierdo */
+  width: 100%;                 /* Ocupa todo el ancho de la pantalla */
+  background: var(--color-darker); /* Fondo negro profundo */
+  box-shadow: var(--box-shadow);   /* Sombra definida en variables */
+  border-bottom: 1px solid rgba(0, 191, 255, 0.2); /* Borde inferior azul semitransparente */
+  z-index: 1000;               /* Índice z alto para aparecer sobre otros elementos */
+}
+
+/* 
+   Contenedor interno de la navegación
+*/
+.contenedor-navegacion {
+  display: flex;               /* Layout flexbox para alinear elementos */
+  justify-content: space-between; /* Distribuye elementos con espacio entre ellos */
+  align-items: center;         /* Centra elementos verticalmente */
+  padding: 1rem 2rem;          /* Relleno: 1rem arriba/abajo, 2rem izquierda/derecha */
+  max-width: 1200px;           /* Ancho máximo igual al contenedor principal */
+  margin: 0 auto;              /* Centra el contenedor */
+  position: relative;          /* Posicionamiento relativo para elementos hijos absolutos */
+}
+
+/* 
+   Estilos para el logotipo
+*/
+.logotipo a {
+  color: white;                /* Color blanco para el texto del logo */
+  font-size: 1.5rem;           /* Tamaño de fuente 1.5 veces el base */
+  font-weight: 800;            /* Peso de fuente extra bold */
+  text-decoration: none;       /* Elimina subrayado del enlace */
+  transition: var(--transition-normal); /* Transición suave para efectos hover */
+  text-transform: uppercase;   /* Convierte texto a mayúsculas */
+  letter-spacing: 1px;         /* Espaciado entre letras */
+}
+
+/* 
+   Lista de enlaces de navegación
+*/
+.enlaces-navegacion {
+  display: flex;               /* Layout flexbox para alinear enlaces horizontalmente */
+  list-style: none;            /* Elimina viñetas de la lista */
+  gap: 2rem;                   /* Espacio de 2rem entre cada enlace */
+}
+
+/* 
+   Estilos para enlaces individuales de navegación
+*/
+.enlaces-navegacion a {
+  color: white;                /* Color blanco para enlaces */
+  text-decoration: none;       /* Sin subrayado */
+  font-weight: 600;            /* Peso de fuente semi-bold */
+  padding: 0.5rem 0;           /* Relleno vertical para área de click más grande */
+  position: relative;          /* Posicionamiento relativo para pseudo-elemento */
+  transition: var(--transition-normal); /* Transición suave */
+  text-transform: uppercase;   /* Texto en mayúsculas */
+  font-size: 0.9rem;           /* Tamaño ligeramente menor al base */
+  letter-spacing: 1px;         /* Espaciado entre letras */
+}
+
+/* 
+   Efectos hover y estado activo para enlaces de navegación
+*/
+.enlaces-navegacion a:hover,
+.enlaces-navegacion a.activo {
+  color: var(--color-primary); /* Cambia a color azul principal */
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6); /* Sombra de texto con efecto glow */
+}
+
+/* 
+   Pseudo-elemento para crear línea animada debajo de enlaces
+*/
+.enlaces-navegacion a::after {
+  content: '';                 /* Contenido vacío */
+  position: absolute;          /* Posicionamiento absoluto respecto al enlace */
+  bottom: -3px;                /* 3px debajo del enlace */
+  left: 0;                     /* Alineado a la izquierda */
+  width: 0;                    /* Ancho inicial 0 (invisible) */
+  height: 2px;                 /* Alto de 2px */
+  background: var(--color-primary); /* Color azul principal */
+  transition: width 0.3s ease, box-shadow 0.3s ease; /* Transición del ancho y sombra */
+}
+
+/* 
+   Animación de la línea en hover y estado activo
+*/
+.enlaces-navegacion a:hover::after,
+.enlaces-navegacion a.activo::after {
+  width: 100%;                 /* Expande la línea al 100% del ancho del enlace */
+  box-shadow: 0 0 10px var(--color-primary); /* Añade efecto glow a la línea */
+}
+
+/* 
+   Menú hamburguesa para dispositivos móviles
+*/
+.menu-hamburguesa {
+  display: none;               /* Oculto por defecto (se muestra en responsive) */
+  cursor: pointer;             /* Cursor de mano al pasar sobre él */
+  position: absolute;          /* Posicionamiento absoluto */
+  right: 1rem;                 /* 1rem desde el borde derecho */
+  top: 50%;                    /* 50% desde arriba */
+  transform: translateY(-50%); /* Centra verticalmente usando transform */
+}
+
+/* 
+   Líneas del menú hamburguesa
+*/
+.menu-hamburguesa .linea1,
+.menu-hamburguesa .linea2,
+.menu-hamburguesa .linea3 {
+  width: 25px;                 /* Ancho de cada línea */
+  height: 3px;                 /* Alto de cada línea */
+  background: white;           /* Color blanco */
+  margin: 5px;                 /* Margen de 5px entre líneas */
+  transition: var(--transition-normal); /* Transición para animaciones */
+}
+
+/* 
+   Checkbox oculto para controlar el menú móvil
+*/
+.toggle-hamburguesa {
+  display: none;               /* No se muestra visualmente */
+  opacity: 0;                  /* Completamente transparente */
+  position: absolute;          /* Posicionamiento absoluto */
+  visibility: hidden;          /* Oculto para lectores de pantalla */
+}
+
+/* ========================================
+   5. HERO SECTION (SECCIÓN PRINCIPAL)
+   ======================================== */
+
+/* 
+   Sección hero principal de la página de inicio
+*/
+.seccion-hero {
+  height: 100vh;               /* Altura del 100% del viewport */
+  min-height: 600px;           /* Altura mínima de 600px */
+  /* Imagen de fondo con overlay oscuro */
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../assets/images/goats-trio-bg.jpg');
+  background-size: cover;      /* La imagen cubre toda el área */
+  background-position: center; /* Imagen centrada */
+  display: flex;               /* Layout flexbox */
+  align-items: center;         /* Centra contenido verticalmente */
+  justify-content: center;     /* Centra contenido horizontalmente */
+  text-align: center;          /* Centra texto */
+  position: relative;          /* Posicionamiento relativo */
+  margin-top: 60px;            /* Margen superior para compensar navegación fija */
+}
+
+/* 
+   Contenido interno de la sección hero
+*/
+.contenido-hero {
+  max-width: 800px;            /* Ancho máximo del contenido */
+  padding: 0 2rem;             /* Relleno lateral */
+  z-index: 1;                  /* Índice z para aparecer sobre el fondo */
+}
+
+/* 
+   Título principal de la sección hero
+*/
+.titulo-hero {
+  font-size: 4rem;             /* Tamaño grande para impacto visual */
+  font-weight: bold;           /* Peso de fuente negrita */
+  color: var(--color-text);    /* Color blanco */
+  margin-bottom: 1rem;         /* Espacio inferior */
+}
+
+/* 
+   Subtítulo de la sección hero
+*/
+.subtitulo-hero {
+  font-size: 1.5rem;           /* Tamaño mediano */
+  color: var(--color-text);    /* Color blanco */
+  margin-bottom: 2rem;         /* Espacio inferior mayor */
+  max-width: 600px;            /* Ancho máximo para mejor legibilidad */
+  margin-left: auto;           /* Centra horizontalmente */
+  margin-right: auto;          /* Centra horizontalmente */
+}
+
+/* ========================================
+   6. SECCIONES PRINCIPALES
+   ======================================== */
+
+/* 
+   Sección de introducción
+*/
+.seccion-introduccion {
+  background-color: var(--color-dark); /* Fondo oscuro principal */
+}
+
+/* 
+   Contenido de introducción usando CSS Grid
+*/
+.contenido-introduccion {
+  display: grid;                    /* Activa CSS Grid layout */
+  grid-template-columns: 2fr 1fr;   /* Dos columnas: primera ocupa 2/3, segunda 1/3 */
+  gap: 3rem;                        /* Espacio de 3rem entre columnas */
+  align-items: center;              /* Centra elementos verticalmente en el grid */
+}
+
+/* 
+   Texto de la introducción
+*/
+.texto-introduccion p {
+  margin-bottom: 1.5rem;            /* Espacio entre párrafos */
+  line-height: 1.7;                 /* Altura de línea para mejor legibilidad */
+  color: var(--color-text);         /* Color blanco para el texto */
+}
+
+/* 
+   Contenedor de estadísticas
+*/
+.estadisticas-introduccion {
+  display: flex;                    /* Layout flexbox */
+  flex-direction: column;           /* Dirección vertical (elementos apilados) */
+  gap: 1.5rem;                      /* Espacio entre elementos estadísticos */
+}
+
+/* 
+   Elemento individual de estadística
+*/
+.elemento-estadistica {
+  background: var(--color-primary); /* Fondo azul principal */
+  color: white;                     /* Texto blanco */
+  padding: 1.5rem;                  /* Relleno interno */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  text-align: center;               /* Texto centrado */
+  box-shadow: var(--box-shadow);    /* Sombra definida en variables */
+}
+
+/* 
+   Número grande de la estadística
+*/
+.numero-estadistica {
+  display: block;                   /* Se comporta como elemento de bloque */
+  font-size: 2.5rem;                /* Tamaño grande para destacar */
+  font-weight: 700;                 /* Peso bold */
+  color: var(--color-secondary);    /* Color azul secundario */
+  margin-bottom: 0.5rem;            /* Espacio inferior pequeño */
+}
+
+/* 
+   Etiqueta descriptiva de la estadística
+*/
+.etiqueta-estadistica {
+  font-size: 1rem;                  /* Tamaño base */
+}
+
+/* ========================================
+   7. SECCIÓN DE JUGADORES
+   ======================================== */
+
+/* 
+   Sección principal de jugadores
+*/
+.seccion-jugadores {
+  background-color: var(--color-darker); /* Fondo negro más profundo */
+  padding: 3rem 0;                       /* Relleno vertical de 3rem */
+}
+
+/* 
+   Contenedor de las tarjetas de jugadores
+*/
+.contenedor-jugadores {
+  display: flex;                    /* Layout flexbox */
+  gap: 2rem;                        /* Espacio entre tarjetas */
+  flex-wrap: wrap;                  /* Permite que las tarjetas se envuelvan en múltiples líneas */
+  justify-content: center;          /* Centra las tarjetas horizontalmente */
+}
+
+/* 
+   Tarjeta individual de jugador
+*/
+.tarjeta-jugador {
+  background: var(--color-dark);    /* Fondo oscuro */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  border: 2px solid var(--color-primary); /* Borde azul de 2px */
+  /* Sombra doble: una negra para profundidad y otra azul para efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  width: 320px;                     /* Ancho fijo de 320px */
+  overflow: hidden;                 /* Oculta contenido que se desborde */
+  transition: var(--transition-normal); /* Transición suave para efectos hover */
+  position: relative;               /* Posicionamiento relativo para elementos hijos absolutos */
+}
+
+/* 
+   Efectos hover para la tarjeta de jugador
+*/
+.tarjeta-jugador:hover {
+  transform: translateY(-10px);     /* Mueve la tarjeta 10px hacia arriba */
+  /* Intensifica las sombras en hover */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 191, 255, 0.4);
+  border-color: var(--color-primary); /* Mantiene el color del borde */
+}
+
+/* 
+   Contenedor de la imagen de la tarjeta
+*/
+.contenedor-imagen-tarjeta {
+  position: relative;               /* Posicionamiento relativo para elementos hijos absolutos */
+  height: 320px;                    /* Altura fija de 320px */
+  overflow: hidden;                 /* Oculta partes de imagen que se desborden */
+  border-bottom: 1px solid rgba(0, 191, 255, 0.3); /* Borde inferior azul semitransparente */
+}
+
+/* 
+   Imagen del jugador
+*/
+.imagen-jugador {
+  width: 100%;                      /* Ocupa todo el ancho del contenedor */
+  height: 100%;                     /* Ocupa toda la altura del contenedor */
+  object-fit: cover;                /* Mantiene proporción y cubre todo el área */
+  transition: transform 0.5s ease;  /* Transición suave para efecto zoom */
+  filter: contrast(1.1);            /* Aumenta ligeramente el contraste */
+}
+
+/* 
+   Efecto zoom en la imagen al hacer hover en la tarjeta
+*/
+.tarjeta-jugador:hover .imagen-jugador {
+  transform: scale(1.05);           /* Escala la imagen al 105% (efecto zoom) */
+}
+
+/* 
+   Bandera del país del jugador
+*/
+.bandera-pais {
+  position: absolute;               /* Posicionamiento absoluto dentro del contenedor de imagen */
+  top: 15px;                        /* 15px desde arriba */
+  right: 15px;                      /* 15px desde la derecha */
+  width: 40px;                      /* Ancho de 40px */
+  height: 40px;                     /* Alto de 40px (forma cuadrada) */
+  border-radius: 50%;               /* Hace la bandera circular */
+  overflow: hidden;                 /* Oculta partes de imagen que se desborden del círculo */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+
+/* 
+   Imagen de la bandera
+*/
+.bandera-pais img {
+  width: 100%;                      /* Ocupa todo el ancho del contenedor circular */
+  height: 100%;                     /* Ocupa toda la altura del contenedor circular */
+  object-fit: cover;                /* Mantiene proporción y cubre el área circular */
+}
+
+/* 
+   Contenido textual de la tarjeta
+*/
+.contenido-tarjeta {
+  padding: 1.5rem;                  /* Relleno interno de 1.5rem */
+  color: white;                     /* Color de texto blanco */
+  text-align: center;               /* Texto centrado */
+}
+
+/* 
+   Nombre del jugador
+*/
+.nombre-jugador {
+  font-size: 1.5rem;                /* Tamaño de fuente 1.5 veces el base */
+  font-weight: 700;                 /* Peso bold */
+  margin-bottom: 0.5rem;            /* Espacio inferior */
+  color: white;                     /* Color blanco */
+  text-transform: uppercase;        /* Convierte a mayúsculas */
+  letter-spacing: 1px;              /* Espaciado entre letras */
+}
+
+/* 
+   Apodo del jugador
+*/
+.apodo-jugador {
+  font-size: 1rem;                  /* Tamaño base */
+  color: var(--color-primary);      /* Color azul principal */
+  font-style: italic;               /* Texto en cursiva */
+  margin-bottom: 1rem;              /* Espacio inferior */
+  text-shadow: 0 0 5px rgba(0, 191, 255, 0.5); /* Sombra de texto con efecto glow */
+}
+
+/* 
+   Contenedor de elementos destacados del jugador
+*/
+.destacados-jugador {
+  display: flex;                    /* Layout flexbox */
+  flex-wrap: wrap;                  /* Permite envolver elementos en múltiples líneas */
+  gap: 0.5rem;                      /* Espacio entre elementos */
+  margin-bottom: 1rem;              /* Espacio inferior */
+}
+
+/* 
+   Elemento destacado individual (badges/etiquetas)
+*/
+.destacado {
+  background: var(--color-primary); /* Fondo azul principal */
+  color: white;                     /* Texto blanco */
+  padding: 0.3rem 0.6rem;           /* Relleno: 0.3rem vertical, 0.6rem horizontal */
+  border-radius: 20px;              /* Bordes muy redondeados para forma de píldora */
+  font-size: 0.8rem;                /* Tamaño de fuente pequeño */
+  font-weight: 500;                 /* Peso de fuente medio */
+}
+
+/* 
+   Descripción del jugador en la tarjeta
+*/
+.descripcion-jugador {
+  color: white;                     /* Color blanco */
+  margin-bottom: 1.2rem;            /* Espacio inferior */
+  line-height: 1.4;                 /* Altura de línea para legibilidad */
+}
+
+/* 
+   Enlace para ver más detalles del jugador
+*/
+.enlace-jugador {
+  display: inline-block;            /* Se comporta como bloque pero en línea */
+  background: var(--color-secondary); /* Fondo azul secundario */
+  color: white;                     /* Texto blanco */
+  padding: 0.6rem 1.2rem;           /* Relleno interno */
+  border-radius: 30px;              /* Bordes muy redondeados */
+  text-decoration: none;            /* Sin subrayado */
+  font-weight: 600;                 /* Peso de fuente semi-bold */
+  transition: var(--transition-normal); /* Transición suave */
+}
+
+/* 
+   Efectos hover para el enlace del jugador
+*/
+.enlace-jugador:hover {
+  background: var(--color-accent);  /* Cambia a color accent en hover */
+  transform: translateY(-2px);      /* Mueve 2px hacia arriba */
+}
+
+/* ========================================
+   8. PÁGINAS DE JUGADORES INDIVIDUALES
+   ======================================== */
+
+/* 
+   Contenedor principal de página de jugador individual
+*/
+.pagina-jugador {
+  padding-top: 60px;                /* Relleno superior para compensar navegación fija */
+}
+
+/* 
+   Sección hero para páginas individuales de jugadores
+*/
+.seccion-hero-jugador {
+  height: 70vh;                     /* 70% de la altura del viewport */
+  min-height: 500px;                /* Altura mínima de 500px */
+  position: relative;               /* Posicionamiento relativo */
+  display: flex;                    /* Layout flexbox */
+  align-items: center;              /* Centra contenido verticalmente */
+  background-size: cover;           /* La imagen de fondo cubre toda el área */
+  background-position: center;      /* Imagen centrada */
+  color: white;                     /* Color de texto blanco */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+  width: 100%;                      /* Ancho completo */
+}
+
+/* 
+   Fondo específico para la página de Messi
+*/
+.hero-messi {
+  /* Gradiente oscuro sobre imagen de fondo */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/messi-hero-bg.jpg');
+}
+
+/* 
+   Fondo específico para la página de Ronaldo
+*/
+.hero-ronaldo {
+  /* Gradiente oscuro sobre imagen de fondo */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/ronaldo-hero-bg.jpg');
+}
+
+/* 
+   Fondo específico para la página de Neymar
+*/
+.hero-neymar {
+  /* Gradiente oscuro sobre imagen de fondo */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/neymar-hero-bg.jpg');
+}
+
+/* 
+   Contenido interno del hero de jugador
+*/
+.contenido-hero-jugador {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: 1fr 1fr;   /* Dos columnas iguales */
+  gap: 3rem;                        /* Espacio entre columnas */
+  align-items: center;              /* Centra elementos verticalmente */
+  max-width: 1200px;                /* Ancho máximo */
+  margin: 0 auto;                   /* Centra horizontalmente */
+  padding: 0 2rem;                  /* Relleno lateral */
+  z-index: 1;                       /* Índice z para aparecer sobre el fondo */
+  width: 100%;                      /* Ancho completo */
+  box-sizing: border-box;           /* Incluye padding en el cálculo del ancho */
+  position: relative;               /* Posicionamiento relativo */
+  height: 100%;                     /* Altura completa del contenedor */
+  min-height: 0;                    /* Altura mínima 0 para flexibilidad */
+}
+
+/* 
+   Sección de texto del hero de jugador
+*/
+.texto-hero-jugador {
+  text-align: left;                 /* Alineación de texto a la izquierda */
+  max-width: 100%;                  /* Ancho máximo completo */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+  word-wrap: break-word;            /* Permite partir palabras largas */
+  overflow-wrap: break-word;        /* Alternativa moderna para word-wrap */
+  hyphens: auto;                    /* Guiones automáticos para partir palabras */
+  min-width: 0;                     /* Ancho mínimo 0 para flexibilidad */
+  flex: 1;                          /* Crece para llenar espacio disponible */
+}
+
+/* 
+   Título principal del hero de jugador
+*/
+.titulo-hero-jugador {
+  font-size: 3rem;                  /* Tamaño grande */
+  margin-bottom: 0.5rem;            /* Espacio inferior pequeño */
+  color: white;                     /* Color blanco */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra de texto para legibilidad */
+  word-wrap: break-word;            /* Permite partir palabras */
+  line-height: 1.1;                 /* Altura de línea compacta */
+}
+
+/* 
+   Subtítulo del hero de jugador
+*/
+.subtitulo-hero-jugador {
+  font-size: 1.5rem;                /* Tamaño mediano */
+  color: var(--color-secondary);    /* Color azul secundario */
+  margin-bottom: 2rem;              /* Espacio inferior */
+  font-weight: 500;                 /* Peso de fuente medio */
+  word-wrap: break-word;            /* Permite partir palabras */
+}
+
+/* 
+   Información adicional del jugador en grid
+*/
+.info-hero-jugador {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: 1fr 1fr;   /* Dos columnas iguales */
+  gap: 1rem;                        /* Espacio entre elementos */
+  margin-bottom: 2rem;              /* Espacio inferior */
+}
+
+/* 
+   Elemento individual de información
+*/
+.elemento-info {
+  display: flex;                    /* Layout flexbox */
+  flex-direction: column;           /* Dirección vertical */
+  min-width: 0;                     /* Ancho mínimo 0 para flexibilidad */
+}
+
+/* 
+   Etiqueta de información
+*/
+.etiqueta-info {
+  font-size: 0.9rem;                /* Tamaño ligeramente menor */
+  color: white;                     /* Color blanco */
+  margin-bottom: 0.25rem;           /* Espacio inferior pequeño */
+}
+
+/* 
+   Valor de información
+*/
+.valor-info {
+  font-weight: 500;                 /* Peso de fuente medio */
+  color: var(--color-secondary);    /* Color azul secundario */
+  word-wrap: break-word;            /* Permite partir palabras */
+}
+
+/* 
+   Cita destacada del jugador
+*/
+.cita-hero-jugador {
+  font-style: italic;               /* Texto en cursiva */
+  border-left: 3px solid var(--color-secondary); /* Borde izquierdo azul */
+  padding-left: 1rem;               /* Relleno izquierdo */
+  margin-top: 1.5rem;               /* Margen superior */
+  max-width: 100%;                  /* Ancho máximo completo */
+}
+
+/* 
+   Blockquote dentro de la cita
+*/
+.cita-hero-jugador blockquote {
+  font-size: 1.1rem;                /* Tamaño ligeramente mayor */
+  margin: 0;                        /* Sin margen */
+  word-wrap: break-word;            /* Permite partir palabras */
+}
+
+/* 
+   Contenedor de imagen del hero de jugador
+*/
+.imagen-hero-jugador {
+  text-align: center;               /* Centra contenido */
+  display: flex;                    /* Layout flexbox */
+  justify-content: center;          /* Centra horizontalmente */
+  align-items: center;              /* Centra verticalmente */
+  max-width: 100%;                  /* Ancho máximo completo */
+  min-width: 0;                     /* Ancho mínimo 0 */
+  flex: 1;                          /* Crece para llenar espacio */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+}
+
+/* 
+   Imagen del jugador en el hero
+*/
+.imagen-hero-jugador img {
+  max-height: 400px;                /* Altura máxima */
+  max-width: 100%;                  /* Ancho máximo completo */
+  width: auto;                      /* Ancho automático para mantener proporción */
+  height: auto;                     /* Altura automática para mantener proporción */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra */
+  object-fit: contain;              /* Mantiene proporción sin recortar */
+  display: block;                   /* Se comporta como elemento de bloque */
+}
+
+/* ========================================
+   9. SECCIÓN DE BIOGRAFÍA
+   ======================================== */
+
+/* 
+   Sección de biografía del jugador
+*/
+.seccion-biografia {
+  background-color: var(--color-dark); /* Fondo oscuro */
+}
+
+/* 
+   Contenido de la biografía usando grid
+*/
+.contenido-biografia {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: 2fr 1fr;   /* Primera columna 2/3, segunda 1/3 */
+  gap: 3rem;                        /* Espacio entre columnas */
+}
+
+/* 
+   Títulos h3 dentro del texto de biografía
+*/
+.texto-biografia h3 {
+  color: var(--color-primary);      /* Color azul principal */
+  margin: 1.5rem 0 1rem;            /* Margen: 1.5rem arriba, 0 lateral, 1rem abajo */
+}
+
+/* 
+   Párrafos dentro del texto de biografía
+*/
+.texto-biografia p {
+  margin-bottom: 1rem;              /* Espacio entre párrafos */
+  line-height: 1.7;                 /* Altura de línea para legibilidad */
+  color: var(--color-text);         /* Color blanco */
+}
+
+/* 
+   Barra lateral de la biografía
+*/
+.barra-lateral-biografia {
+  display: flex;                    /* Layout flexbox */
+  flex-direction: column;           /* Dirección vertical */
+  gap: 2rem;                        /* Espacio entre elementos */
+}
+
+/* 
+   Tarjeta de perfil del jugador en la barra lateral
+*/
+.tarjeta-perfil-jugador {
+  background: var(--color-darker);  /* Fondo negro más profundo */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+  /* Sombra doble: profundidad + efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+}
+
+/* 
+   Contenedor de imagen de perfil
+*/
+.imagen-perfil {
+  height: 250px;                    /* Altura fija */
+  overflow: hidden;                 /* Oculta partes de imagen que se desborden */
+}
+
+/* 
+   Imagen de perfil del jugador
+*/
+.imagen-perfil img {
+  width: 100%;                      /* Ancho completo del contenedor */
+  height: 100%;                     /* Altura completa del contenedor */
+  object-fit: cover;                /* Mantiene proporción y cubre el área */
+}
+
+/* 
+   Detalles del perfil del jugador
+*/
+.detalles-perfil {
+  padding: 1.5rem;                  /* Relleno interno */
+  color: white;                     /* Color de texto blanco */
+}
+
+/* 
+   Título h3 dentro de los detalles del perfil
+*/
+.detalles-perfil h3 {
+  color: var(--color-primary);      /* Color azul principal */
+  margin-bottom: 1rem;              /* Espacio inferior */
+  text-align: center;               /* Texto centrado */
+}
+
+/* 
+   Lista de estadísticas del perfil
+*/
+.estadisticas-perfil {
+  list-style: none;                 /* Sin viñetas */
+}
+
+/* 
+   Elementos individuales de estadísticas
+*/
+.estadisticas-perfil li {
+  padding: 0.8rem 0;                /* Relleno vertical */
+  border-bottom: 1px solid #ddd;    /* Borde inferior gris claro */
+  display: flex;                    /* Layout flexbox */
+  flex-direction: column;           /* Dirección vertical */
+}
+
+/* 
+   Último elemento de estadísticas (sin borde inferior)
+*/
+.estadisticas-perfil li:last-child {
+  border-bottom: none;              /* Sin borde inferior */
+}
+
+/* 
+   Primer span de cada estadística (etiqueta)
+*/
+.estadisticas-perfil li span:first-child {
+  font-weight: 600;                 /* Peso semi-bold */
+  color: var(--color-primary);      /* Color azul principal */
+  font-size: 0.9rem;                /* Tamaño ligeramente menor */
+}
+
+/* 
+   Sección de destacados de carrera
+*/
+.destacados-carrera {
+  background: var(--color-darker);  /* Fondo negro profundo */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  padding: 1.5rem;                  /* Relleno interno */
+  /* Sombra doble: profundidad + efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  color: white;                     /* Color de texto blanco */
+}
+
+/* 
+   Título h3 de destacados de carrera
+*/
+.destacados-carrera h3 {
+  color: var(--color-primary);      /* Color azul principal */
+  margin-bottom: 1rem;              /* Espacio inferior */
+  text-align: center;               /* Texto centrado */
+}
+
+/* 
+   Lista de destacados de carrera
+*/
+.lista-destacados {
+  list-style: none;                 /* Sin viñetas */
+}
+
+/* 
+   Elementos individuales de la lista de destacados
+*/
+.lista-destacados li {
+  display: flex;                    /* Layout flexbox */
+  margin-bottom: 1rem;              /* Espacio inferior */
+  align-items: center;              /* Centra elementos verticalmente */
+}
+
+/* 
+   Año del destacado (badge)
+*/
+.destacado-year {
+  background: var(--color-primary); /* Fondo azul principal */
+  color: white;                     /* Texto blanco */
+  padding: 0.3rem 0.6rem;           /* Relleno interno */
+  border-radius: 4px;               /* Bordes ligeramente redondeados */
+  margin-right: 1rem;               /* Margen derecho */
+  font-weight: 600;                 /* Peso semi-bold */
+  font-size: 0.9rem;                /* Tamaño ligeramente menor */
+  min-width: 60px;                  /* Ancho mínimo */
+  text-align: center;               /* Texto centrado */
+}
+
+/* 
+   Evento del destacado
+*/
+.destacado-event {
+  flex: 1;                          /* Crece para llenar espacio restante */
+}
+
+/* ========================================
+   10. SECCIÓN DE ESTILO DE JUEGO
+   ======================================== */
+
+/* 
+   Sección de estilo de juego
+*/
+.seccion-estilo-juego {
+  background-color: var(--color-darker); /* Fondo negro profundo */
+}
+
+/* 
+   Contenido del estilo de juego usando grid
+*/
+.contenido-estilo {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: 1fr 1fr;   /* Dos columnas iguales */
+  gap: 3rem;                        /* Espacio entre columnas */
+  align-items: start;               /* Alinea elementos al inicio verticalmente */
+}
+
+/* 
+   Párrafos de descripción del estilo
+*/
+.descripcion-estilo p {
+  margin-bottom: 1rem;              /* Espacio entre párrafos */
+  line-height: 1.7;                 /* Altura de línea para legibilidad */
+  color: var(--color-text);         /* Color blanco */
+}
+
+/* 
+   Contenedor de atributos del estilo
+*/
+.atributos-estilo {
+  display: flex;                    /* Layout flexbox */
+  flex-direction: column;           /* Dirección vertical */
+  gap: 1.5rem;                      /* Espacio entre atributos */
+}
+
+/* 
+   Atributo individual del estilo de juego
+*/
+.atributo {
+  display: flex;                    /* Layout flexbox */
+  align-items: center;              /* Centra elementos verticalmente */
+  justify-content: space-between;   /* Distribuye espacio entre elementos */
+}
+
+/* 
+   Nombre del atributo
+*/
+.atributo-name {
+  width: 100px;                     /* Ancho fijo */
+  font-weight: 600;                 /* Peso semi-bold */
+  color: var(--color-primary);      /* Color azul principal */
+}
+
+/* 
+   Barra de progreso del atributo
+*/
+.atributo-bar {
+  flex: 1;                          /* Crece para llenar espacio disponible */
+  height: 10px;                     /* Altura de la barra */
+  background: var(--color-darker);  /* Fondo oscuro */
+  border-radius: 5px;               /* Bordes redondeados */
+  margin: 0 1rem;                   /* Margen lateral */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+}
+
+/* 
+   Relleno de la barra de progreso
+*/
+.atributo-fill {
+  height: 100%;                     /* Altura completa de la barra */
+  background: var(--color-secondary); /* Color azul secundario */
+  border-radius: 5px;               /* Bordes redondeados */
+}
+
+/* 
+   Valor numérico del atributo
+*/
+.atributo-value {
+  width: 60px;                      /* Ancho fijo */
+  text-align: right;                /* Alineación a la derecha */
+  font-weight: 600;                 /* Peso semi-bold */
+  color: var(--color-text);         /* Color blanco */
+}
+
+/* ========================================
+   11. SECCIÓN DE LOGROS
+   ======================================== */
+
+/* 
+   Sección de logros del jugador
+*/
+.seccion-logros {
+  background-color: var(--color-dark); /* Fondo oscuro */
+}
+
+/* 
+   Contenido de logros usando grid de 3 columnas
+*/
+.contenido-logros {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: 1fr 1fr 1fr; /* Tres columnas iguales */
+  gap: 2rem;                        /* Espacio entre columnas */
+}
+
+/* 
+   Sección de logros de clubes
+*/
+.logros-clubes {
+  margin-bottom: 2rem;              /* Espacio inferior */
+  display: flex;                    /* Layout flexbox */
+  flex-direction: column;           /* Dirección vertical */
+}
+
+/* 
+   Logotipo del club
+*/
+.logotipo-club {
+  display: flex;                    /* Layout flexbox */
+  flex-direction: column;           /* Dirección vertical */
+  align-items: center;              /* Centra elementos horizontalmente */
+  margin-bottom: 1rem;              /* Espacio inferior */
+}
+
+/* 
+   Imagen del logotipo del club
+*/
+.logotipo-club img {
+  width: 80px;                      /* Ancho fijo */
+  height: 80px;                     /* Altura fija */
+  object-fit: contain;              /* Mantiene proporción sin recortar */
+  margin-bottom: 0.5rem;            /* Espacio inferior */
+}
+
+/* 
+   Título h4 del logotipo del club
+*/
+.logotipo-club h4 {
+  color: var(--color-primary);      /* Color azul principal */
+}
+
+/* 
+   Logotipo nacional (selección)
+*/
+.logotipo-nacional {
+  display: flex;                    /* Layout flexbox */
+  flex-direction: column;           /* Dirección vertical */
+  align-items: center;              /* Centra elementos horizontalmente */
+  margin-bottom: 1rem;              /* Espacio inferior */
+}
+
+/* 
+   Imagen del logotipo nacional
+*/
+.logotipo-nacional img {
+  width: 80px;                      /* Ancho fijo */
+  height: 80px;                     /* Altura fija */
+  object-fit: contain;              /* Mantiene proporción sin recortar */
+  margin-bottom: 0.5rem;            /* Espacio inferior */
+}
+
+/* 
+   Lista de logros
+*/
+.lista-logros {
+  list-style: none;                 /* Sin viñetas */
+}
+
+/* 
+   Elementos individuales de la lista de logros
+*/
+.lista-logros li {
+  padding: 0.5rem 0;                /* Relleno vertical */
+  border-bottom: 1px solid #eee;    /* Borde inferior gris claro */
+  display: flex;                    /* Layout flexbox */
+  align-items: center;              /* Centra elementos verticalmente */
+}
+
+/* 
+   Último elemento de logros (sin borde inferior)
+*/
+.lista-logros li:last-child {
+  border-bottom: none;              /* Sin borde inferior */
+}
+
+/* 
+   Contador de logros (badge numérico)
+*/
+.achievement-count {
+  background: var(--color-primary); /* Fondo azul principal */
+  color: white;                     /* Texto blanco */
+  padding: 0.2rem 0.5rem;           /* Relleno pequeño */
+  border-radius: 4px;               /* Bordes ligeramente redondeados */
+  margin-right: 0.8rem;             /* Margen derecho */
+  font-size: 0.8rem;                /* Tamaño pequeño */
+  font-weight: 600;                 /* Peso semi-bold */
+}
+
+/* ========================================
+   12. SECCIÓN DE ESTADÍSTICAS
+   ======================================== */
+
+/* 
+   Sección de estadísticas
+*/
+.stats-section {
+  background-color: var(--color-darker); /* Fondo negro profundo */
+}
+
+/* 
+   Resumen de estadísticas en grid
+*/
+.resumen-estadisticas {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
+  gap: 1.5rem;                      /* Espacio entre tarjetas */
+  margin-bottom: 3rem;              /* Espacio inferior */
+}
+
+/* 
+   Tarjeta individual de estadística
+*/
+.tarjeta-estadistica {
+  background: var(--color-dark);    /* Fondo oscuro */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  padding: 1.5rem;                  /* Relleno interno */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  text-align: center;               /* Texto centrado */
+  /* Sombra doble: profundidad + efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  color: white;                     /* Color de texto blanco */
+  transition: var(--transition-normal); /* Transición suave */
+}
+
+/* 
+   Tabla de estadísticas detalladas
+*/
+.tabla-estadisticas {
+  width: 100%;                      /* Ancho completo */
+  border-collapse: collapse;        /* Colapsa bordes de celdas adyacentes */
+  /* Sombra doble: profundidad + efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  background: var(--color-dark);    /* Fondo oscuro */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+}
+
+/* 
+   Celdas de encabezado y datos de la tabla
+*/
+.tabla-estadisticas th,
+.tabla-estadisticas td {
+  padding: 1rem;                    /* Relleno interno */
+  text-align: center;               /* Texto centrado */
+  border-bottom: 1px solid rgba(0, 191, 255, 0.2); /* Borde inferior azul semitransparente */
+  color: white;                     /* Color de texto blanco */
+}
+
+/* 
+   Encabezado de la tabla
+*/
+.tabla-estadisticas thead {
+  background-color: var(--color-primary); /* Fondo azul principal */
+  color: white;                     /* Texto blanco */
+}
+
+/* 
+   Filas pares del cuerpo de la tabla (efecto zebra)
+*/
+.tabla-estadisticas tbody tr:nth-child(even) {
+  background-color: var(--color-darker); /* Fondo negro más profundo */
+}
+
+/* ========================================
+   13. SECCIÓN DE LEGADO
+   ======================================== */
+
+/* 
+   Sección de legado del jugador
+*/
+.seccion-legado {
+  background-color: var(--color-dark); /* Fondo oscuro */
+}
+
+/* 
+   Contenido del legado usando grid
+*/
+.contenido-legado {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: 1fr 1fr;   /* Dos columnas iguales */
+  gap: 3rem;                        /* Espacio entre columnas */
+}
+
+/* 
+   Párrafos del texto de legado
+*/
+.texto-legado p {
+  margin-bottom: 1.5rem;            /* Espacio entre párrafos */
+  line-height: 1.7;                 /* Altura de línea para legibilidad */
+  color: var(--color-text);         /* Color blanco */
+}
+
+/* 
+   Título h3 de las citas de legado
+*/
+.citas-legado h3 {
+  margin-bottom: 1.5rem;            /* Espacio inferior */
+  color: var(--color-primary);      /* Color azul principal */
+}
+
+/* 
+   Tarjeta individual de cita
+*/
+.tarjeta-cita {
+  background: var(--color-darker);  /* Fondo negro profundo */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  padding: 1.5rem;                  /* Relleno interno */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  margin-bottom: 1.5rem;            /* Espacio inferior */
+  /* Sombra doble: profundidad + efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  position: relative;               /* Posicionamiento relativo para pseudo-elementos */
+  color: white;                     /* Color de texto blanco */
+}
+
+/* 
+   Última tarjeta de cita (sin margen inferior)
+*/
+.tarjeta-cita:last-child {
+  margin-bottom: 0;                 /* Sin margen inferior */
+}
+
+/* 
+   Blockquote dentro de la tarjeta de cita
+*/
+.tarjeta-cita blockquote {
+  font-style: italic;               /* Texto en cursiva */
+  margin-bottom: 1rem;              /* Espacio inferior */
+  color: var(--color-text);         /* Color blanco */
+  line-height: 1.6;                 /* Altura de línea */
+}
+
+/* 
+   Pseudo-elemento para comillas de apertura
+*/
+.tarjeta-cita blockquote::before {
+  content: '\201C';                 /* Carácter Unicode para comillas de apertura */
+  font-size: 2rem;                  /* Tamaño grande */
+  color: var(--color-secondary);    /* Color azul secundario */
+  position: absolute;               /* Posicionamiento absoluto */
+  top: 0.5rem;                      /* 0.5rem desde arriba */
+  left: 1rem;                       /* 1rem desde la izquierda */
+}
+
+/* 
+   Elemento cite (autor de la cita)
+*/
+.tarjeta-cita cite {
+  display: block;                   /* Se comporta como elemento de bloque */
+  text-align: right;                /* Alineación a la derecha */
+  font-weight: 600;                 /* Peso semi-bold */
+  color: var(--color-primary);      /* Color azul principal */
+}
+
+/* ========================================
+   14. SECCIÓN DE VIDEOS
+   ======================================== */
+
+/* 
+   Sección de videos
+*/
+.seccion-videos {
+  background-color: var(--color-darker); /* Fondo negro profundo */
+}
+
+/* 
+   Cuadrícula de videos
+*/
+.cuadricula-videos {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
+  gap: 2rem;                        /* Espacio entre elementos */
+  margin-top: 2rem;                 /* Margen superior */
+}
+
+/* 
+   Elemento individual de video
+*/
+.elemento-video {
+  background: var(--color-dark);    /* Fondo oscuro */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+  /* Sombra doble: profundidad + efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+}
+
+/* 
+   Miniatura del video
+*/
+.miniatura-video {
+  position: relative;               /* Posicionamiento relativo para elementos hijos absolutos */
+  height: 200px;                    /* Altura fija */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+  cursor: pointer;                  /* Cursor de mano para indicar interactividad */
+}
+
+/* 
+   Imagen de la miniatura
+*/
+.miniatura-video img {
+  width: 100%;                      /* Ancho completo */
+  height: 100%;                     /* Altura completa */
+  object-fit: cover;                /* Mantiene proporción y cubre el área */
+  transition: transform 0.5s ease;  /* Transición suave para efecto zoom */
+}
+
+/* 
+   Efecto zoom en la miniatura al hacer hover
+*/
+.elemento-video:hover .miniatura-video img {
+  transform: scale(1.05);           /* Escala al 105% */
+}
+
+/* 
+   Botón de reproducir superpuesto
+*/
+.boton-reproducir {
+  position: absolute;               /* Posicionamiento absoluto */
+  top: 50%;                         /* 50% desde arriba */
+  left: 50%;                        /* 50% desde la izquierda */
+  transform: translate(-50%, -50%); /* Centra perfectamente */
+  width: 60px;                      /* Ancho fijo */
+  height: 60px;                     /* Altura fija (forma circular) */
+  background: rgba(0, 0, 0, 0.7);   /* Fondo negro semitransparente */
+  border-radius: 50%;               /* Forma circular */
+  display: flex;                    /* Layout flexbox */
+  align-items: center;              /* Centra verticalmente */
+  justify-content: center;          /* Centra horizontalmente */
+  color: white;                     /* Color del ícono blanco */
+  font-size: 1.5rem;                /* Tamaño del ícono */
+  transition: var(--transition-normal); /* Transición suave */
+}
+
+/* 
+   Efecto hover en el botón de reproducir
+*/
+.elemento-video:hover .boton-reproducir {
+  background: var(--color-secondary); /* Cambia a azul secundario */
+}
+
+/* 
+   Título del video
+*/
+.titulo-video {
+  padding: 1rem;                    /* Relleno interno */
+  font-size: 1rem;                  /* Tamaño base */
+  color: var(--color-primary);      /* Color azul principal */
+  text-align: center;               /* Texto centrado */
+}
+
+/* ========================================
+   15. BOTONES Y ELEMENTOS INTERACTIVOS
+   ======================================== */
+
+/* 
+   Botón estándar del sitio
+*/
+.boton {
+  display: inline-block;            /* Se comporta como elemento en línea pero acepta dimensiones */
+  padding: 12px 24px;               /* Relleno interno */
+  background: var(--color-primary); /* Fondo azul principal */
+  color: white;                     /* Texto blanco */
+  text-decoration: none;            /* Sin subrayado */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  font-weight: 600;                 /* Peso semi-bold */
+  text-align: center;               /* Texto centrado */
+  transition: var(--transition-normal); /* Transición suave */
+  border: none;                     /* Sin borde */
+  cursor: pointer;                  /* Cursor de mano */
+  font-size: 1rem;                  /* Tamaño base */
+}
+
+/* 
+   Efecto hover del botón estándar
+*/
+.boton:hover {
+  background: var(--color-secondary); /* Cambia a azul secundario */
+  transform: translateY(-2px);      /* Se eleva 2px */
+  box-shadow: var(--box-shadow);    /* Agrega sombra */
+}
+
+/* 
+   Botón de llamada a la acción (CTA)
+*/
+.cta-button {
+  display: inline-block;            /* Se comporta como elemento en línea pero acepta dimensiones */
+  padding: 15px 30px;               /* Relleno más grande */
+  /* Gradiente diagonal de azul principal a secundario */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;                     /* Texto blanco */
+  text-decoration: none;            /* Sin subrayado */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  font-weight: 700;                 /* Peso bold */
+  text-transform: uppercase;        /* Texto en mayúsculas */
+  letter-spacing: 1px;              /* Espaciado entre letras */
+  transition: var(--transition-normal); /* Transición suave */
+  box-shadow: var(--box-shadow);    /* Sombra */
+  position: relative;               /* Posicionamiento relativo para pseudo-elementos */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+}
+
+/* 
+   Pseudo-elemento para efecto de brillo en CTA
+*/
+.cta-button::before {
+  content: '';                      /* Contenido vacío */
+  position: absolute;               /* Posicionamiento absoluto */
+  top: 0;                           /* Desde arriba */
+  left: -100%;                      /* Inicialmente fuera de vista a la izquierda */
+  width: 100%;                      /* Ancho completo */
+  height: 100%;                     /* Altura completa */
+  /* Gradiente horizontal con brillo blanco semitransparente */
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;            /* Transición del movimiento */
+}
+
+/* 
+   Efecto de brillo al hacer hover en CTA
+*/
+.cta-button:hover::before {
+  left: 100%;                       /* Se mueve hacia la derecha */
+}
+
+/* 
+   Efecto hover del botón CTA
+*/
+.cta-button:hover {
+  transform: translateY(-3px);      /* Se eleva 3px */
+  box-shadow: 0 8px 25px rgba(0, 115, 255, 0.3); /* Sombra azul con glow */
+}
+
+/* ========================================
+   16. PERFILES DE JUGADORES
+   ======================================== */
+
+/* 
+   Perfil del jugador (modal o sección destacada)
+*/
+#player-profile {
+  max-width: 800px;                 /* Ancho máximo */
+  width: 100%;                      /* Ancho completo disponible */
+  background: var(--color-dark);    /* Fondo oscuro */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  padding: 2rem;                    /* Relleno interno */
+  /* Sombra doble: profundidad + efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  margin: 2rem auto;                /* Margen automático para centrar */
+  color: white;                     /* Color de texto blanco */
+}
+
+/* 
+   Botón de regreso
+*/
+#btn-back {
+  background: transparent;          /* Fondo transparente */
+  border: none;                     /* Sin borde */
+  color: var(--color-primary);      /* Color azul principal */
+  font-size: 1.2rem;                /* Tamaño grande */
+  cursor: pointer;                  /* Cursor de mano */
+  margin-bottom: 1.5rem;            /* Margen inferior */
+  transition: var(--transition-normal); /* Transición suave */
+  display: flex;                    /* Layout flexbox */
+  align-items: center;              /* Centra verticalmente */
+  gap: 0.5rem;                      /* Espacio entre elementos */
+}
+
+/* 
+   Efecto hover del botón de regreso
+*/
+#btn-back:hover {
+  color: var(--color-secondary);    /* Cambia a azul secundario */
+}
+
+/* 
+   Pseudo-elemento para flecha de regreso
+*/
+#btn-back::before {
+  content: '←';                     /* Carácter de flecha izquierda */
+  font-size: 1.4rem;                /* Tamaño más grande */
+}
+
+/* 
+   Imagen destacada del perfil
+*/
+.imagen-destacada {
+  width: 100%;                      /* Ancho completo */
+  height: 400px;                    /* Altura fija */
+  object-fit: cover;                /* Mantiene proporción y cubre el área */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  box-shadow: var(--box-shadow);    /* Sombra */
+}
+
+/* ========================================
+   17. TABLA DE COMPARACIÓN
+   ======================================== */
+
+/* 
+   Sección de comparación
+*/
+.comparison-section {
+  background-color: var(--color-darker); /* Fondo negro profundo */
+}
+
+/* 
+   Contenedor de la tabla de comparación (scroll horizontal)
+*/
+.comparison-table-container {
+  overflow-x: auto;                 /* Scroll horizontal si es necesario */
+  margin-top: 2rem;                 /* Margen superior */
+}
+
+/* 
+   Tabla de comparación
+*/
+.comparison-table {
+  width: 100%;                      /* Ancho completo */
+  border-collapse: collapse;        /* Colapsa bordes de celdas adyacentes */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5); /* Sombra profunda */
+  background: var(--color-dark);    /* Fondo oscuro */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+}
+
+/* 
+   Celdas de encabezado y datos de la tabla de comparación
+*/
+.comparison-table th,
+.comparison-table td {
+  padding: 1rem;                    /* Relleno interno */
+  text-align: center;               /* Texto centrado */
+  border-bottom: 1px solid rgba(0, 191, 255, 0.2); /* Borde inferior azul semitransparente */
+  color: white;                     /* Color de texto blanco */
+}
+
+/* 
+   Encabezado de la tabla de comparación
+*/
+.comparison-table thead {
+  background-color: var(--color-primary); /* Fondo azul principal */
+  color: var(--color-darker);       /* Texto negro profundo */
+}
+
+/* 
+   Encabezados de la tabla (peso de fuente)
+*/
+.comparison-table th {
+  font-weight: 600;                 /* Peso semi-bold */
+}
+
+/* 
+   Filas pares del cuerpo de la tabla (efecto zebra)
+*/
+.comparison-table tbody tr:nth-child(even) {
+  background-color: var(--color-darker); /* Fondo negro más profundo */
+}
+
+/* 
+   Efecto hover en filas de la tabla
+*/
+.comparison-table tbody tr:hover {
+  background-color: rgba(0, 191, 255, 0.1); /* Fondo azul muy tenue */
+}
+
+/* 
+   Ícono del jugador en la tabla
+*/
+.player-icon {
+  width: 40px;                      /* Ancho fijo */
+  height: 40px;                     /* Altura fija (forma circular) */
+  border-radius: 50%;               /* Forma circular */
+  object-fit: cover;                /* Mantiene proporción y cubre el área */
+  margin-bottom: 0.5rem;            /* Margen inferior */
+  display: block;                   /* Se comporta como elemento de bloque */
+  margin: 0 auto 0.5rem;            /* Centrado con margen inferior */
+  border: 2px solid white;          /* Borde blanco */
+}
+
+/* ========================================
+   18. GALERÍA DE IMÁGENES
+   ======================================== */
+
+/* 
+   Sección de galería
+*/
+.gallery-section {
+  background-color: var(--color-dark); /* Fondo oscuro */
+}
+
+/* 
+   Cuadrícula de la galería
+*/
+.cuadricula-galeria {
+  display: grid;                    /* Layout CSS Grid */
+  /* Columnas automáticas con mínimo 300px y máximo 1fr */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;                      /* Espacio entre elementos */
+  margin-top: 2rem;                 /* Margen superior */
+}
+
+/* 
+   Elemento individual de la galería
+*/
+.elemento-galeria {
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  overflow: hidden;                 /* Oculta contenido desbordado */
+  box-shadow: var(--box-shadow);    /* Sombra */
+  transition: var(--transition-normal); /* Transición suave */
+  position: relative;               /* Posicionamiento relativo para elementos hijos absolutos */
+}
+
+/* 
+   Efecto hover en elemento de galería
+*/
+.elemento-galeria:hover {
+  transform: translateY(-5px);      /* Se eleva 5px */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+}
+
+/* 
+   Imagen del elemento de galería
+*/
+.elemento-galeria img {
+  width: 100%;                      /* Ancho completo */
+  height: 220px;                    /* Altura fija */
+  object-fit: cover;                /* Mantiene proporción y cubre el área */
+  display: block;                   /* Se comporta como elemento de bloque */
+  transition: transform 0.5s ease;  /* Transición suave para efecto zoom */
+}
+
+/* 
+   Efecto zoom en imagen de galería al hacer hover
+*/
+.elemento-galeria:hover img {
+  transform: scale(1.05);           /* Escala al 105% */
+}
+
+/* 
+   Leyenda de la imagen de galería
+*/
+.leyenda-galeria {
+  position: absolute;               /* Posicionamiento absoluto */
+  bottom: 0;                        /* En la parte inferior */
+  left: 0;                          /* Desde la izquierda */
+  right: 0;                         /* Hasta la derecha */
+  background: rgba(0, 0, 0, 0.7);   /* Fondo negro semitransparente */
+  color: white;                     /* Texto blanco */
+  padding: 0.8rem;                  /* Relleno interno */
+  font-size: 0.9rem;                /* Tamaño pequeño */
+  transform: translateY(100%);      /* Inicialmente oculta debajo */
+  transition: transform 0.3s ease;  /* Transición suave */
+}
+
+/* 
+   Mostrar leyenda al hacer hover en elemento de galería
+*/
+.elemento-galeria:hover .leyenda-galeria {
+  transform: translateY(0);         /* Se muestra completamente */
+}
+
+/* ========================================
+   19. SECCIÓN ABOUT Y FOOTER
+   ======================================== */
+
+/* 
+   Sección About
+*/
+.about-section {
+  background-color: var(--color-dark); /* Fondo oscuro */
+}
+
+/* 
+   Contenido de About en grid
+*/
+.about-content {
+  display: grid;                    /* Layout CSS Grid */
+  grid-template-columns: 2fr 1fr;   /* Dos columnas: texto más ancho, autor más estrecho */
+  gap: 3rem;                        /* Espacio entre columnas */
+  align-items: start;               /* Alineación al inicio */
+}
+
+/* 
+   Párrafos del texto About
+*/
+.about-text p {
+  margin-bottom: 1.5rem;            /* Espacio entre párrafos */
+  line-height: 1.7;                 /* Altura de línea para legibilidad */
+  color: var(--color-text);         /* Color blanco */
+}
+
+/* 
+   Tarjeta del autor
+*/
+.about-author {
+  background: var(--color-darker);  /* Fondo negro profundo */
+  border: 2px solid var(--color-primary); /* Borde azul */
+  padding: 2rem;                    /* Relleno interno */
+  border-radius: var(--border-radius); /* Bordes redondeados */
+  text-align: center;               /* Texto centrado */
+  /* Sombra doble: profundidad + efecto glow */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  color: white;                     /* Color de texto blanco */
+}
+
+/* 
+   Imagen del autor
+*/
+.author-image {
+  width: 120px;                     /* Ancho fijo */
+  height: 120px;                    /* Altura fija (forma circular) */
+  border-radius: 50%;               /* Forma circular */
+  object-fit: cover;                /* Mantiene proporción y cubre el área */
+  margin: 0 auto 1.5rem;            /* Centrado con margen inferior */
+  border: 3px solid var(--color-secondary); /* Borde azul secundario */
+}
+
+/* 
+   Enlaces sociales
+*/
+.social-links {
+  display: flex;                    /* Layout flexbox */
+  justify-content: center;          /* Centra horizontalmente */
+  gap: 1rem;                        /* Espacio entre enlaces */
+  margin-top: 1.5rem;               /* Margen superior */
+}
+
+/* 
+   Enlace social individual
+*/
+.social-link {
+  display: inline-block;            /* Se comporta como elemento en línea pero acepta dimensiones */
+  padding: 0.5rem 1rem;             /* Relleno interno */
+  background: var(--color-primary); /* Fondo azul principal */
+  color: white;                     /* Texto blanco */
+  text-decoration: none;            /* Sin subrayado */
+  border-radius: 20px;              /* Bordes muy redondeados */
+  font-size: 0.9rem;                /* Tamaño pequeño */
+  transition: var(--transition-normal); /* Transición suave */
+}
+
+/* 
+   Efecto hover en enlace social
+*/
+.social-link:hover {
+  background: var(--color-secondary); /* Cambia a azul secundario */
+  transform: translateY(-2px);      /* Se eleva 2px */
+}
+
+/* 
+   Footer principal
+*/
+.pie-principal {
+  background: var(--color-primary); /* Fondo azul principal */
+  color: white;                     /* Texto blanco */
+  padding: 4rem 0 2rem;             /* Relleno: 4rem arriba, 2rem abajo */
+}
+
+/* 
+   Contenido del footer en grid
+*/
+.contenido-pie {
+  display: grid;                    /* Layout CSS Grid */
+  /* Columnas automáticas con mínimo 200px */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;                        /* Espacio entre columnas */
+  margin-bottom: 3rem;              /* Margen inferior */
+}
+
+/* 
+   Logotipo del footer
+*/
+.logotipo-pie h3 {
+  color: var(--color-secondary);    /* Color azul secundario */
+  font-size: 1.5rem;                /* Tamaño grande */
+  margin-bottom: 1rem;              /* Margen inferior */
+}
+
+/* 
+   Títulos de secciones del footer
+*/
+.enlaces-pie h4,
+.recursos-pie h4,
+.newsletter-pie h4 {
+  color: white;                     /* Color blanco */
+  margin-bottom: 1.2rem;            /* Margen inferior */
+  font-size: 1.2rem;                /* Tamaño mediano */
+}
+
+/* 
+   Listas del footer
+*/
+.enlaces-pie ul,
+.recursos-pie ul {
+  list-style: none;                 /* Sin viñetas */
+}
+
+/* 
+   Elementos de lista del footer
+*/
+.enlaces-pie li,
+.recursos-pie li {
+  margin-bottom: 0.8rem;            /* Margen inferior */
+}
+
+/* 
+   Enlaces del footer
+*/
+.enlaces-pie a,
+.recursos-pie a {
+  color: white;                     /* Color blanco */
+  text-decoration: none;            /* Sin subrayado */
+  transition: var(--transition-normal); /* Transición suave */
+}
+
+/* 
+   Efecto hover en enlaces del footer
+*/
+.enlaces-pie a:hover,
+.recursos-pie a:hover {
+  color: var(--color-secondary);    /* Cambia a azul secundario */
+}
+
+/* 
+   Formulario de newsletter
+*/
+.formulario-newsletter {
+  display: flex;                    /* Layout flexbox */
+  margin-top: 1rem;                 /* Margen superior */
+}
+
+/* 
+   Input del formulario de newsletter
+*/
+.formulario-newsletter input {
+  flex: 1;                          /* Ocupa el espacio disponible */
+  padding: 0.8rem;                  /* Relleno interno */
+  border: none;                     /* Sin borde */
+  border-radius: 4px 0 0 4px;       /* Bordes redondeados solo a la izquierda */
+  outline: none;                    /* Sin outline al hacer focus */
+}
+
+/* 
+   Botón del formulario de newsletter
+*/
+.formulario-newsletter button {
+  background: var(--color-secondary); /* Fondo azul secundario */
+  color: white;                     /* Texto blanco */
+  border: none;                     /* Sin borde */
+  padding: 0 1rem;                  /* Relleno horizontal */
+  border-radius: 0 4px 4px 0;       /* Bordes redondeados solo a la derecha */
+  cursor: pointer;                  /* Cursor de mano */
+  transition: var(--transition-normal); /* Transición suave */
+}
+
+/* 
+   Efecto hover en botón de newsletter
+*/
+.formulario-newsletter button:hover {
+  background: var(--color-accent);  /* Cambia a azul accent */
+}
+
+/* 
+   Pie inferior (copyright)
+*/
+.pie-inferior {
+  text-align: center;               /* Texto centrado */
+  padding-top: 2rem;                /* Relleno superior */
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Borde superior blanco semitransparente */
+  font-size: 0.9rem;                /* Tamaño pequeño */
+  color: white;                     /* Color blanco */
+}
+
+/* ========================================
+   20. ANIMACIONES Y EFECTOS
+   ======================================== */
+
+/* 
+   Animación de brillo (glow effect)
+*/
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px rgba(0, 191, 255, 0.5); /* Brillo inicial */
+  }
+  to {
+    text-shadow: 0 0 30px rgba(0, 191, 255, 0.8); /* Brillo final más intenso */
+  }
+}
+
+/* 
+   Animación de aparición gradual
+*/
+@keyframes fadeIn {
+  from {
+    opacity: 0;                     /* Completamente transparente */
+  }
+  to {
+    opacity: 1;                     /* Completamente opaco */
+  }
+}
+
+/* 
+   Sección con animación de entrada
+*/
+.seccion {
+  opacity: 0;                       /* Inicialmente invisible */
+  transform: translateY(20px);      /* Desplazada 20px hacia abajo */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Transiciones suaves */
+}
+
+/* 
+   Sección visible (activada por JavaScript)
+*/
+.seccion.visible {
+  opacity: 1;                       /* Completamente visible */
+  transform: translateY(0);         /* En su posición original */
+}
+
+/* ========================================
+   21. RESPONSIVE DESIGN - MEDIA QUERIES
+   ======================================== */
+
+/* 
+   PANTALLAS GRANDES (desktops, menos de 1200px)
+   Ajustes para monitores estándar
+*/
+@media (max-width: 1200px) {
+  .contenedor {
+    max-width: 960px;               /* Reduce ancho máximo del contenedor */
+  }
+  
+  .cuadricula-galeria {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas en lugar de auto-fill */
+  }
+}
+
+/* 
+   PANTALLAS MEDIANAS (tablets, menos de 992px)
+   Ajustes para tablets en landscape y desktops pequeños
+*/
+@media (max-width: 992px) {
+  .contenedor {
+    max-width: 720px;               /* Reduce ancho máximo del contenedor */
+  }
+  
+  .titulo-seccion {
+    font-size: 2rem;                /* Reduce tamaño del título */
+  }
+  
+  .descripcion-seccion {
+    font-size: 1rem;                /* Reduce tamaño de descripción */
+  }
+  
+  .contenedor-jugadores {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas para tarjetas de jugadores */
+  }
+  
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.75rem;               /* Reduce relleno de celdas */
+  }
+  
+  .cuadricula-galeria {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas para galería */
+  }
+  
+  .about-content {
+    grid-template-columns: 1fr;     /* Una sola columna para about */
+    gap: 2rem;                      /* Reduce espacio entre elementos */
+  }
+  
+  .about-text {
+    order: 2;                       /* Texto después del autor */
+  }
+  
+  .about-author {
+    order: 1;                       /* Autor primero */
+  }
+  
+  .contenido-pie {
+    grid-template-columns: 1fr 1fr; /* 2 columnas para footer */
+    gap: 2rem;                      /* Reduce espacio */
+  }
+  
+  .pie-inferior {
+    flex-direction: column;         /* Elementos en columna */
+    gap: 1rem;                      /* Espacio entre elementos */
+    text-align: center;             /* Texto centrado */
+  }
+  
+  /* Ajustes para páginas de jugadores individuales */
+  .contenido-hero-jugador {
+    grid-template-columns: 1fr;     /* Una sola columna */
+    text-align: center;             /* Texto centrado */
+    gap: 2rem;                      /* Espacio entre elementos */
+    padding: 0 1rem;                /* Reduce relleno lateral */
+  }
+  
+  .texto-hero-jugador {
+    text-align: center;             /* Texto centrado */
+    order: 2;                       /* Texto después de imagen */
+  }
+  
+  .imagen-hero-jugador {
+    order: 1;                       /* Imagen primero */
+  }
+  
+  .titulo-hero-jugador {
+    font-size: 2.5rem;              /* Reduce tamaño del título */
+  }
+  
+  .subtitulo-hero-jugador {
+    font-size: 1.3rem;              /* Reduce tamaño del subtítulo */
+  }
+  
+  .info-hero-jugador {
+    justify-content: center;        /* Centra información */
+    grid-template-columns: 1fr 1fr; /* 2 columnas para info */
+    gap: 1rem;                      /* Espacio entre elementos */
+  }
+  
+  .cita-hero-jugador {
+    max-width: 600px;               /* Ancho máximo para cita */
+    margin: 1.5rem auto 0;          /* Centrado con margen */
+  }
+  
+  .imagen-hero-jugador img {
+    max-height: 350px;              /* Reduce altura máxima de imagen */
+  }
+  
+  /* Ajustes para secciones de contenido */
+  .contenido-estilo,
+  .contenido-biografia,
+  .contenido-legado {
+    grid-template-columns: 1fr;     /* Una sola columna */
+    gap: 2rem;                      /* Espacio entre elementos */
+  }
+  
+  .contenido-logros {
+    grid-template-columns: 1fr;     /* Una sola columna */
+  }
+  
+  .contenido-introduccion {
+    grid-template-columns: 1fr;     /* Una sola columna */
+  }
+  
+  .cuadricula-videos {
+    grid-template-columns: 1fr 1fr; /* 2 columnas para videos */
+  }
+  
+  /* Mostrar menú hamburguesa en tablets */
+  .enlaces-navegacion {
+    position: fixed;                /* Posición fija */
+    top: 70px;                      /* Debajo del header */
+    right: -100%;                   /* Inicialmente oculto a la derecha */
+    width: 70%;                     /* 70% del ancho de pantalla */
+    height: calc(100vh - 70px);     /* Altura completa menos header */
+    background: var(--color-dark);  /* Fondo oscuro */
+    flex-direction: column;         /* Elementos en columna */
+    align-items: center;            /* Centra elementos */
+    justify-content: flex-start;    /* Alineación al inicio */
+    padding-top: 50px;              /* Relleno superior */
+    transition: right 0.3s ease;    /* Transición suave */
+    z-index: 999;                   /* Z-index alto */
+  }
+
+  /* Mostrar menú cuando el checkbox está marcado */
+  .toggle-hamburguesa:checked ~ .enlaces-navegacion {
+    right: 0;                       /* Se muestra completamente */
+  }
+
+  .menu-hamburguesa {
+    display: block;                 /* Mostrar menú hamburguesa */
+  }
+}
+
+/* 
+   PANTALLAS PEQUEÑAS (móviles en landscape, menos de 768px)
+   Ajustes para móviles en horizontal y tablets pequeñas
+*/
+@media (max-width: 768px) {
+  .contenedor {
+    max-width: 540px;               /* Reduce ancho máximo */
+    padding: 0 1rem;                /* Reduce relleno lateral */
+  }
+  
+  section {
+    padding: 3rem 0;                /* Reduce relleno vertical de secciones */
+  }
+  
+  .titulo-seccion {
+    font-size: 1.8rem;              /* Reduce tamaño del título */
+    margin-bottom: 0.5rem;          /* Reduce margen inferior */
+  }
+  
+  .titulo-seccion::after {
+    width: 60px;                    /* Reduce ancho de línea decorativa */
+    margin: 0.5rem auto;            /* Reduce margen */
+  }
+  
+  .contenedor-jugadores {
+    grid-template-columns: 1fr;     /* Una sola columna para tarjetas */
+    gap: 2rem;                      /* Espacio entre tarjetas */
+    flex-direction: column;         /* Elementos en columna */
+    align-items: center;            /* Centra elementos */
+  }
+  
+  .tarjeta-jugador {
+    max-width: 350px;               /* Ancho máximo de tarjeta */
+    margin: 0 auto;                 /* Centrado */
+    width: 100%;                    /* Ancho completo disponible */
+  }
+  
+  .comparison-table {
+    font-size: 0.9rem;              /* Reduce tamaño de fuente */
+  }
+  
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;                /* Reduce relleno de celdas */
+  }
+  
+  .player-icon img {
+    width: 30px;                    /* Reduce tamaño de ícono */
+    height: 30px;                   /* Reduce tamaño de ícono */
+  }
+  
+  .cuadricula-galeria {
+    grid-template-columns: 1fr;     /* Una sola columna para galería */
+    gap: 1.5rem;                    /* Espacio entre elementos */
+  }
+  
+  .contenido-pie {
+    grid-template-columns: 1fr;     /* Una sola columna para footer */
+    gap: 2rem;                      /* Espacio entre secciones */
+    text-align: center;             /* Texto centrado */
+  }
+  
+  .formulario-newsletter {
+    max-width: 100%;                /* Ancho máximo completo */
+  }
+  
+  .contenedor-navegacion {
+    padding: 1rem;                  /* Reduce relleno */
+    justify-content: flex-start;    /* Alineación al inicio */
+  }
+  
+  /* Configuración del menú móvil */
+  .enlaces-navegacion {
+    position: fixed;                /* Posición fija */
+    top: 70px;                      /* Debajo del header */
+    right: -100%;                   /* Inicialmente oculto */
+    width: 70%;                     /* 70% del ancho */
+    height: calc(100vh - 70px);     /* Altura completa menos header */
+    background: var(--color-dark);  /* Fondo oscuro */
+    flex-direction: column;         /* Elementos en columna */
+    align-items: center;            /* Centra elementos */
+    justify-content: flex-start;    /* Alineación al inicio */
+    padding-top: 50px;              /* Relleno superior */
+    transition: right 0.3s ease;    /* Transición suave */
+    z-index: 999;                   /* Z-index alto */
+  }
+
+  /* Mostrar menú cuando el checkbox está marcado */
+  .toggle-hamburguesa:checked ~ .enlaces-navegacion {
+    right: 0;                       /* Se muestra completamente */
+  }
+
+  .menu-hamburguesa {
+    display: block;                 /* Mostrar menú hamburguesa */
+  }
+  
+  .titulo-hero {
+    font-size: 2.5rem;              /* Reduce tamaño del título hero */
+  }
+  
+  .resumen-estadisticas {
+    grid-template-columns: 1fr 1fr; /* 2 columnas para estadísticas */
+  }
+  
+  .cuadricula-videos {
+    grid-template-columns: 1fr;     /* Una sola columna para videos */
+  }
+  
+  #player-profile {
+    width: 100%;                    /* Ancho completo para perfil */
+  }
+}
+
+/* 
+   PANTALLAS MUY PEQUEÑAS (móviles en portrait, menos de 576px)
+   Ajustes para móviles en vertical
+*/
+@media (max-width: 576px) {
+  .contenedor {
+    padding: 0 0.75rem;             /* Reduce aún más el relleno lateral */
+  }
+  
+  section {
+    padding: 2.5rem 0;              /* Reduce relleno vertical */
+  }
+  
+  .titulo-seccion {
+    font-size: 1.5rem;              /* Reduce tamaño del título */
+  }
+  
+  .descripcion-seccion {
+    font-size: 0.9rem;              /* Reduce tamaño de descripción */
+  }
+  
+  .comparison-table {
+    font-size: 0.8rem;              /* Reduce tamaño de fuente de tabla */
+  }
+  
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.4rem 0.3rem;         /* Reduce relleno de celdas */
+  }
+  
+  .player-icon img {
+    width: 25px;                    /* Reduce tamaño de ícono */
+    height: 25px;                   /* Reduce tamaño de ícono */
+  }
+  
+  .boton {
+    padding: 0.5rem 1rem;           /* Reduce relleno de botones */
+    font-size: 0.9rem;              /* Reduce tamaño de fuente */
+  }
+  
+  .cta-button {
+    padding: 0.75rem 1.5rem;        /* Reduce relleno de botón CTA */
+    font-size: 1rem;                /* Tamaño de fuente estándar */
+  }
+  
+  .titulo-hero {
+    font-size: 2rem;                /* Reduce tamaño del título hero */
+  }
+  
+  /* Ajustes específicos para páginas de jugadores */
+  .titulo-hero-jugador {
+    font-size: 2.2rem;              /* Reduce tamaño del título */
+  }
+  
+  .subtitulo-hero-jugador {
+    font-size: 1.1rem;              /* Reduce tamaño del subtítulo */
+  }
+  
+  .contenido-hero-jugador {
+    padding: 0 1rem;                /* Reduce relleno lateral */
+    gap: 1.5rem;                    /* Reduce espacio entre elementos */
+  }
+  
+  .seccion-hero-jugador {
+    min-height: 400px;              /* Reduce altura mínima */
+    height: 60vh;                   /* 60% de la altura de viewport */
+  }
+  
+  .info-hero-jugador {
+    grid-template-columns: 1fr;     /* Una sola columna para info */
+    gap: 0.75rem;                   /* Reduce espacio */
+  }
+  
+  .imagen-hero-jugador img {
+    max-height: 300px;              /* Reduce altura máxima de imagen */
+  }
+  
+  /* Ajustes para secciones de biografía */
+  .contenido-biografia {
+    grid-template-columns: 1fr;     /* Una sola columna */
+    gap: 2rem;                      /* Espacio entre elementos */
+  }
+  
+  .barra-lateral-biografia {
+    order: -1;                      /* Barra lateral primero */
+  }
+  
+  .imagen-perfil {
+    height: 200px;                  /* Reduce altura de imagen de perfil */
+  }
+  
+  .detalles-perfil {
+    padding: 1rem;                  /* Reduce relleno */
+  }
+  
+  .destacados-carrera {
+    padding: 1rem;                  /* Reduce relleno */
+  }
+  
+  .destacado-year {
+    min-width: 50px;                /* Reduce ancho mínimo */
+    font-size: 0.8rem;              /* Reduce tamaño de fuente */
+    padding: 0.2rem 0.4rem;         /* Reduce relleno */
+  }
+  
+  .resumen-estadisticas {
+    grid-template-columns: 1fr;     /* Una sola columna para estadísticas */
+    gap: 1rem;                      /* Espacio entre elementos */
+  }
+  
+  .tarjeta-estadistica {
+    padding: 1rem;                  /* Reduce relleno */
+  }
+  
+  .tabla-estadisticas {
+    font-size: 0.8rem;              /* Reduce tamaño de fuente */
+  }
+  
+  .tabla-estadisticas th,
+  .tabla-estadisticas td {
+    padding: 0.5rem 0.3rem;         /* Reduce relleno de celdas */
+  }
+  
+  .cuadricula-galeria {
+    grid-template-columns: 1fr;     /* Una sola columna */
+    gap: 1rem;                      /* Reduce espacio */
+  }
+  
+  .elemento-galeria img {
+    height: 180px;                  /* Reduce altura de imágenes */
+  }
+  
+  .leyenda-galeria {
+    font-size: 0.8rem;              /* Reduce tamaño de fuente */
+    padding: 0.6rem;                /* Reduce relleno */
+  }
+  
+  /* Ajustes específicos para móviles muy pequeños */
+  .seccion-hero-jugador {
+    min-height: 400px;              /* Altura mínima */
+    height: 60vh;                   /* 60% de viewport */
+  }
+  
+  .contenido-hero-jugador {
+    padding: 0 0.5rem;              /* Relleno mínimo */
+    gap: 1.5rem;                    /* Espacio entre elementos */
+  }
+  
+  .titulo-hero-jugador {
+    font-size: 1.8rem;              /* Reduce tamaño */
+    line-height: 1.1;               /* Altura de línea compacta */
+    margin-bottom: 0.3rem;          /* Reduce margen */
+  }
+  
+  .subtitulo-hero-jugador {
+    font-size: 1rem;                /* Reduce tamaño */
+    margin-bottom: 1.5rem;          /* Margen inferior */
+  }
+  
+  .info-hero-jugador {
+    grid-template-columns: 1fr;     /* Una sola columna */
+    gap: 0.6rem;                    /* Espacio mínimo */
+    margin-bottom: 1.5rem;          /* Margen inferior */
+  }
+  
+  .elemento-info {
+    text-align: center;             /* Texto centrado */
+  }
+  
+  .etiqueta-info {
+    font-size: 0.8rem;              /* Tamaño pequeño */
+  }
+  
+  .valor-info {
+    font-size: 0.9rem;              /* Tamaño pequeño */
+  }
+  
+  .imagen-hero-jugador img {
+    max-height: 250px;              /* Altura máxima reducida */
+  }
+  
+  .cita-hero-jugador {
+    padding-left: 0.8rem;           /* Relleno izquierdo */
+    margin-top: 1rem;               /* Margen superior */
+  }
+  
+  .cita-hero-jugador blockquote {
+    font-size: 0.9rem;              /* Tamaño de fuente */
+    line-height: 1.3;               /* Altura de línea */
+  }
+}
+
+/* 
+   MÓVILES MUY PEQUEÑOS (320px - 480px)
+   Ajustes para dispositivos con pantallas muy pequeñas
+*/
+@media (max-width: 480px) {
+  .seccion-hero-jugador {
+    min-height: 350px;              /* Altura mínima reducida */
+    height: 55vh;                   /* 55% de viewport */
+  }
+  
+  .contenido-hero-jugador {
+    padding: 0 0.75rem;             /* Relleno lateral mínimo */
+    gap: 1rem;                      /* Espacio reducido */
+  }
+  
+  .titulo-hero-jugador {
+    font-size: 1.5rem;              /* Tamaño muy reducido */
+    line-height: 1.2;               /* Altura de línea */
+  }
+  
+  .subtitulo-hero-jugador {
+    font-size: 0.9rem;              /* Tamaño muy pequeño */
+    margin-bottom: 1rem;            /* Margen reducido */
+  }
+  
+  .info-hero-jugador {
+    gap: 0.5rem;                    /* Espacio mínimo */
+    margin-bottom: 1rem;            /* Margen reducido */
+  }
+  
+  .etiqueta-info {
+    font-size: 0.75rem;             /* Tamaño muy pequeño */
+  }
+  
+  .valor-info {
+    font-size: 0.85rem;             /* Tamaño pequeño */
+  }
+  
+  .imagen-hero-jugador img {
+    max-height: 200px;              /* Altura máxima muy reducida */
+  }
+  
+  .cita-hero-jugador {
+    padding-left: 0.5rem;           /* Relleno mínimo */
+    margin-top: 0.8rem;             /* Margen reducido */
+  }
+  
+  .cita-hero-jugador blockquote {
+    font-size: 0.8rem;              /* Tamaño muy pequeño */
+    line-height: 1.4;               /* Altura de línea */
+  }
+  
+  /* Ajustes adicionales para navegación en móviles pequeños */
+  .menu-hamburguesa {
+    width: 20px;                    /* Ancho reducido */
+    height: 20px;                   /* Altura reducida */
+  }
+  
+  .menu-hamburguesa span {
+    height: 2px;                    /* Altura de línea reducida */
+  }
+  
+  .enlaces-navegacion {
+    padding: 1rem;                  /* Relleno del menú */
+  }
+  
+  .enlaces-navegacion a {
+    font-size: 0.9rem;              /* Tamaño de fuente */
+    padding: 0.8rem 0;              /* Relleno vertical */
+  }
+  
+  /* Mejoras para secciones de biografía y estadísticas en móviles pequeños */
+  .contenido-biografia {
+    gap: 1rem;                      /* Espacio reducido */
+  }
+  
+  .texto-biografia h3 {
+    font-size: 1.1rem;              /* Tamaño de título */
+    margin: 1rem 0 0.5rem;          /* Márgenes */
+  }
+  
+  .texto-biografia p {
+    font-size: 0.85rem;             /* Tamaño de párrafo */
+    line-height: 1.5;               /* Altura de línea */
+    margin-bottom: 0.8rem;          /* Margen inferior */
+  }
+  
+  .tarjeta-perfil-jugador {
+    padding: 1rem;                  /* Relleno de tarjeta */
+  }
+  
+  .imagen-perfil {
+    height: 150px;                  /* Altura de imagen */
+  }
+  
+  .detalles-perfil h4 {
+    font-size: 1rem;                /* Tamaño de título */
+  }
+  
+  .detalles-perfil p {
+    font-size: 0.8rem;              /* Tamaño de párrafo */
+  }
+  
+  .destacados-carrera {
+    padding: 0.8rem;                /* Relleno */
+  }
+  
+  .destacado-year {
+    font-size: 0.7rem;              /* Tamaño muy pequeño */
+    padding: 0.15rem 0.3rem;        /* Relleno mínimo */
+    min-width: 40px;                /* Ancho mínimo */
+  }
+  
+  .resumen-estadisticas {
+    gap: 0.8rem;                    /* Espacio reducido */
+  }
+  
+  .tarjeta-estadistica {
+    padding: 0.8rem;                /* Relleno reducido */
+  }
+  
+  .numero-estadistica {
+    font-size: 1.5rem;              /* Tamaño reducido */
+  }
+  
+  .etiqueta-estadistica {
+    font-size: 0.75rem;             /* Tamaño muy pequeño */
+  }
+  
+  .tabla-estadisticas {
+    font-size: 0.75rem;             /* Tamaño muy pequeño */
+  }
+  
+  .tabla-estadisticas th,
+  .tabla-estadisticas td {
+    padding: 0.4rem 0.2rem;         /* Relleno mínimo */
+  }
+  
+  .titulo-seccion {
+    font-size: 1.5rem;              /* Tamaño de título de sección */
+  }
+}
+
+/* ========================================
+   NOTAS IMPORTANTES SOBRE CSS:
+   
+   1. CSS Grid vs Flexbox:
+      - Grid: Para layouts bidimensionales (filas y columnas)
+      - Flexbox: Para layouts unidimensionales (una dirección)
+   
+   2. Object-fit:
+      - cover: Mantiene proporción, puede recortar imagen
+      - contain: Mantiene proporción, muestra imagen completa
+      - fill: Estira imagen para llenar contenedor
+   
+   3. Transform:
+      - translateY(): Mueve elemento verticalmente
+      - scale(): Cambia el tamaño del elemento
+      - No afecta el flujo del documento
+   
+   4. Box-shadow múltiples:
+      - Se pueden aplicar varias sombras separadas por comas
+      - Útil para efectos complejos como glow + profundidad
+   
+   5. Filter:
+      - contrast(): Ajusta el contraste
+      - brightness(): Ajusta el brillo
+      - blur(): Aplica desenfoque
+   
+   6. Overflow:
+      - hidden: Oculta contenido que se desborda
+      - visible: Muestra contenido desbordado (por defecto)
+      - scroll: Añade barras de scroll si es necesario
+   
+   ======================================== */

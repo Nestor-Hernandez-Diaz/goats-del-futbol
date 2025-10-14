@@ -15,7 +15,7 @@ Una wiki interactiva dedicada a los **Greatest Of All Time** del fútbol mundial
 ## 🚀 Tecnologías Utilizadas
 
 - **HTML5**: Estructura semántica y accesible
-- **CSS3**: Estilos modernos con Flexbox y Grid
+- **CSS3 Avanzado**: Flexbox, Grid, Pseudoclases y Pseudoelementos (::before, ::after), Animaciones (@keyframes), Transiciones, Transformaciones (translate, scale), Variables CSS (Custom Properties)
 - **JavaScript**: Interactividad y funcionalidades dinámicas
 - **Responsive Design**: Media queries para adaptabilidad
 
@@ -142,3 +142,22 @@ Las contribuciones son bienvenidas. Para cambios importantes:
 ---
 
 ⭐ **¡No olvides dar una estrella al proyecto si te gustó!** ⭐
+
+## 🧠 Técnicas avanzadas de CSS (ubicación y uso)
+
+- **Grid**: Layout principal asimétrico (2fr/1fr) en páginas de jugadores; cuadrículas en estadísticas, logros y galería con `repeat(auto-fill, minmax(...))`.
+- **Flexbox**: Header y navegación (`space-between`); hero centrado (`align-items`, `justify-content`); tarjetas de jugadores con `flex-wrap`; columnas verticales en biografía (`flex-direction: column`).
+- **Pseudoclases**: `:hover` en tarjetas e imágenes; `:nth-child(even)` en filas de tablas; estados activos en navegación.
+- **Pseudoelementos**: `::after` para línea dorada bajo títulos; `::before` para comillas decorativas en citas.
+- **Animaciones (@keyframes)**: `glow` (brillo pulsante) y `fadeIn` (entrada suave) en elementos destacados y tarjetas.
+- **Transiciones**: Uso de `--transition-normal` para enlaces, botones, imágenes y overlays en galería.
+- **Transformaciones**: `translateY` para elevación en hover; `scale` para zoom; `translate(-50%, -50%)` para centrado absoluto de botones de video.
+- **Variables CSS**: Design tokens en `:root` para colores, tipografía y espaciados, reutilizados en todo el proyecto.
+- **Posicionamiento avanzado**: Header `sticky` siempre visible; overlays de video con `position: absolute` para cobertura total.
+- **Media Queries**: Ajustes de grid y flex para tablet (≤768px) y mobile (≤480px), optimizando legibilidad y disposición.
+
+## 📚 Documentación y recursos
+
+- Guion de presentación del CSS comentado: <mcfile name="GUION_PRESENTACION_CSS_COMENTADO.md" path="C:\xampp\htdocs\proyecto-goats-futbol\documentation\GUION_PRESENTACION_CSS_COMENTADO.md"></mcfile>
+- Técnicas avanzadas de CSS (detalle y ubicaciones): <mcfile name="TECNICAS_AVANZADAS_CSS.md" path="C:\xampp\htdocs\proyecto-goats-futbol\documentation\TECNICAS_AVANZADAS_CSS.md"></mcfile>
+- Hoja de estilos comentada: <mcfile name="styles-comentado.css" path="C:\xampp\htdocs\proyecto-goats-futbol\css\styles-comentado.css"></mcfile>
