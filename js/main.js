@@ -76,4 +76,28 @@ document.addEventListener('DOMContentLoaded', () => {
     { root: null, threshold: 0 }
   );
   showObserver.observe(topSentinel);
+
+  // Semana 2: revelar secciones al hacer scroll
+  const revealTargets = document.querySelectorAll('[data-reveal]');
+  if (revealTargets.length) {
+    const sectionObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    revealTargets.forEach((el) => sectionObserver.observe(el));
+  }
+
+  // Semana 2: lazy y decoding para imágenes
+  const imgs = document.querySelectorAll('img');
+  imgs.forEach((img) => {
+    if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
+    if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+  });
 });
