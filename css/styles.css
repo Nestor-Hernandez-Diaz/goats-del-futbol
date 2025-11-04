@@ -1542,8 +1542,53 @@ section {
   }
 
   .toggle-hamburguesa:checked ~ .enlaces-navegacion {
-    right: 0;
-  }
+  right: 0;
+}
+
+/* Semana 3: Lightbox y Modal de Video */
+.lightbox-overlay,
+.video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.lightbox-content,
+.video-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  background: var(--color-darker, #0b1a2a);
+  border-radius: var(--border-radius, 12px);
+  box-shadow: var(--box-shadow, 0 10px 30px rgba(0,0,0,0.4));
+  overflow: hidden;
+}
+
+.lightbox-content img {
+  display: block;
+  max-width: 90vw;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+.close-lightbox,
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-primary, #00bfff);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
 
   .menu-hamburguesa {
     display: block;

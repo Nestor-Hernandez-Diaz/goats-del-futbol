@@ -100,4 +100,53 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
     if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
   });
+
+  // Semana 3: Lightbox para galería
+  document.addEventListener('click', (e) => {
+    const img = e.target.closest('.elemento-galeria img');
+    if (!img) return;
+    e.preventDefault();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.innerHTML = `
+      <div class="lightbox-content" role="dialog" aria-modal="true">
+        <button class="close-lightbox" aria-label="Cerrar">×</button>
+        <img src="${img.src}" alt="${img.alt || ''}">
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const removeOverlay = () => overlay.remove();
+    overlay.addEventListener('click', (evt) => {
+      if (evt.target.classList.contains('close-lightbox') || evt.target === overlay) removeOverlay();
+    });
+    document.addEventListener('keydown', (evt) => { if (evt.key === 'Escape') removeOverlay(); }, { once: true });
+  });
+
+  // Semana 3: Modal de videos YouTube usando data-video-id
+  document.addEventListener('click', (e) => {
+    const videoEl = e.target.closest('.elemento-video');
+    if (!videoEl) return;
+    const videoId = videoEl.dataset.videoId;
+    if (!videoId) return;
+
+    const modal = document.createElement('div');
+    modal.className = 'video-modal';
+    modal.innerHTML = `
+      <div class="video-modal-content" role="dialog" aria-modal="true">
+        <button class="close-modal" aria-label="Cerrar">×</button>
+        <iframe width="100%" height="500"
+          src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+          title="Video YouTube" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+        </iframe>
+      </div>`;
+    document.body.appendChild(modal);
+
+    const closeModal = () => modal.remove();
+    modal.addEventListener('click', (evt) => {
+      if (evt.target.classList.contains('close-modal') || evt.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (evt) => { if (evt.key === 'Escape') closeModal(); }, { once: true });
+  });
 });
