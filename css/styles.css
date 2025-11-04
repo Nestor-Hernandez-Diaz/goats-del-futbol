@@ -2031,4 +2031,41 @@ section {
   .titulo-seccion {
     font-size: 1.5rem;
   }
+
+  /* Ajustes de galería y videos en el último breakpoint */
+  .cuadricula-galeria {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .elemento-galeria img {
+    height: 180px;
+  }
+
+  .cuadricula-videos {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .miniatura-video {
+    height: 160px;
+  }
+
+  /* Modal de video responsivo */
+  .video-modal-content {
+    max-width: 95vw;
+  }
+  .video-modal-content iframe {
+    width: 95vw;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  /* Lightbox responsivo */
+  .lightbox-content {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+  .lightbox-content img {
+    max-width: 95vw;
+    max-height: 75vh;
+  }
 }
