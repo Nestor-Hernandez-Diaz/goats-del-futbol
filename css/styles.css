@@ -1562,46 +1562,21 @@ section {
 /* Semana 3: Lightbox y Modal de Video */
 .lightbox-overlay,
 .video-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
+  /* (Reversión a Semana 2) estilos eliminados */
 }
 
 .lightbox-content,
 .video-modal-content {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  background: var(--color-darker, #0b1a2a);
-  border-radius: var(--border-radius, 12px);
-  box-shadow: var(--box-shadow, 0 10px 30px rgba(0,0,0,0.4));
-  overflow: hidden;
+  /* (Reversión a Semana 2) estilos eliminados */
 }
 
 .lightbox-content img {
-  display: block;
-  max-width: 90vw;
-  max-height: 80vh;
-  object-fit: contain;
+  /* (Reversión a Semana 2) estilos eliminados */
 }
 
 .close-lightbox,
 .close-modal {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 50%;
-  background: var(--color-primary, #00bfff);
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
+  /* (Reversión a Semana 2) estilos eliminados */
 }
 
   .menu-hamburguesa {
@@ -2064,22 +2039,8 @@ section {
   }
 
   /* Modal de video responsivo */
-  .video-modal-content {
-    max-width: 95vw;
-  }
-  .video-modal-content iframe {
-    width: 95vw;
-    aspect-ratio: 16 / 9;
-    height: auto;
-  }
+  /* (Reversión a Semana 2) estilos eliminados */
 
   /* Lightbox responsivo */
-  .lightbox-content {
-    max-width: 95vw;
-    max-height: 85vh;
-  }
-  .lightbox-content img {
-    max-width: 95vw;
-    max-height: 75vh;
-  }
+  /* (Reversión a Semana 2) estilos eliminados */
 }
