@@ -436,35 +436,28 @@
         // Crear skeleton wrapper
         const wrapper = document.createElement('div');
         wrapper.className = 'skeleton-wrapper';
-        wrapper.style.cssText = `
-          position: relative;
-          overflow: hidden;
-          background: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.05) 25%,
-            rgba(255, 255, 255, 0.1) 50%,
-            rgba(255, 255, 255, 0.05) 75%
-          );
-          background-size: 200% 100%;
-          animation: shimmer 1.5s infinite;
-          border-radius: 8px;
-        `;
         
         // Mantener aspect ratio
-        const aspectRatio = img.dataset.aspectRatio || '16/9';
-        wrapper.style.aspectRatio = aspectRatio;
+        const aspectRatio = (img.dataset.aspectRatio || '16/9').trim();
+        const ratioClassMap = {
+          '16/9': 'ratio-16-9',
+          '3/4': 'ratio-3-4',
+          '4/3': 'ratio-4-3',
+          '1/1': 'ratio-1-1'
+        };
+        const ratioClass = ratioClassMap[aspectRatio] || 'ratio-16-9';
+        wrapper.classList.add(ratioClass);
         
         // Envolver imagen
         img.parentNode.insertBefore(wrapper, img);
         wrapper.appendChild(img);
         
         // Añadir clase para ocultar imagen mientras carga
-        img.style.opacity = '0';
-        img.style.transition = 'opacity 0.4s ease-in';
+        img.classList.add('skeleton-img');
         
         // Remover skeleton cuando la imagen cargue
         const handleLoad = () => {
-          img.style.opacity = '1';
+          img.classList.add('is-loaded');
           setTimeout(() => {
             if (wrapper.parentNode) {
               wrapper.replaceWith(img);
@@ -475,17 +468,12 @@
         };
         
         const handleError = () => {
-          // En caso de error, mostrar placeholder
-          wrapper.innerHTML = `
-            <div style="
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              height: 100%;
-              color: rgba(255,255,255,0.3);
-              font-size: 3rem;
-            ">📷</div>
-          `;
+          // En caso de error, mostrar placeholder semántico
+          const errorEl = document.createElement('div');
+          errorEl.className = 'skeleton-error';
+          errorEl.textContent = '📷';
+          wrapper.innerHTML = '';
+          wrapper.appendChild(errorEl);
           img.removeEventListener('load', handleLoad);
           img.removeEventListener('error', handleError);
         };
