@@ -166,19 +166,29 @@
     offset: 80, // Altura del header fijo
     
     init() {
-      document.addEventListener('click', (e) => {
-        const link = e.target.closest('a[href^="#"]');
-        if (!link) return;
-        
-        const href = link.getAttribute('href');
-        if (href === '#' || href === '#!') return;
-        
-        const target = Utils.qs(href);
-        if (!target) return;
-        
-        e.preventDefault();
-        this.scrollToElement(target);
-      });
+      if (window.jQuery) {
+        const $ = window.jQuery;
+        $('body').on('click', 'a[href^="#"]', (e) => {
+          const link = e.currentTarget;
+          const href = link.getAttribute('href');
+          if (href === '#' || href === '#!') return;
+          const target = Utils.qs(href);
+          if (!target) return;
+          e.preventDefault();
+          this.scrollToElement(target);
+        });
+      } else {
+        document.addEventListener('click', (e) => {
+          const link = e.target.closest('a[href^="#"]');
+          if (!link) return;
+          const href = link.getAttribute('href');
+          if (href === '#' || href === '#!') return;
+          const target = Utils.qs(href);
+          if (!target) return;
+          e.preventDefault();
+          this.scrollToElement(target);
+        });
+      }
       console.log('✅ Smooth scroll inicializado');
     },
     
@@ -827,38 +837,63 @@
     },
     
     setupEventListeners() {
-      // Click en imágenes para abrir lightbox
-      this.images.forEach((img, index) => {
-        img.style.cursor = 'pointer';
-        img.addEventListener('click', () => this.open(index));
-      });
-      
-      // Cerrar lightbox
-      this.closeBtn.addEventListener('click', () => this.close());
-      this.overlay.addEventListener('click', (e) => {
-        if (e.target === this.overlay) this.close();
-      });
-      
-      // Navegación
-      this.prevBtn.addEventListener('click', () => this.prev());
-      this.nextBtn.addEventListener('click', () => this.next());
-      
-      // Teclado
-      document.addEventListener('keydown', (e) => {
-        if (!this.overlay.classList.contains('is-open')) return;
-        
-        switch(e.key) {
-          case 'Escape':
-            this.close();
-            break;
-          case 'ArrowLeft':
-            this.prev();
-            break;
-          case 'ArrowRight':
-            this.next();
-            break;
-        }
-      });
+      // jQuery si está disponible; fallback a Vanilla
+      if (window.jQuery) {
+        const $ = window.jQuery;
+        $(this.images)
+          .css('cursor', 'pointer')
+          .each((index, img) => {
+            $(img).on('click', () => this.open(index));
+          });
+
+        $(this.closeBtn).on('click', () => this.close());
+        $(this.overlay).on('click', (e) => {
+          if (e.target === this.overlay) this.close();
+        });
+        $(this.prevBtn).on('click', () => this.prev());
+        $(this.nextBtn).on('click', () => this.next());
+
+        $(document).on('keydown.lightbox', (e) => {
+          if (!this.overlay.classList.contains('is-open')) return;
+          switch (e.key) {
+            case 'Escape':
+              this.close();
+              break;
+            case 'ArrowLeft':
+              this.prev();
+              break;
+            case 'ArrowRight':
+              this.next();
+              break;
+          }
+        });
+      } else {
+        // Fallback Vanilla
+        this.images.forEach((img, index) => {
+          img.style.cursor = 'pointer';
+          img.addEventListener('click', () => this.open(index));
+        });
+        this.closeBtn.addEventListener('click', () => this.close());
+        this.overlay.addEventListener('click', (e) => {
+          if (e.target === this.overlay) this.close();
+        });
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        document.addEventListener('keydown', (e) => {
+          if (!this.overlay.classList.contains('is-open')) return;
+          switch(e.key) {
+            case 'Escape':
+              this.close();
+              break;
+            case 'ArrowLeft':
+              this.prev();
+              break;
+            case 'ArrowRight':
+              this.next();
+              break;
+          }
+        });
+      }
       
       // Touch/Swipe (básico)
       let touchStartX = 0;
@@ -962,17 +997,32 @@
     },
     
     setupEventListeners(elements) {
-      elements.forEach(el => {
-        el.style.cursor = 'pointer';
-        el.addEventListener('click', () => {
-          const videoId = el.dataset.videoId;
-          if (videoId) {
-            this.open(videoId);
-          } else {
-            console.warn('⚠️ No se encontró data-video-id en el elemento');
-          }
+      if (window.jQuery) {
+        const $ = window.jQuery;
+        $(document)
+          .on('click', '.elemento-video, [data-video-id]', (e) => {
+            const el = e.currentTarget;
+            const videoId = el.dataset.videoId;
+            if (videoId) {
+              this.open(videoId);
+            } else {
+              console.warn('⚠️ No se encontró data-video-id en el elemento');
+            }
+          });
+        $('.elemento-video, [data-video-id]').css('cursor', 'pointer');
+      } else {
+        elements.forEach(el => {
+          el.style.cursor = 'pointer';
+          el.addEventListener('click', () => {
+            const videoId = el.dataset.videoId;
+            if (videoId) {
+              this.open(videoId);
+            } else {
+              console.warn('⚠️ No se encontró data-video-id en el elemento');
+            }
+          });
         });
-      });
+      }
     },
     
     open(videoId) {
@@ -1017,16 +1067,28 @@
       this.removeFocusTrap = Utils.createFocusTrap(this.modal);
       
       // Event listeners para cerrar
-      closeBtn.addEventListener('click', () => this.close());
-      this.modal.addEventListener('click', (e) => {
-        if (e.target === this.modal) this.close();
-      });
-      
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && this.modal) {
-          this.close();
-        }
-      }, { once: true });
+      if (window.jQuery) {
+        const $ = window.jQuery;
+        $(closeBtn).on('click', () => this.close());
+        $(this.modal).on('click', (e) => {
+          if (e.target === this.modal) this.close();
+        });
+        $(document).on('keydown.videomodal', (e) => {
+          if (e.key === 'Escape' && this.modal) {
+            this.close();
+          }
+        });
+      } else {
+        closeBtn.addEventListener('click', () => this.close());
+        this.modal.addEventListener('click', (e) => {
+          if (e.target === this.modal) this.close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.modal) {
+            this.close();
+          }
+        }, { once: true });
+      }
     },
     
     close() {
