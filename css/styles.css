@@ -1559,25 +1559,7 @@ section {
   right: 0;
 }
 
-/* Semana 3: Lightbox y Modal de Video */
-.lightbox-overlay,
-.video-modal {
-  /* (Reversión a Semana 2) estilos eliminados */
-}
-
-.lightbox-content,
-.video-modal-content {
-  /* (Reversión a Semana 2) estilos eliminados */
-}
-
-.lightbox-content img {
-  /* (Reversión a Semana 2) estilos eliminados */
-}
-
-.close-lightbox,
-.close-modal {
-  /* (Reversión a Semana 2) estilos eliminados */
-}
+/* Nota: Lightbox y Modal se implementarán en Semana 3 */
 
   .menu-hamburguesa {
     display: block;
@@ -2044,3 +2026,474 @@ section {
   /* Lightbox responsivo */
   /* (Reversión a Semana 2) estilos eliminados */
 }
+
+/* ========================================
+   ANIMACIONES DE SCROLL Y EFECTOS JS
+   ======================================== */
+
+/* Animaciones para elementos con [data-reveal] */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animaciones generales para secciones */
+section,
+.tarjeta-jugador,
+.elemento-galeria {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+section.animate-in,
+.tarjeta-jugador.animate-in,
+.elemento-galeria.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Prevenir animación en carga inicial */
+.preload * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+/* ========================================
+   ANIMACIONES STAGGERED (EFECTO CASCADA)
+   ======================================== */
+
+.stagger-item {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  /* El delay se aplica dinámicamente desde JS */
+}
+
+.stagger-item.stagger-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Efecto especial para tarjetas de jugadores */
+.tarjeta-jugador.stagger-item {
+  transform: translateY(40px) scale(0.9);
+}
+
+.tarjeta-jugador.stagger-item.stagger-visible {
+  transform: translateY(0) scale(1);
+}
+
+/* Efecto para elementos de galería */
+.elemento-galeria.stagger-item {
+  transform: translateY(20px) rotateX(10deg);
+  transform-style: preserve-3d;
+}
+
+.elemento-galeria.stagger-item.stagger-visible {
+  transform: translateY(0) rotateX(0deg);
+}
+
+/* Efecto para videos */
+.elemento-video.stagger-item {
+  transform: translateY(25px) scale(0.92);
+  filter: blur(2px);
+}
+
+.elemento-video.stagger-item.stagger-visible {
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* ========================================
+   ESTILOS PARA NEWSLETTER
+   ======================================== */
+
+.newsletter-error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(231, 76, 60, 0.1);
+  border-left: 3px solid #e74c3c;
+  border-radius: 4px;
+  animation: slideDown 0.3s ease-out;
+}
+
+.newsletter-success {
+  color: #27ae60;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(39, 174, 96, 0.1);
+  border-left: 3px solid #27ae60;
+  border-radius: 4px;
+  animation: slideDown 0.3s ease-out;
+}
+
+input.error {
+  border-color: #e74c3c !important;
+  animation: shake 0.5s ease-in-out;
+}
+
+input.success {
+  border-color: #27ae60 !important;
+}
+
+.validation-icon {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ========================================
+   MEJORAS DEL BOTÓN VOLVER ARRIBA
+   ======================================== */
+
+#back-to-top {
+  /* Los estilos base están en main.js para control dinámico */
+  animation: fadeInUp 0.3s ease-out;
+  font-family: var(--font-primary);
+}
+
+#back-to-top:hover {
+  background: var(--color-accent) !important;
+}
+
+#back-to-top:active {
+  transform: translateY(-2px) !important;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   MEJORAS DE ACCESIBILIDAD
+   ======================================== */
+
+/* Focus visible mejorado */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reducir animaciones para usuarios que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  [data-reveal],
+  section,
+  .tarjeta-jugador,
+  .elemento-galeria {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ========================================
+   ESTADOS DE CARGA Y TRANSICIONES
+   ======================================== */
+
+/* Placeholder para skeleton screens (futuro) */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ========================================
+   MODALES Y OVERLAYS (Lightbox, Video)
+   ======================================== */
+
+/* Overlay base para lightbox de imágenes */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-counter {
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.lightbox-close {
+  top: 20px;
+  right: 20px;
+  font-size: 40px;
+  z-index: 10001;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 48px;
+}
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-close:hover {
+  transform: scale(1.1);
+}
+
+/* Modal de video YouTube */
+.video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.video-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.video-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.video-modal-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  font-size: 40px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  z-index: 10001;
+}
+
+.video-modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.video-modal-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Accesibilidad: reducir animaciones */
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-overlay,
+  .video-modal {
+    transition: none;
+  }
+  .lightbox-close,
+  .lightbox-prev,
+  .lightbox-next,
+  .video-modal-close {
+    transition: none;
+  }
+}
+
+/* Responsivo: ajustar controles en pantallas pequeñas */
+@media (max-width: 576px) {
+  .lightbox-close { font-size: 32px; width: 44px; height: 44px; }
+  .lightbox-prev,
+  .lightbox-next { font-size: 36px; width: 44px; height: 44px; }
+}
+
+/* ========================================
+   SKELETON SCREENS - Mes 1, Semana 3
+   ======================================== */
+
+.skeleton-wrapper {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Skeleton específico para tarjetas de jugadores */
+.tarjeta-jugador .skeleton-wrapper {
+  aspect-ratio: 3/4;
+  min-height: 300px;
+}
+
+/* Skeleton para galería */
+.elemento-galeria .skeleton-wrapper {
+  aspect-ratio: 16/9;
+  min-height: 200px;
+}
+
+/* Skeleton para miniaturas de video */
+.elemento-video .skeleton-wrapper {
+  aspect-ratio: 16/9;
+  min-height: 180px;
+}
+
+/* Pulse effect alternativo (opcional) */
+.skeleton-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ========================================
+   FIN DE ESTILOS - Mes 1, Semana 3
+   ======================================== */
