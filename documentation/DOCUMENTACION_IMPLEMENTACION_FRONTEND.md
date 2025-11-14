@@ -91,6 +91,14 @@
 - Pruebas: verificar que tarjetas, galería y videos revelan en cascada; inspeccionar elementos para confirmar ausencia de `style="transition-delay: ..."`; validar `prefers-reduced-motion` desactiva delays; sin errores en consola.
 - Observaciones: se introdujeron variables CSS `--stagger-step` en contenedores y `--stagger-index` por elemento con clases `stagger-i-N`; se limita a 24 índices para mantener CSS compacto.
 
+### Entrada 7 (Skeleton loaders sin estilos inline; clases y ratios)
+- Fecha: 2025-11-14
+- Rama: `main`
+- Commit: 5e22950 — feat(skeleton): mover estilos inline a clases; .skeleton-img, .skeleton-error y ratios .ratio-*
+- Archivos: `js/main.js`, `css/styles.css`
+- Pruebas: recargar con cache limpio y verificar fade-in de imágenes con `.skeleton-img` sin usar estilos inline; confirmar que en errores se muestra `.skeleton-error`; revisar ratios aplicados (`.ratio-16-9`, `.ratio-3-4`, etc.).
+- Observaciones: se mantiene compatibilidad con `prefers-reduced-motion` desactivando animaciones y transiciones; ratios desconocidos usan default 16/9.
+
 ## Checklist para 4/4 (Indicador 1)
 - [ ] jQuery 3.7.1 agregado y verificado en todas las páginas.
 - [ ] Lightbox funcional con jQuery, accesible y responsivo.
