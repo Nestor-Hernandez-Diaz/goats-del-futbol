@@ -345,10 +345,17 @@
         const elements = Utils.qsa(group.selector);
         if (!elements.length) return;
         
-        // Aplicar delay progresivo a cada elemento
+        // Determinar clase de paso según delay
+        const stepClass = group.delay === 150
+          ? 'stagger-step-150'
+          : group.delay === 120
+            ? 'stagger-step-120'
+            : 'stagger-step-100';
+        
+        // Aplicar clases por índice (sin estilos inline)
         elements.forEach((el, index) => {
-          el.style.transitionDelay = `${index * group.delay}ms`;
-          el.classList.add('stagger-item');
+          const idx = Math.min(index, 24); // clamp para evitar clases excesivas
+          el.classList.add('stagger-item', `stagger-i-${idx}`);
         });
         
         // Observar el contenedor padre
@@ -359,6 +366,10 @@
             containers.add(container);
             this.observeStaggerContainer(container);
           }
+        });
+        // Añadir clase de paso al contenedor para heredar variable CSS
+        containers.forEach(container => {
+          container.classList.add(stepClass, 'stagger-group');
         });
         
         console.log(`✅ Animación staggered aplicada a ${elements.length} elementos (${group.selector})`);

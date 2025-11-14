@@ -2073,7 +2073,7 @@ section.animate-in,
   opacity: 0;
   transform: translateY(30px) scale(0.95);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  /* El delay se aplica dinámicamente desde JS */
+  transition-delay: calc(var(--stagger-index, 0) * var(--stagger-step, 100ms));
 }
 
 .stagger-item.stagger-visible {
@@ -2109,6 +2109,47 @@ section.animate-in,
 .elemento-video.stagger-item.stagger-visible {
   transform: translateY(0) scale(1);
   filter: blur(0);
+}
+
+/* Paso de delay por grupo (heredado desde el contenedor) */
+.stagger-group { --stagger-step: 100ms; }
+.stagger-step-100 { --stagger-step: 100ms; }
+.stagger-step-120 { --stagger-step: 120ms; }
+.stagger-step-150 { --stagger-step: 150ms; }
+
+/* Índices de delay (aplicados por elemento) */
+.stagger-i-0  { --stagger-index: 0; }
+.stagger-i-1  { --stagger-index: 1; }
+.stagger-i-2  { --stagger-index: 2; }
+.stagger-i-3  { --stagger-index: 3; }
+.stagger-i-4  { --stagger-index: 4; }
+.stagger-i-5  { --stagger-index: 5; }
+.stagger-i-6  { --stagger-index: 6; }
+.stagger-i-7  { --stagger-index: 7; }
+.stagger-i-8  { --stagger-index: 8; }
+.stagger-i-9  { --stagger-index: 9; }
+.stagger-i-10 { --stagger-index: 10; }
+.stagger-i-11 { --stagger-index: 11; }
+.stagger-i-12 { --stagger-index: 12; }
+.stagger-i-13 { --stagger-index: 13; }
+.stagger-i-14 { --stagger-index: 14; }
+.stagger-i-15 { --stagger-index: 15; }
+.stagger-i-16 { --stagger-index: 16; }
+.stagger-i-17 { --stagger-index: 17; }
+.stagger-i-18 { --stagger-index: 18; }
+.stagger-i-19 { --stagger-index: 19; }
+.stagger-i-20 { --stagger-index: 20; }
+.stagger-i-21 { --stagger-index: 21; }
+.stagger-i-22 { --stagger-index: 22; }
+.stagger-i-23 { --stagger-index: 23; }
+.stagger-i-24 { --stagger-index: 24; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger-item {
+    transition-duration: 0s;
+    transition-delay: 0s;
+    transform: none;
+  }
 }
 
 /* ========================================
