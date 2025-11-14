@@ -67,6 +67,14 @@
 - Pruebas: servidor local en `http://localhost:8000`; apertura de Lightbox en galería y modal de video con transiciones por clase `.is-open`; verificación de cierre con overlay y `Esc`; sin errores de carga.
 - Observaciones: se eliminaron estilos inline y hovers en JS para unificar en CSS; se mantienen `role="dialog"`, `aria-modal` y focus trap vía utilidades.
 
+### Entrada 4 (Lightbox/Video Modal con jQuery + Smooth Scroll)
+- Fecha: 2025-11-14
+- Rama: `main`
+- Commit: a2a77f0 — feat(js): migrar Lightbox y Video Modal a jQuery; smooth scroll con jQuery y fallback
+- Archivos: `js/main.js`
+- Pruebas: validar clicks en imágenes de galería abren el lightbox; navegación con flechas y `Esc` con eventos jQuery; validar click en `.elemento-video` abre el modal y `Esc` lo cierra; probar enlaces de ancla navegan suavemente con jQuery respetando `prefers-reduced-motion` (se usa `scrollTo` interno). Sin errores en consola.
+- Observaciones: se usó jQuery con `on` y namespaces para teclado; se mantiene fallback Vanilla si jQuery no está disponible.
+
 ## Checklist para 4/4 (Indicador 1)
 - [ ] jQuery 3.7.1 agregado y verificado en todas las páginas.
 - [ ] Lightbox funcional con jQuery, accesible y responsivo.
