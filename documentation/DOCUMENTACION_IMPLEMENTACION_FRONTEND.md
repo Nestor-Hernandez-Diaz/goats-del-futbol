@@ -51,6 +51,14 @@
 - Pruebas: revisión de lint (N/A), visual (N/A)
 - Observaciones: documento base con plan y plantilla de registro.
 
+### Entrada 2 (inclusión de jQuery 3.7.1)
+- Fecha: 2025-11-14
+- Rama: `main`
+- Commit: 4340af6 — feat(frontend): incluir jQuery 3.7.1 en index y páginas de jugadores
+- Archivos: `index.html`, `pages/messi.html`, `pages/neymar.html`, `pages/ronaldo.html`
+- Pruebas: abrir páginas y comprobar en consola `jQuery.fn.jquery` devuelve `3.7.1`. Sin errores en consola.
+- Observaciones: jQuery cargado en `<head>` antes de `main.js` (defer), listo para implementar interacciones.
+
 ## Checklist para 4/4 (Indicador 1)
 - [ ] jQuery 3.7.1 agregado y verificado en todas las páginas.
 - [ ] Lightbox funcional con jQuery, accesible y responsivo.
