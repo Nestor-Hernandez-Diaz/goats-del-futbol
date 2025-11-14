@@ -59,6 +59,14 @@
 - Pruebas: abrir páginas y comprobar en consola `jQuery.fn.jquery` devuelve `3.7.1`. Sin errores en consola.
 - Observaciones: jQuery cargado en `<head>` antes de `main.js` (defer), listo para implementar interacciones.
 
+### Entrada 3 (restaurar CSS de overlays y refactor JS a clases)
+- Fecha: 2025-11-14
+- Rama: `main`
+- Commit: 01b1ca9 — feat(css/js): restaurar estilos de overlays y modales; refactor Lightbox/VideoModal a clases CSS y estado is-open
+- Archivos: `css/styles.css`, `js/main.js`
+- Pruebas: servidor local en `http://localhost:8000`; apertura de Lightbox en galería y modal de video con transiciones por clase `.is-open`; verificación de cierre con overlay y `Esc`; sin errores de carga.
+- Observaciones: se eliminaron estilos inline y hovers en JS para unificar en CSS; se mantienen `role="dialog"`, `aria-modal` y focus trap vía utilidades.
+
 ## Checklist para 4/4 (Indicador 1)
 - [ ] jQuery 3.7.1 agregado y verificado en todas las páginas.
 - [ ] Lightbox funcional con jQuery, accesible y responsivo.
