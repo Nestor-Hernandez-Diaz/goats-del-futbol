@@ -75,6 +75,14 @@
 - Pruebas: validar clicks en imágenes de galería abren el lightbox; navegación con flechas y `Esc` con eventos jQuery; validar click en `.elemento-video` abre el modal y `Esc` lo cierra; probar enlaces de ancla navegan suavemente con jQuery respetando `prefers-reduced-motion` (se usa `scrollTo` interno). Sin errores en consola.
 - Observaciones: se usó jQuery con `on` y namespaces para teclado; se mantiene fallback Vanilla si jQuery no está disponible.
 
+### Entrada 5 (BackToTop sin estilos inline; clases CSS y fallback jQuery)
+- Fecha: 2025-11-14
+- Rama: `main`
+- Commit: ad16ff3 — feat(ui): BackToTop sin estilos inline; clases CSS .back-to-top/.is-visible y fallback jQuery
+- Archivos: `js/main.js`, `css/styles.css`
+- Pruebas: verificar aparición del botón al hacer scroll (IntersectionObserver); validar que se oculte al volver al tope; probar click con jQuery y fallback nativo, respetando `prefers-reduced-motion`; comprobar estados hover/focus desde CSS y que no haya estilos inline.
+- Observaciones: se agregó `.top-sentinel` al CSS; se reemplazó `display` inline por clase `is-visible` con transición; se mantuvo accesibilidad con `aria-hidden` según visibilidad.
+
 ## Checklist para 4/4 (Indicador 1)
 - [ ] jQuery 3.7.1 agregado y verificado en todas las páginas.
 - [ ] Lightbox funcional con jQuery, accesible y responsivo.
