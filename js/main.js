@@ -230,7 +230,7 @@
     createSentinel() {
       this.sentinel = document.createElement('div');
       this.sentinel.id = 'top-sentinel';
-      this.sentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none;';
+      this.sentinel.className = 'top-sentinel';
       document.body.prepend(this.sentinel);
     },
     
@@ -238,40 +238,10 @@
       this.button = document.createElement('button');
       this.button.id = 'back-to-top';
       this.button.type = 'button';
+      this.button.className = 'back-to-top';
       this.button.setAttribute('aria-label', 'Volver arriba');
       this.button.title = 'Volver arriba';
       this.button.textContent = '↑';
-      this.button.style.cssText = `
-        position:fixed;
-        bottom:24px;
-        right:24px;
-        width:48px;
-        height:48px;
-        border-radius:50%;
-        border:none;
-        background:var(--color-primary,#0073ff);
-        color:#fff;
-        box-shadow:0 4px 12px rgba(0,0,0,0.2);
-        cursor:pointer;
-        z-index:1000;
-        display:none;
-        align-items:center;
-        justify-content:center;
-        font-size:20px;
-        font-weight:bold;
-        transition:all 0.3s ease;
-      `;
-      
-      // Efectos hover (inline por simplicidad)
-      this.button.addEventListener('mouseenter', () => {
-        this.button.style.transform = 'translateY(-4px)';
-        this.button.style.boxShadow = '0 6px 16px rgba(0,0,0,0.3)';
-      });
-      this.button.addEventListener('mouseleave', () => {
-        this.button.style.transform = 'translateY(0)';
-        this.button.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
-      });
-      
       document.body.appendChild(this.button);
     },
     
@@ -279,8 +249,13 @@
       this.observer = new IntersectionObserver(
         (entries) => {
           const entry = entries[0];
-          this.button.style.display = entry.isIntersecting ? 'none' : 'flex';
-          this.button.setAttribute('aria-hidden', entry.isIntersecting);
+          if (entry.isIntersecting) {
+            this.button.classList.remove('is-visible');
+            this.button.setAttribute('aria-hidden', 'true');
+          } else {
+            this.button.classList.add('is-visible');
+            this.button.setAttribute('aria-hidden', 'false');
+          }
         },
         { root: null, threshold: 0 }
       );
@@ -288,9 +263,18 @@
     },
     
     setupClickHandler() {
-      this.button.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const scrollHandler = (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+      };
+
+      if (window.jQuery) {
+        const $btn = jQuery(this.button);
+        $btn.off('click.backToTop').on('click.backToTop', scrollHandler);
+      } else {
+        this.button.addEventListener('click', scrollHandler);
+      }
     }
   };
 
