@@ -83,6 +83,14 @@
 - Pruebas: verificar aparición del botón al hacer scroll (IntersectionObserver); validar que se oculte al volver al tope; probar click con jQuery y fallback nativo, respetando `prefers-reduced-motion`; comprobar estados hover/focus desde CSS y que no haya estilos inline.
 - Observaciones: se agregó `.top-sentinel` al CSS; se reemplazó `display` inline por clase `is-visible` con transición; se mantuvo accesibilidad con `aria-hidden` según visibilidad.
 
+### Entrada 6 (Stagger animations sin estilos inline; clases e índices)
+- Fecha: 2025-11-14
+- Rama: `main`
+- Commit: 822806d — feat(animations): eliminar inline style en stagger; clases .stagger-i-* y .stagger-step-* con CSS variables
+- Archivos: `js/main.js`, `css/styles.css`
+- Pruebas: verificar que tarjetas, galería y videos revelan en cascada; inspeccionar elementos para confirmar ausencia de `style="transition-delay: ..."`; validar `prefers-reduced-motion` desactiva delays; sin errores en consola.
+- Observaciones: se introdujeron variables CSS `--stagger-step` en contenedores y `--stagger-index` por elemento con clases `stagger-i-N`; se limita a 24 índices para mantener CSS compacto.
+
 ## Checklist para 4/4 (Indicador 1)
 - [ ] jQuery 3.7.1 agregado y verificado en todas las páginas.
 - [ ] Lightbox funcional con jQuery, accesible y responsivo.
