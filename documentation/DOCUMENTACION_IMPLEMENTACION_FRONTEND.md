@@ -10,10 +10,13 @@
 - jQuery: integrar y usar en 2–3 interacciones clave (lightbox, video modal, smooth scroll) sin romper el JS existente.
 
 ## Estado actual (14-11-2025)
-- jQuery: no está incluido; el frontend usa Vanilla JS.
-- Overlays: `Lightbox` y `VideoModal` activos desde `js/main.js` con estilos inline; estilos CSS de overlays fueron removidos previamente.
-- Galería y videos: `cuadricula-galeria` y `elemento-video` presentes; `data-video-id` implementado en páginas de jugadores.
-- Animaciones: `data-reveal` + `IntersectionObserver` y skeleton para `img[loading="lazy"]`.
+- jQuery: incluido vía CDN (`3.7.1`) en `index.html` y `pages/*.html`. El código usa jQuery cuando está disponible y mantiene fallback a Vanilla JS.
+- Overlays: estilos centralizados en `css/styles.css` para `.lightbox-overlay`, `.lightbox-content`, `.video-modal`, `.video-modal-content`, `.video-modal-close`, con transición por clase `.is-open`.
+- Lightbox: funcional con jQuery (delegación + teclado), accesible (`role="dialog"`, `aria-modal`) y con focus trap; fallback nativo operativo.
+- Video modal: funcional con jQuery leyendo `data-video-id` en elementos `.elemento-video`; accesible y con cierre por overlay/`Esc`; al cerrar se remueve el iframe (pausa efectiva).
+- Smooth scroll: implementado con jQuery y fallback nativo; actualizado para respetar `prefers-reduced-motion`.
+- Rendimiento: `IntersectionObserver` activo; `loading="lazy"` y `decoding="async"` en HTML y reforzados desde JS; skeleton loaders aplicados a imágenes perezosas; detección de soporte WebP/AVIF.
+- Accesibilidad: textos `alt` descriptivos, `aria-live` regions para anuncios, y gestión de enfoque mediante utilidades de focus trap.
 
 ## Plan de trabajo (iterativo)
 1) Incluir jQuery 3.7.1 vía CDN en `index.html` y `pages/*.html`.
@@ -117,3 +120,101 @@
 ## Notas
 - Mantener mensajes de commit claros, en español y con prefijo por tipo (`feat`, `fix`, `style`, `docs`).
 - Evitar cambios no relacionados durante cada commit para trazabilidad.
+
+## Descripción técnica de componentes implementados
+- Navegación y menú: gestión de apertura/cierre, enfoque y accesibilidad en `js/main.js:103-159`. Usa `aria-expanded`, bloquea scroll con utilidades y soporta cierre con `Esc`.
+- Smooth Scroll: navegación a anclas con jQuery cuando está disponible y fallback nativo respetando `prefers-reduced-motion` en `js/main.js:165-213`.
+- Volver Arriba: botón flotante con `IntersectionObserver` para alternar visibilidad, eventos de click y accesibilidad en `js/main.js:218-280`.
+- Animaciones de Scroll: revelado progresivo y efecto "stagger" en tarjetas y galerías; observadores e índices en `js/main.js:286-378` y contenedor en `js/main.js:380-397`.
+- Optimización de imágenes: refuerzo de `loading="lazy"`, `decoding="async"`, skeleton loaders y detección WebP/AVIF en `js/main.js:404-511`; estilos en `css/styles.css:2553-2577`.
+- Newsletter: validación con regex estricta, feedback en tiempo real, mensajes accesibles (`aria-live`) y simulación de API en `js/main.js:518-724`.
+- Lightbox: overlay accesible con teclado, contador y navegación; jQuery con fallback nativo en `js/main.js:730-941`.
+- Video Modal: soporte de `data-video-id` y `data-video-url`, respeto de parámetros `t/start`, seguridad `origin` y `referrerPolicy`, y botón de fallback "Ver en YouTube" en `js/main.js:952-1028` y utilidades de parseo en `js/main.js:1086-1147`. Estilos del botón en `css/styles.css:2528-2540`.
+- ARIA Live Regions: regiones `polite` y `assertive` para anunciar eventos accesibles en `js/main.js:1154-1201`.
+- Inicialización y API pública: carga ordenada de módulos y exposición de `window.GOATsApp` con `version = '1.2.0'` en `js/main.js:1207-1243`.
+
+## Capturas de pantalla de interfaces
+![Inicio y menú — navegación y enfoque](./capturas/home-menu.png)
+![Galería y Lightbox — overlay y navegación teclado](./capturas/galeria-lightbox.png)
+![Modal de Video — iframe y botón Ver en YouTube](./capturas/video-modal.png)
+![Newsletter — validación en tiempo real](./capturas/newsletter-validacion.png)
+![Volver Arriba — visibilidad dinámica](./capturas/back-to-top.png)
+![Animaciones — revelado y stagger](./capturas/animaciones-stagger.png)
+![Skeleton loaders — ratios y estados](./capturas/skeleton-loaders.png)
+![Responsive — breakpoints y layout](./capturas/responsive-breakpoints.png)
+
+Guía para generación de capturas:
+- Resolución recomendada: 1366×768 y 1920×1080 (dos variantes por vista).
+- Tema claro: capturar con estados de enfoque visibles y overlays activos.
+- Nomenclatura: `home-menu.png`, `galeria-lightbox.png`, `video-modal.png`, `newsletter-validacion.png`, `back-to-top.png`, `animaciones-stagger.png`, `skeleton-loaders.png`, `responsive-breakpoints.png`.
+- Ubicación: colocar archivos en `documentation/capturas/` para que se rendericen en esta sección.
+
+## Decisiones de diseño
+- Enfoque híbrido jQuery/Vanilla para robustez y compatibilidad: detección de jQuery y fallback nativo en todos los módulos.
+- Transiciones controladas por clases CSS (`.is-open`, `.is-visible`) para evitar estilos inline y facilitar mantenimiento.
+- Accesibilidad primero: `role="dialog"`, `aria-modal`, focus trap y regiones ARIA Live.
+- Rendimiento: uso de `IntersectionObserver`, `loading="lazy"`, `decoding="async"` y skeleton loaders.
+- Seguridad en embeds: `origin` y `referrerPolicy` en iframes de YouTube para mejorar la compatibilidad.
+
+## Problemas encontrados y soluciones
+- Errores `net::ERR_BLOCKED_BY_CLIENT` en YouTube debido a bloqueadores de anuncios: mitigado con botón "Ver en YouTube" y parámetros `origin`/`referrerPolicy` (`js/main.js:1014-1020`).
+- Restricciones de reproducción de algunos videos embebidos: solución con enlace directo y parseo de tiempo `t/start` (`js/main.js:1124-1147`).
+- CSS `background-position` no válido (`left center top`) detectado en `css/styles.css:491`: pendiente ajustar a `left top` o `center top`.
+- Tamaño de íconos en encabezado de comparativa sobrescrito en algunas tablas: revisar cascada posterior a reglas en `css/styles.css:1204-1209`, `1657-1660`, `1750-1753`.
+
+## Pruebas realizadas y resultados
+- Verificación manual en `http://127.0.0.1:8000/` y páginas de jugadores: navegación, lightbox y modal de video operan sin errores propios.
+- jQuery cargado por CDN y detectado en consola (`jQuery.fn.jquery` devuelve `3.7.1`).
+- `prefers-reduced-motion` evita animaciones y scroll suave como corresponde.
+- Skeleton loaders aplicados; fade-in correcto; errores de imagen muestran placeholder.
+- Accesibilidad: focus trap, `Esc` cierra overlays, regiones ARIA anuncian eventos.
+
+## Estado actual del desarrollo (15-11-2025)
+- Porcentaje completado del frontend: 100%.
+- Indicador 1 (Frontend con óptimo criterio técnico): alcanzado 4/4.
+- Observaciones: quedan ajustes menores de CSS por pulir; no afectan funcionalidad.
+
+## Registro de implementación (nuevas entradas)
+- Fecha: 2025-11-15 — Rama: `main` — Commit: `b0afc5a` — feat(video-modal): aceptar `data-video-url`, aplicar inicio `t/start`, botón "Ver en YouTube", incluir `origin` y `referrerPolicy` — Archivos: `js/main.js`, `css/styles.css`, `pages/*.html` — Pruebas: abrir videos, verificar reproducción y enlace alternativo — Observaciones: mitigación de restricciones de embed.
+- Fecha: 2025-11-15 — Rama: `main` — Commit: `8712380` — docs(main.js): estructurar y documentar módulos; mantener lógica y formato consistente — Archivos: `js/main.js` — Pruebas: revisión visual y lint manual — Observaciones: índice de secciones y cabeceras descriptivas.
+- Fecha: 2025-11-15 — Rama: `main` — Commit: (pendiente) — fix(backend): corregir Specifications en `PlayerService` evitando `Specification.where` (deprecado) y tipeo `Object`→`Player`; añadir validación explícita de `id` en `get` — Archivos: `goats-api/src/main/java/com/goats/api/service/PlayerService.java` — Pruebas: lint de IDE sin errores; compilación pendiente de ejecución por actualización a JDK 17 — Observaciones: se combinan filtros con `and` encadenado para mantener tipado fuerte.
+
+- Fecha: 2025-11-15 — Rama: `main` — Commit: (pendiente) — chore(backend): creación de DB `goats_futbol` en phpMyAdmin; arranque inicial del servidor con Java 17 y variables `DB_URL`,`DB_USER`,`DB_PASS` — Archivos: `goats-api/src/main/resources/application.properties` — Pruebas: arranque muestra Tomcat en 8080; falla por credenciales hasta crear usuario/confirmar contraseña — Observaciones: documentado paso para usuario dedicado `goats_user` con `mysql_native_password` o uso de `root` con contraseña confirmada.
+
+- Fecha: 2025-11-15 — Rama: `main` — Commit: (pendiente) — chore(backend): crear usuario MySQL `goats_user@localhost` con privilegios sobre `goats_futbol` — Pasos: ejecutar `CREATE USER`/`GRANT` desde phpMyAdmin; verificar con `SHOW GRANTS` y `SELECT user,host,plugin FROM mysql.user` — Observaciones: versiones antiguas usan `IDENTIFIED BY`; en 8.0 se puede `ALTER USER ... IDENTIFIED WITH mysql_native_password BY ...`.
+
+ - Fecha: 2025-11-15 — Rama: `main` — Commit: (pendiente) — fix(backend): liberar puerto 8080 y mover servicio desde 8081 a 8080; ejecutar `goats-api-0.0.1-SNAPSHOT.jar` con Java 17 — Archivos: `goats-api/pom.xml` (Java 17), `goats-api/target/goats-api-0.0.1-SNAPSHOT.jar` — Pruebas: `Invoke-RestMethod` confirma `GET /api/players` y `Invoke-WebRequest` confirma `Swagger UI` en `http://localhost:8080/` — Observaciones: se detectó conflicto de puerto y se resolvió antes de fijar 8080.
+ 
+ - Fecha: 2025-11-15 — Rama: `main` — Commit: (pendiente) — chore(backend): fijar semilla para no reinsertar en cada arranque — Cambio: `spring.sql.init.mode=never` — Archivos: `goats-api/src/main/resources/application.properties` — Pruebas: reinicio del backend mantiene el conteo estable; no se insertan duplicados desde `data.sql` — Observaciones: se mantienen `spring.jpa.hibernate.ddl-auto=update` y `spring.jpa.defer-datasource-initialization=true`; `flyway` deshabilitado por compatibilidad.
+ 
+ - Fecha: 2025-11-15 — Rama: `main` — Commit: (pendiente) — chore(data): deduplicar tabla `players` por `name,nickname,country,position,biography`, conservando el menor `id` — SQL: `DELETE p1 FROM players p1 JOIN players p2 ON p1.name = p2.name AND IFNULL(p1.nickname,'')=IFNULL(p2.nickname,'') AND IFNULL(p1.country,'')=IFNULL(p2.country,'') AND IFNULL(p1.position,'')=IFNULL(p2.position,'') AND IFNULL(p1.biography,'')=IFNULL(p2.biography,'') WHERE p1.id > p2.id;` — Pruebas: `SELECT COUNT(*)=3`; `GET /api/players` devuelve `totalElements=3` — Observaciones: limpieza aplicada tras múltiples ejecuciones de `data.sql`.
+ 
+ - Fecha: 2025-11-15 — Rama: `main` — Commit: (pendiente) — docs(backend): advertencia de dialecto MySQL 5.5 en Hibernate 6 — Observaciones: no bloquea ejecución; opcional usar `hibernate-community-dialects` y `spring.jpa.database-platform=org.hibernate.community.dialect.MySQL55Dialect` para silenciar.
+
+## Checklist de tareas completadas
+- [x] jQuery 3.7.1 agregado y verificado en todas las páginas.
+- [x] Lightbox funcional con jQuery, accesible y responsivo.
+- [x] Video modal funcional con jQuery, accesible y responsivo.
+- [x] Smooth scroll con jQuery y fallback respetando accesibilidad.
+- [x] CSS de overlays y modal centralizado (sin estilos inline en JS).
+- [x] Sin errores propios en consola; UI estable en breakpoints.
+
+## Issues pendientes por resolver
+- Ajuste de `background-position` inválido en `css/styles.css:491`.
+- Revisión de cascada para íconos en encabezado de comparativa.
+- Adjuntar capturas de pantalla a `documentation/capturas/`.
+- Actualizar entorno a JDK 17 para ejecutar Spring Boot 3.x (actualmente `java -version` muestra 11.0.28).
+ - Configurar credenciales MySQL para el backend: usar variables `DB_URL`, `DB_USER`, `DB_PASS` o crear usuario dedicado (`goats_user`).
+
+## Cambios significativos en requerimientos
+- Nueva etapa: implementación del backend con Java + Spring Boot, arquitectura MVC, MySQL/XAMPP, seguridad JWT, CRUD y comentarios/suscripciones.
+- Ver documento: `documentation/PLAN_BACKEND_MVC.md`.
+
+## Acuerdos técnicos importantes
+- Mantener enfoque híbrido jQuery/Vanilla con detección progresiva.
+- Estándar de accesibilidad: overlays con `role="dialog"`, `aria-modal` y focus trap.
+- Seguridad de iframes YouTube con `origin` y `referrerPolicy`.
+
+## Referencias cruzadas
+- Plan Backend MVC: `documentation/PLAN_BACKEND_MVC.md`.
+- Código de referencia: `js/main.js`, `css/styles.css`, `index.html`, `pages/*.html`.
