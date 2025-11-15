@@ -29,7 +29,7 @@
      * Bloquear/desbloquear scroll del body
      */
     toggleBodyScroll: (lock) => {
-      document.body.style.overflow = lock ? 'hidden' : 'auto';
+      document.body.classList.toggle('no-scroll', !!lock);
     },
     
     /**
@@ -196,9 +196,10 @@
       const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = targetPosition - this.offset;
       
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: prefersReduced ? 'auto' : 'smooth'
       });
       
       // Manejar foco para accesibilidad
@@ -639,23 +640,23 @@
     showRealtimeError() {
       this.input.classList.add('error');
       this.input.classList.remove('success');
-      this.input.style.borderColor = '#e74c3c';
       
       // Opcional: mostrar icono de error
       const icon = this.getOrCreateIcon();
       icon.textContent = '✕';
-      icon.style.color = '#e74c3c';
+      icon.classList.add('is-error');
+      icon.classList.remove('is-success');
     },
     
     showRealtimeSuccess() {
       this.input.classList.remove('error');
       this.input.classList.add('success');
-      this.input.style.borderColor = '#27ae60';
       
       // Opcional: mostrar icono de éxito
       const icon = this.getOrCreateIcon();
       icon.textContent = '✓';
-      icon.style.color = '#27ae60';
+      icon.classList.add('is-success');
+      icon.classList.remove('is-error');
     },
     
     getOrCreateIcon() {
@@ -664,21 +665,6 @@
       if (!icon) {
         icon = document.createElement('span');
         icon.className = 'validation-icon';
-        icon.style.cssText = `
-          position: absolute;
-          right: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 1.2rem;
-          font-weight: bold;
-          pointer-events: none;
-        `;
-        
-        // Posicionar el form relativamente si no lo está
-        if (getComputedStyle(this.form).position === 'static') {
-          this.form.style.position = 'relative';
-        }
-        
         this.form.appendChild(icon);
       }
       
@@ -726,14 +712,12 @@
     
     clearError() {
       this.input.classList.remove('error');
-      this.input.style.borderColor = '';
       const errors = Utils.qsa('.newsletter-error', this.form);
       errors.forEach((err) => err.remove());
     },
     
     clearSuccess() {
       this.input.classList.remove('success');
-      this.input.style.borderColor = '';
       const icon = this.form.querySelector('.validation-icon');
       if (icon) icon.remove();
     }
@@ -824,7 +808,6 @@
       if (window.jQuery) {
         const $ = window.jQuery;
         $(this.images)
-          .css('cursor', 'pointer')
           .each((index, img) => {
             $(img).on('click', () => this.open(index));
           });
@@ -853,7 +836,6 @@
       } else {
         // Fallback Vanilla
         this.images.forEach((img, index) => {
-          img.style.cursor = 'pointer';
           img.addEventListener('click', () => this.open(index));
         });
         this.closeBtn.addEventListener('click', () => this.close());
@@ -954,8 +936,7 @@
       this.counter.textContent = `${this.currentIndex + 1} / ${this.images.length}`;
       
       // Actualizar visibilidad de botones
-      this.prevBtn.style.display = this.images.length > 1 ? 'block' : 'none';
-      this.nextBtn.style.display = this.images.length > 1 ? 'block' : 'none';
+      this.overlay.classList.toggle('is-multi', this.images.length > 1);
     }
   };
 
@@ -968,10 +949,10 @@
     removeFocusTrap: null,
     
     init() {
-      const videoElements = Utils.qsa('.elemento-video, [data-video-id]');
+      const videoElements = Utils.qsa('.elemento-video, [data-video-id], [data-video-url]');
       
       if (!videoElements.length) {
-        console.warn('⚠️ No se encontraron elementos de video');
+        console.info('ℹ️ Página sin elementos de video');
         return;
       }
       
@@ -983,32 +964,33 @@
       if (window.jQuery) {
         const $ = window.jQuery;
         $(document)
-          .on('click', '.elemento-video, [data-video-id]', (e) => {
+          .on('click', '.elemento-video, [data-video-id], [data-video-url]', (e) => {
             const el = e.currentTarget;
-            const videoId = el.dataset.videoId;
-            if (videoId) {
-              this.open(videoId);
+            const value = el.dataset.videoUrl || el.dataset.videoId;
+            const info = this.getEmbedConfig(value);
+            if (info && info.id) {
+              this.open(info.id, info);
             } else {
-              console.warn('⚠️ No se encontró data-video-id en el elemento');
+              console.warn('⚠️ No se encontró data-video-id ni data-video-url en el elemento');
             }
           });
-        $('.elemento-video, [data-video-id]').css('cursor', 'pointer');
+        // Cursor se define desde CSS en .elemento-video
       } else {
         elements.forEach(el => {
-          el.style.cursor = 'pointer';
           el.addEventListener('click', () => {
-            const videoId = el.dataset.videoId;
-            if (videoId) {
-              this.open(videoId);
+            const value = el.dataset.videoUrl || el.dataset.videoId;
+            const info = this.getEmbedConfig(value);
+            if (info && info.id) {
+              this.open(info.id, info);
             } else {
-              console.warn('⚠️ No se encontró data-video-id en el elemento');
+              console.warn('⚠️ No se encontró data-video-id ni data-video-url en el elemento');
             }
           });
         });
       }
     },
     
-    open(videoId) {
+    open(videoId, opts = {}) {
       // Crear modal
       this.modal = document.createElement('div');
       this.modal.className = 'video-modal';
@@ -1028,13 +1010,25 @@
       
       // Iframe de YouTube
       const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+      const start = typeof opts.start === 'number' && opts.start > 0 ? `&start=${opts.start}` : '';
+      const origin = `&origin=${encodeURIComponent(location.origin)}`;
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0${start}${origin}`;
       iframe.title = 'Video YouTube';
       iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+
+      const openLink = document.createElement('a');
+      const direct = opts.originalUrl || `https://www.youtube.com/watch?v=${videoId}${opts.start ? `&t=${opts.start}s` : ''}`;
+      openLink.className = 'video-modal-open-youtube';
+      openLink.href = direct;
+      openLink.target = '_blank';
+      openLink.rel = 'noopener noreferrer';
+      openLink.textContent = 'Ver en YouTube';
       
       // Ensamblar modal
       content.appendChild(closeBtn);
+      content.appendChild(openLink);
       content.appendChild(iframe);
       this.modal.appendChild(content);
       document.body.appendChild(this.modal);
@@ -1088,6 +1082,68 @@
         this.modal = null;
         Utils.toggleBodyScroll(false);
       }, 300);
+    },
+    getVideoId(input) {
+      if (!input) return null;
+      const isUrl = /^https?:\/\//i.test(input);
+      if (isUrl) return this.parseVideoIdFromUrl(input);
+      return String(input).trim();
+    },
+    getEmbedConfig(input) {
+      if (!input) return null;
+      const isUrl = /^https?:\/\//i.test(input);
+      if (!isUrl) return { id: String(input).trim() };
+      const id = this.parseVideoIdFromUrl(input);
+      const start = this.parseStartFromUrl(input);
+      const info = { id, originalUrl: input };
+      if (typeof start === 'number' && start > 0) info.start = start;
+      return info;
+    },
+    parseVideoIdFromUrl(url) {
+      try {
+        const u = new URL(url);
+        const host = u.hostname.replace(/^www\./, '');
+        if (host === 'youtu.be') {
+          return u.pathname.split('/')[1] || null;
+        }
+        if (host.endsWith('youtube.com')) {
+          if (u.pathname.startsWith('/watch')) {
+            return u.searchParams.get('v');
+          }
+          if (u.pathname.startsWith('/embed/')) {
+            return u.pathname.split('/')[2] || null;
+          }
+          if (u.pathname.startsWith('/shorts/')) {
+            return u.pathname.split('/')[2] || null;
+          }
+        }
+      } catch (e) {}
+      const m = url.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{6,})/);
+      return m ? m[1] : null;
+    },
+    parseStartFromUrl(url) {
+      try {
+        const u = new URL(url);
+        const t = u.searchParams.get('t') || u.searchParams.get('start');
+        if (!t) return null;
+        const s = this.parseTimeToSeconds(t);
+        return typeof s === 'number' && s >= 0 ? s : null;
+      } catch (e) {
+        const m = url.match(/[?&#](?:t|start)=([^&#]+)/);
+        if (!m) return null;
+        const s = this.parseTimeToSeconds(m[1]);
+        return typeof s === 'number' && s >= 0 ? s : null;
+      }
+    },
+    parseTimeToSeconds(str) {
+      const v = String(str).trim();
+      if (/^\d+$/.test(v)) return parseInt(v, 10);
+      const m = v.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/i);
+      if (!m) return null;
+      const h = parseInt(m[1] || '0', 10);
+      const min = parseInt(m[2] || '0', 10);
+      const sec = parseInt(m[3] || '0', 10);
+      return h * 3600 + min * 60 + sec;
     }
   };
 
@@ -1110,24 +1166,12 @@
       this.politeRegion.setAttribute('aria-live', 'polite');
       this.politeRegion.setAttribute('aria-atomic', 'true');
       this.politeRegion.className = 'sr-only';
-      this.politeRegion.style.cssText = `
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0,0,0,0);
-        white-space: nowrap;
-        border: 0;
-      `;
       
       // Región assertive (interrumpe)
       this.assertiveRegion = document.createElement('div');
       this.assertiveRegion.setAttribute('aria-live', 'assertive');
       this.assertiveRegion.setAttribute('aria-atomic', 'true');
       this.assertiveRegion.className = 'sr-only';
-      this.assertiveRegion.style.cssText = this.politeRegion.style.cssText;
       
       document.body.appendChild(this.politeRegion);
       document.body.appendChild(this.assertiveRegion);

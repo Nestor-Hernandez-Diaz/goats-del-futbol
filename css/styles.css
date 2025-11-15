@@ -41,6 +41,24 @@ body {
   background-image: linear-gradient(to bottom, var(--color-darker), var(--color-dark));
 }
 
+/* Utilidad de accesibilidad: ocultar visualmente pero disponible para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Bloqueo de scroll cuando hay modales abiertos */
+body.no-scroll {
+  overflow: hidden;
+}
+
 /* ========================================
    2. TIPOGRAFÍA BASE
    ======================================== */
@@ -464,15 +482,18 @@ section {
 }
 
 .hero-messi {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/messi-hero-bg.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/messi-hero.png');
+  background-position: center;
 }
 
 .hero-ronaldo {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/ronaldo-hero-bg.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/ronaldo-hero-banner.png');
+  background-position: left center top;
 }
 
 .hero-neymar {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/neymar-hero-bg.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/neymar-hero-banner.png');
+  background-position: center;
 }
 
 .contenido-hero-jugador {
@@ -750,6 +771,18 @@ section {
   background: var(--color-secondary);
   border-radius: 5px;
 }
+/* Width utilities for attribute fill bars */
+.w-87 { width: 87%; }
+.w-88 { width: 88%; }
+.w-89 { width: 89%; }
+.w-90 { width: 90%; }
+.w-92 { width: 92%; }
+.w-93 { width: 93%; }
+.w-94 { width: 94%; }
+.w-95 { width: 95%; }
+.w-96 { width: 96%; }
+.w-97 { width: 97%; }
+.w-98 { width: 98%; }
 
 .valor-atributo {
   width: 60px;
@@ -960,6 +993,7 @@ section {
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  cursor: pointer;
 }
 
 .miniatura-video {
@@ -1159,14 +1193,25 @@ section {
 }
 
 .player-icon {
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 0.5rem;
   display: block;
   margin: 0 auto 0.5rem;
   border: 2px solid white;
+}
+
+.comparison-table thead .player-icon {
+  width: 40px;
+  height: 40px;
+  border-width: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.comparison-table thead th {
+  padding: 0.6rem;
 }
 
 /* Galería */
@@ -1200,6 +1245,7 @@ section {
   object-fit: cover;
   display: block;
   transition: transform 0.5s ease;
+  cursor: pointer;
 }
 
 .elemento-galeria:hover img {
@@ -1336,6 +1382,7 @@ section {
 .formulario-newsletter {
   display: flex;
   margin-top: 1rem;
+  position: relative;
 }
 
 .formulario-newsletter input {
@@ -1608,10 +1655,10 @@ section {
   .comparison-table td {
     padding: 0.5rem;
   }
-  
-  .player-icon img {
-    width: 30px;
-    height: 30px;
+
+  .comparison-table thead .player-icon {
+    width: 18px;
+    height: 18px;
   }
   
   .cuadricula-galeria {
@@ -1701,10 +1748,10 @@ section {
   .comparison-table td {
     padding: 0.4rem 0.3rem;
   }
-  
-  .player-icon img {
-    width: 25px;
-    height: 25px;
+
+  .comparison-table thead .player-icon {
+    width: 16px;
+    height: 16px;
   }
   
 
@@ -2188,8 +2235,18 @@ input.success {
 }
 
 .validation-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  font-weight: bold;
+  pointer-events: none;
   animation: fadeIn 0.3s ease-out;
 }
+
+.validation-icon.is-error { color: #e74c3c; }
+.validation-icon.is-success { color: #27ae60; }
 
 @keyframes fadeIn {
   from {
@@ -2388,6 +2445,12 @@ select:focus-visible {
 .lightbox-prev { left: 20px; }
 .lightbox-next { right: 20px; }
 
+/* Mostrar/ocultar navegación según número de imágenes */
+.lightbox-prev,
+.lightbox-next { display: none; }
+.lightbox-overlay.is-multi .lightbox-prev,
+.lightbox-overlay.is-multi .lightbox-next { display: block; }
+
 .lightbox-close:hover,
 .lightbox-prev:hover,
 .lightbox-next:hover {
@@ -2460,6 +2523,25 @@ select:focus-visible {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.video-modal-open-youtube {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-block;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+  font-size: 14px;
+  z-index: 10000;
+}
+
+.video-modal-open-youtube:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* Accesibilidad: reducir animaciones */
