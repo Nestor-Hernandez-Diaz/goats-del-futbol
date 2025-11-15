@@ -10,10 +10,29 @@
 (function() {
   'use strict';
 
+  /**
+   * Índice de secciones
+   * 1) Utilidades Generales (Utils)
+   * 2) Navegación (Navigation)
+   * 3) Scroll Suave (SmoothScroll)
+   * 4) Volver Arriba (BackToTop)
+   * 5) Animaciones de Scroll (ScrollAnimations)
+   * 6) Optimización de Imágenes (ImageOptimization)
+   * 7) Newsletter (Newsletter)
+   * 8) Lightbox de Galería (Lightbox)
+   * 9) Modal de Videos (VideoModal)
+   * 10) ARIA Live Regions (AriaLive)
+   * 11) Inicialización Principal (init)
+   */
+
   // ============================================================================
   // UTILIDADES GENERALES
   // ============================================================================
   
+  /**
+   * Utilidades compartidas para selección de nodos, control de scroll,
+   * optimización de eventos (debounce) y gestión de foco accesible.
+   */
   const Utils = {
     /**
      * Selector de elementos con validación
@@ -100,6 +119,10 @@
   // NAVEGACIÓN Y MENÚ HAMBURGUESA
   // ============================================================================
   
+  /**
+   * Gestiona el menú hamburguesa, enlaces de navegación y manejo de teclado.
+   * Usa Utils para selección y bloqueo de scroll.
+   */
   const Navigation = {
     burger: null,
     navLinks: null,
@@ -162,6 +185,11 @@
   // SMOOTH SCROLL
   // ============================================================================
   
+  /**
+   * Implementa desplazamiento suave hacia anclas, respetando
+   * 'prefers-reduced-motion'. Funciona con jQuery (si está disponible)
+   * y con fallback en JavaScript nativo.
+   */
   const SmoothScroll = {
     offset: 80, // Altura del header fijo
     
@@ -215,6 +243,10 @@
   // BOTÓN VOLVER ARRIBA
   // ============================================================================
   
+  /**
+   * Crea un botón flotante para volver al tope de la página.
+   * Observa el sentinel superior para alternar visibilidad.
+   */
   const BackToTop = {
     button: null,
     sentinel: null,
@@ -283,6 +315,10 @@
   // INTERSECTION OBSERVER PARA ANIMACIONES
   // ============================================================================
   
+  /**
+   * Aplica animaciones al revelar elementos en viewport y
+   * efecto staggered en grupos de tarjetas, galería y videos.
+   */
   const ScrollAnimations = {
     observer: null,
     staggerObserver: null,
@@ -401,6 +437,10 @@
   // OPTIMIZACIÓN DE IMÁGENES
   // ============================================================================
   
+  /**
+   * Refuerza lazy loading y decoding, aplica skeleton loaders,
+   * y detecta soporte para WebP/AVIF.
+   */
   const ImageOptimization = {
     init() {
       const imgs = Utils.qsa('img');
@@ -515,6 +555,10 @@
   // VALIDACIÓN DE FORMULARIO NEWSLETTER
   // ============================================================================
   
+  /**
+   * Valida emails con feedback en tiempo real y simula suscripción.
+   * Anuncia estados mediante ARIA Live cuando está disponible.
+   */
   const Newsletter = {
     form: null,
     input: null,
@@ -727,6 +771,10 @@
   // LIGHTBOX PARA GALERÍA
   // ============================================================================
   
+  /**
+   * Visor de imágenes accesible con overlay, teclado y gestos básicos.
+   * Preferencia por jQuery para delegación; fallback a Vanilla.
+   */
   const Lightbox = {
     overlay: null,
     content: null,
@@ -944,6 +992,11 @@
   // MODAL DE VIDEOS YOUTUBE
   // ============================================================================
   
+  /**
+   * Modal para reproducir videos de YouTube mediante ID o URL completa.
+   * Respeta parámetros t/start, añade origin/referrerPolicy y
+   * ofrece enlace alternativo "Ver en YouTube" si el embed está restringido.
+   */
   const VideoModal = {
     modal: null,
     removeFocusTrap: null,
@@ -1151,6 +1204,10 @@
   // ARIA LIVE REGIONS - NOTIFICACIONES ACCESIBLES
   // ============================================================================
   
+  /**
+   * Crea regiones ARIA (polite y assertive) para mensajes accesibles
+   * y expone utilidades para anunciar eventos.
+   */
   const AriaLive = {
     politeRegion: null,
     assertiveRegion: null,
@@ -1204,6 +1261,10 @@
   // INICIALIZACIÓN PRINCIPAL
   // ============================================================================
   
+  /**
+   * Inicializa todos los módulos cuando el DOM está listo y
+   * expone una API pública para debugging.
+   */
   function init() {
     console.log('🚀 GOATs del Fútbol - JavaScript inicializado');
     console.log('📅 Implementación: Mes 1, Semana 3 - Optimización y Accesibilidad');
