@@ -9,23 +9,25 @@ let currentFilter = 'all';
 let currentCommentId = null;
 
 // Verificar autenticación al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  checkAuthentication();
-  loadStatistics();
-  loadComments();
+document.addEventListener('DOMContentLoaded', async () => {
+  const isAuthenticated = await checkAuthentication();
+  if (isAuthenticated) {
+    await loadStatistics();
+    await loadComments();
+  }
   setupEventListeners();
 });
 
 /**
  * Verificar si hay token JWT y si es ADMIN
  */
-function checkAuthentication() {
+async function checkAuthentication() {
   const token = localStorage.getItem('jwtToken');
   
   if (!token) {
     showAuthAlert();
     disableDashboard();
-    return;
+    return false;
   }
 
   // Verificar rol ADMIN (el token contiene roles en el payload)
@@ -37,11 +39,15 @@ function checkAuthentication() {
     if (!roles.includes('ROLE_ADMIN') && !roles.includes('ADMIN')) {
       showAuthAlert();
       disableDashboard();
+      return false;
     }
+    
+    return true;
   } catch (error) {
     console.error('Error decodificando token:', error);
     showAuthAlert();
     disableDashboard();
+    return false;
   }
 }
 
@@ -66,6 +72,11 @@ async function loadStatistics() {
     const response = await fetch(`${API_BASE_URL}/comments?size=1000`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
+    
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+    
     const data = await response.json();
     
     const comments = data.content || [];
@@ -79,7 +90,11 @@ async function loadStatistics() {
     document.getElementById('rejected-comments').textContent = rejected;
   } catch (error) {
     console.error('Error cargando estadísticas:', error);
-    showError('Error al cargar estadísticas');
+    // Mostrar 0 en lugar de error
+    document.getElementById('total-comments').textContent = '0';
+    document.getElementById('pending-comments').textContent = '0';
+    document.getElementById('approved-comments').textContent = '0';
+    document.getElementById('rejected-comments').textContent = '0';
   }
 }
 
