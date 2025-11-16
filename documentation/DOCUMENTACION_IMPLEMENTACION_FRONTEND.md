@@ -242,12 +242,107 @@ Guía para generación de capturas:
   - Falta corregir pequeño bug en endpoint /api/auth/me para recuperar roles correctamente
   - Listo para probar creación de jugadores con rol ADMIN
 
-## Estado actual del desarrollo (15-11-2025 20:00)
+### Entrada 10 (Backend Semana 2: PlayerStats, Achievement, Comment, Subscription - CRUD completo)
+- Fecha: 2025-11-15
+- Rama: `main`
+- Commit: (pendiente) — feat(backend): implementar Semana 2 completa con PlayerStats, Achievement, Comment y Subscription
+- Archivos modificados/creados:
+  - Modelos: `PlayerStats.java`, `Achievement.java`, `Comment.java`, `Subscription.java`
+  - Player actualizado: `Player.java` (agregadas relaciones OneToOne, OneToMany)
+  - Repositorios: `PlayerStatsRepository.java`, `AchievementRepository.java`, `CommentRepository.java`, `SubscriptionRepository.java`
+  - DTOs: `PlayerStatsDto.java`, `AchievementDto.java`, `CommentDto.java`, `SubscriptionDto.java`
+  - Servicios: `PlayerStatsService.java`, `AchievementService.java`, `CommentService.java`, `SubscriptionService.java`
+  - Controladores: `PlayerStatsController.java`, `AchievementController.java`, `CommentController.java`, `SubscriptionController.java`
+  - SQL: `V3__create_player_stats.sql`, `V4__create_achievements.sql`, `V5__create_comments.sql`, `V6__create_subscriptions.sql`
+- Cambios realizados:
+  
+  **PlayerStats (Estadísticas de Jugadores):**
+  - ✅ Entidad JPA con relación OneToOne con Player
+  - ✅ Campos: goals, assists, matchesPlayed, trophies, yellowCards, redCards, minutesPlayed, ballonDOrWins, championsLeagueWins, worldCupWins
+  - ✅ Repositorio con queries para top goleadores, asistentes, trofeos, Balones de Oro
+  - ✅ DTO con validaciones @Min para valores no negativos
+  - ✅ Servicio con CRUD completo y métodos de ranking
+  - ✅ Controlador con endpoints GET públicos, POST/PUT/DELETE protegidos con @PreAuthorize("hasRole('ADMIN')")
+  - ✅ Endpoints: GET /api/stats/player/{playerId}, POST /api/stats, PUT /api/stats/player/{playerId}, DELETE /api/stats/player/{playerId}
+  - ✅ Rankings: GET /api/stats/top/goals, /assists, /trophies, /ballondor
+  
+  **Achievement (Logros y Competiciones):**
+  - ✅ Entidad JPA con relación ManyToOne con Player
+  - ✅ Enum AchievementType: INDIVIDUAL, CLUB, NATIONAL_TEAM, RECORD, OTHER
+  - ✅ Campos: title, description, year, type, organization
+  - ✅ Repositorio con queries por jugador, tipo, año, búsqueda por título
+  - ✅ DTO con validaciones @NotBlank, @Size, @Min/@Max para año (1950-2100)
+  - ✅ Servicio con CRUD, búsqueda por filtros, conteo de logros
+  - ✅ Controlador con paginación y protección de roles
+  - ✅ Endpoints: GET /api/achievements/player/{playerId}, GET /api/achievements/{id}, POST /api/achievements (ADMIN)
+  - ✅ Filtros: GET /api/achievements/type/{type}, /year/{year}, /search?title=..., /player/{playerId}/count
+  
+  **Comment (Sistema de Comentarios con Moderación):**
+  - ✅ Entidad JPA con relaciones ManyToOne con User y Player
+  - ✅ Enum ModerationStatus: PENDING, APPROVED, REJECTED, EDITED
+  - ✅ Campos: content, status, moderationReason, moderatedBy, moderatedAt
+  - ✅ Repositorio con queries por jugador, usuario, estado, pendientes
+  - ✅ DTO con validación @Size(min=10, max=1000) para contenido
+  - ✅ Servicio con lógica de moderación: create(), approve(), reject(), update(), delete()
+  - ✅ Permisos: usuarios autenticados crean comentarios (estado PENDING), solo ADMIN modera
+  - ✅ Controlador con endpoints públicos (comentarios aprobados) y protegidos (moderación)
+  - ✅ Endpoints: GET /api/comments/player/{playerId} (público, solo APPROVED), POST /api/comments (autenticado)
+  - ✅ Moderación: POST /api/comments/{id}/approve, POST /api/comments/{id}/reject (ADMIN), GET /api/comments/pending (ADMIN)
+  
+  **Subscription (Suscripciones de Usuarios):**
+  - ✅ Entidad JPA con relaciones ManyToOne con User y Player
+  - ✅ Constraint unique (user_id, player_id) para evitar duplicados
+  - ✅ Campos: active, notificationsEnabled, subscribedAt, unsubscribedAt
+  - ✅ Repositorio con queries por usuario, jugador, suscripciones activas
+  - ✅ DTO con campos userId, playerId, active, notificationsEnabled
+  - ✅ Servicio con subscribe(), unsubscribe(), toggleNotifications(), isSubscribed()
+  - ✅ Controlador con endpoints protegidos por autenticación
+  - ✅ Endpoints: POST /api/subscriptions/player/{playerId} (subscribe), DELETE /api/subscriptions/player/{playerId} (unsubscribe)
+  - ✅ Gestión: PATCH /api/subscriptions/player/{playerId}/notifications, GET /api/subscriptions/user/{userId}
+  
+  **Migración de Base de Datos:**
+  - ✅ V3__create_player_stats.sql: tabla player_stats con foreign key a players, índices en goals/assists/trophies/ballonDOr
+  - ✅ V4__create_achievements.sql: tabla achievements con foreign key a players, índices en player_id/year/type
+  - ✅ V5__create_comments.sql: tabla comments con foreign keys a users/players/moderator, índices en status/player_status/created_at
+  - ✅ V6__create_subscriptions.sql: tabla subscriptions con foreign keys a users/players, constraint unique (user_id, player_id)
+  - ✅ Datos de ejemplo insertados para Messi, Cristiano y Neymar con estadísticas reales
+  - ✅ Logros principales insertados: Balones de Oro, Champions League, Copa del Mundo, etc.
+  
+  **Integración y Relaciones:**
+  - ✅ Player.java actualizado con @OneToOne PlayerStats, @OneToMany Achievement/Comment/Subscription
+  - ✅ Cascadas configuradas: CascadeType.ALL con orphanRemoval=true
+  - ✅ Fetch strategy: LAZY para optimización de rendimiento
+  - ✅ Métodos de utilidad: addAchievement(), removeAchievement() en Player
+  
+- Pruebas:
+  - Compilación exitosa con `mvnw clean package -DskipTests` (39 archivos fuente)
+  - Servidor Spring Boot iniciado correctamente en puerto 8080
+  - 7 repositorios JPA detectados (Player, User, Role, PlayerStats, Achievement, Comment, Subscription)
+  - Hibernate creó 4 tablas nuevas: achievements, comments, player_stats, subscriptions
+  - Restricciones de integridad aplicadas correctamente (foreign keys, unique constraints)
+  - Índices creados para optimizar consultas
+  - Enum types configurados correctamente en MySQL
+  - Sin errores de compilación ni runtime críticos
+- Observaciones:
+  - Sistema completo de estadísticas con rankings y comparativas
+  - Logros categorizados por tipo (individual, club, selección, récords)
+  - Sistema de moderación de comentarios funcional con roles
+  - Suscripciones con notificaciones configurables
+  - Protección de endpoints según roles: público, autenticado, ADMIN
+  - Paginación implementada en todas las listas
+  - Validaciones Jakarta en todos los DTOs
+  - Queries optimizadas con índices en campos relevantes
+  - Datos de ejemplo insertados para demostración
+  - Arquitectura MVC completa y escalable
+  - Listo para integración con frontend
+  - Próxima etapa: Semana 3 (notificaciones, moderación avanzada, reportes)
+
+## Estado actual del desarrollo (15-11-2025 21:00)
 - Porcentaje completado del frontend: 100%.
-- Porcentaje completado del backend: 40% (autenticación JWT implementada).
+- Porcentaje completado del backend: 60% (Semana 1 + Semana 2 implementadas).
 - Indicador 1 (Frontend con óptimo criterio técnico): alcanzado 4/4.
-- Indicador 2 (Backend con óptimo criterio técnico): en progreso 2/4 → objetivo 4/4.
-- Observaciones: autenticación JWT funcional; próxima etapa ampliar modelos (PlayerStats, Achievement, Comment, Subscription).
+- Indicador 2 (Backend con óptimo criterio técnico): en progreso 3/4 → objetivo 4/4.
+- Observaciones: backend con JWT + CRUD completo de 4 entidades; próxima etapa Semana 3 (notificaciones, informes).
 
 ## Issues pendientes por resolver
 - Ajuste de `background-position` inválido en `css/styles.css:491`.
