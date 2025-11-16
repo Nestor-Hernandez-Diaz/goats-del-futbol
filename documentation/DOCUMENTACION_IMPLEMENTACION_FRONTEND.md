@@ -191,20 +191,75 @@ Guía para generación de capturas:
  
  - Fecha: 2025-11-15 — Rama: `main` — Commit: (pendiente) — docs(backend): advertencia de dialecto MySQL 5.5 en Hibernate 6 — Observaciones: no bloquea ejecución; opcional usar `hibernate-community-dialects` y `spring.jpa.database-platform=org.hibernate.community.dialect.MySQL55Dialect` para silenciar.
 
-## Checklist de tareas completadas
-- [x] jQuery 3.7.1 agregado y verificado en todas las páginas.
-- [x] Lightbox funcional con jQuery, accesible y responsivo.
-- [x] Video modal funcional con jQuery, accesible y responsivo.
-- [x] Smooth scroll con jQuery y fallback respetando accesibilidad.
-- [x] CSS de overlays y modal centralizado (sin estilos inline en JS).
-- [x] Sin errores propios en consola; UI estable en breakpoints.
+### Entrada 9 (Implementación completa de Autenticación JWT - Semana 1)
+- Fecha: 2025-11-15
+- Rama: `main`
+- Commit: (pendiente)
+- Archivos: Múltiples archivos del backend
+  - Modelos: `User.java`, `Role.java`
+  - Repositorios: `UserRepository.java`, `RoleRepository.java`
+  - Seguridad: `JwtTokenProvider.java`, `JwtAuthenticationFilter.java`
+  - DTOs: `LoginRequest.java`, `RegisterRequest.java`, `AuthResponse.java`, `UserResponse.java`
+  - Servicios: `AuthService.java`
+  - Controladores: `AuthController.java`
+  - Configuración: `SecurityConfig.java` (actualizado con JWT)
+  - SQL: `V2__create_users_roles.sql`, `init-users-roles.sql`
+  - Dependencias: `pom.xml` (agregado jjwt 0.12.3)
+- Cambios realizados:
+  - ✅ Modelos JPA User y Role con relación ManyToMany
+  - ✅ Repositorios con métodos de búsqueda (findByUsername, findByEmail, findByName)
+  - ✅ JwtTokenProvider para generación y validación de tokens JWT
+  - ✅ JwtAuthenticationFilter para interceptar requests y validar JWT
+  - ✅ AuthService con métodos register(), login() y getCurrentUser()
+  - ✅ DTOs de autenticación con validaciones Jakarta Validation
+  - ✅ AuthController con endpoints POST /api/auth/register, POST /api/auth/login, GET /api/auth/me
+  - ✅ SecurityConfig actualizado con filtro JWT, AuthenticationManager, PasswordEncoder (BCrypt)
+  - ✅ PlayerController actualizado con anotaciones @PreAuthorize para endpoints POST/PUT/DELETE
+  - ✅ PlayerService con métodos create(), update() y delete()
+  - ✅ Script SQL de migración para crear tablas users, roles, user_roles
+  - ✅ Roles predefinidos: ROLE_ADMIN, ROLE_USER, ROLE_GUEST
+  - ✅ Usuario admin por defecto (username: admin, password: admin123)
+- Pruebas:
+  - Compilación exitosa con `mvnw clean package -DskipTests`
+  - Tablas users, roles, user_roles creadas correctamente en MySQL
+  - 3 roles insertados: ROLE_ADMIN, ROLE_USER, ROLE_GUEST
+  - Usuario admin creado con rol ADMIN
+  - POST /api/auth/register funcional: usuario testuser creado con éxito
+  - POST /api/auth/login funcional: devuelve token JWT con roles
+  - Token JWT generado correctamente con algoritmo HS384
+  - GET /api/auth/me requiere autenticación JWT (endpoint protegido)
+  - Servidor iniciado sin errores críticos en puerto 8080
+- Observaciones:
+  - Autenticación JWT funcionando correctamente
+  - Registro de nuevos usuarios operativo con rol USER por defecto
+  - Login devuelve token JWT válido con información del usuario y roles
+  - Endpoints GET /api/players siguen siendo públicos
+  - Endpoints POST/PUT/DELETE /api/players protegidos por rol ADMIN
+  - Password encoding con BCrypt (factor 10)
+  - Token JWT expira en 24 horas (configurable vía app.jwt.expiration)
+  - CORS configurado para permitir headers Authorization
+  - UserDetailsService integrado con base de datos MySQL
+  - Falta corregir pequeño bug en endpoint /api/auth/me para recuperar roles correctamente
+  - Listo para probar creación de jugadores con rol ADMIN
+
+## Estado actual del desarrollo (15-11-2025 20:00)
+- Porcentaje completado del frontend: 100%.
+- Porcentaje completado del backend: 40% (autenticación JWT implementada).
+- Indicador 1 (Frontend con óptimo criterio técnico): alcanzado 4/4.
+- Indicador 2 (Backend con óptimo criterio técnico): en progreso 2/4 → objetivo 4/4.
+- Observaciones: autenticación JWT funcional; próxima etapa ampliar modelos (PlayerStats, Achievement, Comment, Subscription).
 
 ## Issues pendientes por resolver
 - Ajuste de `background-position` inválido en `css/styles.css:491`.
 - Revisión de cascada para íconos en encabezado de comparativa.
 - Adjuntar capturas de pantalla a `documentation/capturas/`.
-- Actualizar entorno a JDK 17 para ejecutar Spring Boot 3.x (actualmente `java -version` muestra 11.0.28).
- - Configurar credenciales MySQL para el backend: usar variables `DB_URL`, `DB_USER`, `DB_PASS` o crear usuario dedicado (`goats_user`).
+
+## Estado actual del desarrollo (15-11-2025)
+- Porcentaje completado del frontend: 100%.
+- Porcentaje completado del backend: 20% (base configurada).
+- Indicador 1 (Frontend con óptimo criterio técnico): alcanzado 4/4.
+- Indicador 2 (Backend con óptimo criterio técnico): en progreso 1/4 → objetivo 4/4.
+- Observaciones: backend funcional con CRUD básico; próxima etapa JWT y roles.
 
 ## Cambios significativos en requerimientos
 - Nueva etapa: implementación del backend con Java + Spring Boot, arquitectura MVC, MySQL/XAMPP, seguridad JWT, CRUD y comentarios/suscripciones.

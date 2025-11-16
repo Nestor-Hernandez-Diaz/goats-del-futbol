@@ -1,10 +1,12 @@
 /**
  * GOATs del Fútbol - JavaScript Principal
  * @author Nestor Hernández Díaz
- * @version 1.0.0
+ * @version 1.2.0
+ * @last_update 2025-11-15
  * @date Noviembre 2025
  * 
  * Implementación Mes 1 - Semana 1: Base JS y navegación accesible
+ * Implementación Mes 1 - Semana 3: Optimización, Accesibilidad y soporte jQuery/Vanilla
  */
 
 (function() {
