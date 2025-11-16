@@ -33,6 +33,20 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    @GetMapping
+    // @PreAuthorize("hasRole('ADMIN')") // Deshabilitado - ver issue #6
+    @Operation(summary = "Listar todos los comentarios (ADMIN)",
+               description = "Obtiene todos los comentarios sin filtro (requiere rol ADMIN)")
+    public Page<CommentDto> getAll(@RequestParam(required = false) ModerationStatus status,
+                                    @PageableDefault(size = 1000) Pageable pageable) {
+        // Verificar manualmente si es ADMIN (workaround de @PreAuthorize)
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            throw new org.springframework.security.access.AccessDeniedException("Requiere rol ADMIN");
+        }
+        return commentService.getAll(status, pageable);
+    }
+
     @GetMapping("/player/{playerId}")
     @Operation(summary = "Listar comentarios de jugador",
                description = "Obtiene comentarios aprobados de un jugador (público)")

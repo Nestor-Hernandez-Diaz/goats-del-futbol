@@ -25,8 +25,12 @@ async function checkAuthentication() {
   const token = localStorage.getItem('jwtToken');
   
   if (!token) {
-    showAuthAlert();
+    console.warn('No hay token JWT. Redirigiendo a login...');
+    showAuthAlert('No has iniciado sesión');
     disableDashboard();
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 2000);
     return false;
   }
 
@@ -36,23 +40,51 @@ async function checkAuthentication() {
     const decodedPayload = JSON.parse(atob(payload));
     const roles = decodedPayload.roles || [];
     
+    // Verificar si el token expiró
+    const exp = decodedPayload.exp;
+    if (exp && Date.now() >= exp * 1000) {
+      console.warn('Token JWT expirado. Redirigiendo a login...');
+      localStorage.removeItem('jwtToken');
+      localStorage.removeItem('currentUser');
+      showAuthAlert('Tu sesión ha expirado');
+      disableDashboard();
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+      return false;
+    }
+    
     if (!roles.includes('ROLE_ADMIN') && !roles.includes('ADMIN')) {
-      showAuthAlert();
+      console.warn('Usuario no tiene rol ADMIN');
+      showAuthAlert('No tienes permisos de administrador');
       disableDashboard();
       return false;
     }
     
+    console.log('✓ Autenticación válida. Rol:', roles.join(', '));
     return true;
   } catch (error) {
     console.error('Error decodificando token:', error);
-    showAuthAlert();
+    showAuthAlert('Token inválido');
     disableDashboard();
+    localStorage.removeItem('jwtToken');
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 2000);
     return false;
   }
 }
 
-function showAuthAlert() {
-  document.getElementById('auth-alert').style.display = 'block';
+function showAuthAlert(message = 'Acceso denegado: Necesitas iniciar sesión con una cuenta de administrador') {
+  const alert = document.getElementById('auth-alert');
+  alert.innerHTML = `
+    <i class="fas fa-exclamation-triangle"></i>
+    <div>
+      <strong>Atención:</strong> ${message}
+      <br><small>Redirigiendo a login...</small>
+    </div>
+  `;
+  alert.style.display = 'flex';
 }
 
 function disableDashboard() {
@@ -90,11 +122,22 @@ async function loadStatistics() {
     document.getElementById('rejected-comments').textContent = rejected;
   } catch (error) {
     console.error('Error cargando estadísticas:', error);
-    // Mostrar 0 en lugar de error
-    document.getElementById('total-comments').textContent = '0';
-    document.getElementById('pending-comments').textContent = '0';
-    document.getElementById('approved-comments').textContent = '0';
-    document.getElementById('rejected-comments').textContent = '0';
+    
+    // Si es 403, el token es inválido o expiró
+    if (error.message.includes('403')) {
+      localStorage.removeItem('jwtToken');
+      localStorage.removeItem('currentUser');
+      showError('Sesión expirada. Redirigiendo a login...');
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+    } else {
+      // Mostrar 0 en lugar de error
+      document.getElementById('total-comments').textContent = '0';
+      document.getElementById('pending-comments').textContent = '0';
+      document.getElementById('approved-comments').textContent = '0';
+      document.getElementById('rejected-comments').textContent = '0';
+    }
   }
 }
 
@@ -140,7 +183,18 @@ async function loadComments(status = 'all') {
   } catch (error) {
     console.error('Error cargando comentarios:', error);
     hideLoading();
-    showError('Error al cargar comentarios. Por favor, intenta de nuevo.');
+    
+    // Si es 403, el token es inválido o expiró
+    if (error.message.includes('403')) {
+      localStorage.removeItem('jwtToken');
+      localStorage.removeItem('currentUser');
+      showError('Sesión expirada. Redirigiendo a login...');
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+    } else {
+      showError('Error al cargar comentarios. Por favor, intenta de nuevo.');
+    }
   }
 }
 

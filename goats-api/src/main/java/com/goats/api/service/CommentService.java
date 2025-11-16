@@ -36,6 +36,19 @@ public class CommentService {
     private PlayerRepository playerRepository;
 
     /**
+     * Obtiene todos los comentarios (filtrado opcional por estado) - ADMIN
+     */
+    public Page<CommentDto> getAll(ModerationStatus status, Pageable pageable) {
+        if (status != null) {
+            return commentRepository.findByStatus(status, pageable)
+                    .map(this::toDto);
+        } else {
+            return commentRepository.findAll(pageable)
+                    .map(this::toDto);
+        }
+    }
+
+    /**
      * Obtiene comentarios de un jugador (filtrado por estado)
      */
     public Page<CommentDto> getByPlayerId(Long playerId, ModerationStatus status, Pageable pageable) {
