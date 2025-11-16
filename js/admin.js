@@ -38,7 +38,14 @@ async function checkAuthentication() {
   try {
     const payload = token.split('.')[1];
     const decodedPayload = JSON.parse(atob(payload));
-    const roles = decodedPayload.roles || [];
+    let roles = decodedPayload.roles || decodedPayload.authorities || [];
+    
+    // Si roles es un string, convertirlo a array
+    if (typeof roles === 'string') {
+      roles = [roles];
+    }
+    
+    console.log('Token decodificado:', { sub: decodedPayload.sub, roles, exp: decodedPayload.exp });
     
     // Verificar si el token expiró
     const exp = decodedPayload.exp;
@@ -54,14 +61,21 @@ async function checkAuthentication() {
       return false;
     }
     
-    if (!roles.includes('ROLE_ADMIN') && !roles.includes('ADMIN')) {
-      console.warn('Usuario no tiene rol ADMIN');
+    // Verificar rol ADMIN (puede ser 'ROLE_ADMIN' o solo 'ADMIN')
+    const hasAdminRole = roles.some(role => 
+      role === 'ROLE_ADMIN' || 
+      role === 'ADMIN' || 
+      role.includes('ADMIN')
+    );
+    
+    if (!hasAdminRole) {
+      console.warn('Usuario no tiene rol ADMIN. Roles:', roles);
       showAuthAlert('No tienes permisos de administrador');
       disableDashboard();
       return false;
     }
     
-    console.log('✓ Autenticación válida. Rol:', roles.join(', '));
+    console.log('✓ Autenticación válida. Roles:', Array.isArray(roles) ? roles.join(', ') : roles);
     return true;
   } catch (error) {
     console.error('Error decodificando token:', error);
