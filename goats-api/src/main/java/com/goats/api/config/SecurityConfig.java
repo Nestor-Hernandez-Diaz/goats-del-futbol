@@ -49,9 +49,17 @@ public class SecurityConfig {
       .csrf(csrf -> csrf.disable())
       .cors(cors -> {})
       .authorizeHttpRequests(auth -> auth
+        // Swagger y documentación pública
         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+        // Autenticación pública (login/register)
         .requestMatchers("/api/auth/**").permitAll()
+        // GET públicos - consulta de datos
         .requestMatchers(HttpMethod.GET, "/api/players/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/stats/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/achievements/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/subscriptions/*/count").permitAll()
+        // Todo lo demás requiere autenticación
         .anyRequest().authenticated()
       )
       .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

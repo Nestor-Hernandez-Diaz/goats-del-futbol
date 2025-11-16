@@ -4,7 +4,6 @@ import com.goats.api.dto.AuthResponse;
 import com.goats.api.dto.LoginRequest;
 import com.goats.api.dto.RegisterRequest;
 import com.goats.api.dto.UserResponse;
-import com.goats.api.model.User;
 import com.goats.api.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

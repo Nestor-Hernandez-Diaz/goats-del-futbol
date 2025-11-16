@@ -39,6 +39,7 @@ public class AchievementService {
     /**
      * Obtiene un logro por ID
      */
+    @SuppressWarnings("null")
     public AchievementDto getById(Long id) {
         Achievement achievement = achievementRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Achievement not found with id: " + id));
@@ -48,6 +49,7 @@ public class AchievementService {
     /**
      * Crea un nuevo logro
      */
+    @SuppressWarnings("null")
     public AchievementDto create(AchievementDto dto) {
         Player player = playerRepository.findById(dto.getPlayerId())
                 .orElseThrow(() -> new RuntimeException("Player not found with id: " + dto.getPlayerId()));
@@ -63,6 +65,7 @@ public class AchievementService {
     /**
      * Actualiza un logro existente
      */
+    @SuppressWarnings("null")
     public AchievementDto update(Long id, AchievementDto dto) {
         Achievement achievement = achievementRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Achievement not found with id: " + id));
@@ -76,6 +79,7 @@ public class AchievementService {
     /**
      * Elimina un logro
      */
+    @SuppressWarnings("null")
     public void delete(Long id) {
         if (!achievementRepository.existsById(id)) {
             throw new RuntimeException("Achievement not found with id: " + id);

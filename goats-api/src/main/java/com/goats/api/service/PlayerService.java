@@ -27,6 +27,7 @@ public class PlayerService {
   /**
    * Lista jugadores con paginación y filtros opcionales
    */
+  @SuppressWarnings("null")
   public Page<PlayerDto> list(Pageable pageable, Optional<String> name, Optional<String> country, Optional<String> position) {
     Specification<Player> byName = name.filter(s -> !s.isBlank())
       .map(v -> (Specification<Player>) (root, q, cb) -> cb.like(cb.lower(root.get("name")), "%" + v.toLowerCase() + "%"))
@@ -75,6 +76,7 @@ public class PlayerService {
   /**
    * Actualiza un jugador existente
    */
+  @SuppressWarnings("null")
   public PlayerDto update(Long id, PlayerDto playerDto) {
     Player player = repository.findById(id).orElseThrow(() -> 
       new RuntimeException("Player not found with id: " + id));
@@ -92,6 +94,7 @@ public class PlayerService {
   /**
    * Elimina un jugador
    */
+  @SuppressWarnings("null")
   public void delete(Long id) {
     Player player = repository.findById(id).orElseThrow(() -> 
       new RuntimeException("Player not found with id: " + id));

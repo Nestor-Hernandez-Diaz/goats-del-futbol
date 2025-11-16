@@ -14,7 +14,7 @@ public class CommentDto {
 
     private Long id;
 
-    @NotNull(message = "User ID is required")
+    // userId se establece automáticamente desde el usuario autenticado
     private Long userId;
 
     private String username; // Para respuestas

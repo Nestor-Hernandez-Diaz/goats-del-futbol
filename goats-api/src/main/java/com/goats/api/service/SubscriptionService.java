@@ -49,6 +49,7 @@ public class SubscriptionService {
     /**
      * Obtiene todos los suscriptores de un jugador
      */
+    @SuppressWarnings("null")
     public Page<SubscriptionDto> getByPlayerId(Long playerId, Boolean active, Pageable pageable) {
         if (active != null) {
             return subscriptionRepository.findByPlayerIdAndActive(playerId, active, pageable)
@@ -72,6 +73,7 @@ public class SubscriptionService {
     /**
      * Crea una nueva suscripción (subscribe)
      */
+    @SuppressWarnings("null")
     public SubscriptionDto subscribe(Long playerId, String currentUsername) {
         User user = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new RuntimeException("User not found: " + currentUsername));

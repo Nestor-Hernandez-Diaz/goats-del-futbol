@@ -29,8 +29,10 @@ public class PlayerStatsService {
     /**
      * Obtiene las estadísticas de un jugador
      */
+    @SuppressWarnings("null")
     public PlayerStatsDto getByPlayerId(Long playerId) {
-        Player player = playerRepository.findById(playerId)
+        // Verificar que el jugador existe
+        playerRepository.findById(playerId)
                 .orElseThrow(() -> new RuntimeException("Player not found with id: " + playerId));
 
         PlayerStats stats = statsRepository.findByPlayerId(playerId)
@@ -42,6 +44,7 @@ public class PlayerStatsService {
     /**
      * Crea estadísticas para un jugador
      */
+    @SuppressWarnings("null")
     public PlayerStatsDto create(PlayerStatsDto dto) {
         Player player = playerRepository.findById(dto.getPlayerId())
                 .orElseThrow(() -> new RuntimeException("Player not found with id: " + dto.getPlayerId()));
@@ -60,6 +63,7 @@ public class PlayerStatsService {
     /**
      * Actualiza estadísticas de un jugador
      */
+    @SuppressWarnings("null")
     public PlayerStatsDto update(Long playerId, PlayerStatsDto dto) {
         PlayerStats stats = statsRepository.findByPlayerId(playerId)
                 .orElseThrow(() -> new RuntimeException("Stats not found for player id: " + playerId));
@@ -73,6 +77,7 @@ public class PlayerStatsService {
     /**
      * Elimina estadísticas de un jugador
      */
+    @SuppressWarnings("null")
     public void delete(Long playerId) {
         PlayerStats stats = statsRepository.findByPlayerId(playerId)
                 .orElseThrow(() -> new RuntimeException("Stats not found for player id: " + playerId));

@@ -9,6 +9,8 @@ import com.goats.api.model.User;
 import com.goats.api.repository.RoleRepository;
 import com.goats.api.repository.UserRepository;
 import com.goats.api.security.JwtTokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -126,8 +130,12 @@ public class AuthService {
      * @return información del usuario
      */
     public UserResponse getCurrentUser(String username) {
+        log.debug("Getting current user for username: {}", username);
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> {
+                    log.error("User not found in database: {}", username);
+                    return new RuntimeException("User not found: " + username);
+                });
 
         Set<String> roleNames = user.getRoles().stream()
                 .map(Role::getName)

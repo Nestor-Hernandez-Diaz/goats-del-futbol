@@ -59,6 +59,7 @@ public class CommentService {
     /**
      * Obtiene un comentario por ID
      */
+    @SuppressWarnings("null")
     public CommentDto getById(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
@@ -68,6 +69,7 @@ public class CommentService {
     /**
      * Crea un nuevo comentario (estado PENDING por defecto)
      */
+    @SuppressWarnings("null")
     public CommentDto create(CommentDto dto, String currentUsername) {
         User user = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new RuntimeException("User not found: " + currentUsername));
@@ -88,6 +90,7 @@ public class CommentService {
     /**
      * Actualiza el contenido de un comentario (solo el autor)
      */
+    @SuppressWarnings("null")
     public CommentDto update(Long id, CommentDto dto, String currentUsername) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
@@ -107,6 +110,7 @@ public class CommentService {
     /**
      * Elimina un comentario (solo el autor o ADMIN)
      */
+    @SuppressWarnings("null")
     public void delete(Long id, String currentUsername, boolean isAdmin) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
@@ -122,6 +126,7 @@ public class CommentService {
     /**
      * Aprueba un comentario (solo ADMIN)
      */
+    @SuppressWarnings("null")
     public CommentDto approve(Long id, String moderatorUsername) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
@@ -140,6 +145,7 @@ public class CommentService {
     /**
      * Rechaza un comentario (solo ADMIN)
      */
+    @SuppressWarnings("null")
     public CommentDto reject(Long id, String reason, String moderatorUsername) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));

@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,29 +34,55 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                String username = tokenProvider.getUsernameFromToken(jwt);
+            if (StringUtils.hasText(jwt)) {
+                logger.debug("JWT token found in request to: " + request.getRequestURI());
+                
+                if (tokenProvider.validateToken(jwt)) {
+                    String username = tokenProvider.getUsernameFromToken(jwt);
+                    logger.debug("Valid JWT token for user: " + username);
 
-                User user = userRepository.findByUsername(username)
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                    User user = userRepository.findByUsername(username)
+                            .orElseThrow(() -> {
+                                logger.error("User not found in database: " + username);
+                                return new RuntimeException("User not found: " + username);
+                            });
 
-                List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                        .map(role -> new SimpleGrantedAuthority(role.getName()))
-                        .collect(Collectors.toList());
+                    logger.debug("User found: " + user.getUsername() + " with " + user.getRoles().size() + " roles");
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(user, null, authorities);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+                            .map(role -> new SimpleGrantedAuthority(role.getName()))
+                            .collect(Collectors.toList());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    // Crear UserDetails de Spring Security (no usar entidad User directamente)
+                    org.springframework.security.core.userdetails.User userDetails =
+                            new org.springframework.security.core.userdetails.User(
+                                    user.getUsername(),
+                                    user.getPasswordHash(),
+                                    user.getEnabled(),
+                                    true, // accountNonExpired
+                                    true, // credentialsNonExpired
+                                    true, // accountNonLocked
+                                    authorities
+                            );
+
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    logger.debug("Authentication set in SecurityContext for user: " + username);
+                } else {
+                    logger.warn("Invalid JWT token for request to: " + request.getRequestURI());
+                }
             }
         } catch (Exception ex) {
-            logger.error("Could not set user authentication in security context", ex);
+            logger.error("Could not set user authentication in security context for URI: " + 
+                        request.getRequestURI(), ex);
         }
 
         filterChain.doFilter(request, response);
