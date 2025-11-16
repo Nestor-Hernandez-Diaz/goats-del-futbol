@@ -30,7 +30,7 @@ function checkAuthentication() {
 
   // Verificar rol ADMIN (el token contiene roles en el payload)
   try {
-    const payload = JSON.parsetoken.split('.')[1]);
+    const payload = token.split('.')[1];
     const decodedPayload = JSON.parse(atob(payload));
     const roles = decodedPayload.roles || [];
     
@@ -63,46 +63,23 @@ async function loadStatistics() {
   if (!token) return;
 
   try {
-    // Obtener comentarios por estado
-    const [pending, approved, rejected] = await Promise.all([
-      fetch(`${API_BASE_URL}/comments/status/PENDING`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      }).then(r => r.json()),
-      fetch(`${API_BASE_URL}/comments/status/APPROVED`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      }).then(r => r.json()),
-      fetch(`${API_BASE_URL}/comments/status/REJECTED`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      }).then(r => r.json())
-    ]);
-
-    const totalComments = (pending.totalElements || 0) + (approved.totalElements || 0) + (rejected.totalElements || 0);
+    const response = await fetch(`${API_BASE_URL}/comments?size=1000`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await response.json();
     
-    document.getElementById('total-comments').textContent = totalComments;
-    document.getElementById('pending-comments').textContent = pending.totalElements || 0;
-    document.getElementById('approved-comments').textContent = approved.totalElements || 0;
-    document.getElementById('rejected-comments').textContent = rejected.totalElements || 0;
+    const comments = data.content || [];
+    const pending = comments.filter(c => c.status === 'PENDING').length;
+    const approved = comments.filter(c => c.status === 'APPROVED').length;
+    const rejected = comments.filter(c => c.status === 'REJECTED').length;
+    
+    document.getElementById('total-comments').textContent = comments.length;
+    document.getElementById('pending-comments').textContent = pending;
+    document.getElementById('approved-comments').textContent = approved;
+    document.getElementById('rejected-comments').textContent = rejected;
   } catch (error) {
     console.error('Error cargando estadísticas:', error);
-    // Si falla, intentar con endpoint genérico
-    try {
-      const response = await fetch(`${API_BASE_URL}/comments?size=1000`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
-      
-      const comments = data.content || [];
-      const pending = comments.filter(c => c.status === 'PENDING').length;
-      const approved = comments.filter(c => c.status === 'APPROVED').length;
-      const rejected = comments.filter(c => c.status === 'REJECTED').length;
-      
-      document.getElementById('total-comments').textContent = comments.length;
-      document.getElementById('pending-comments').textContent = pending;
-      document.getElementById('approved-comments').textContent = approved;
-      document.getElementById('rejected-comments').textContent = rejected;
-    } catch (err) {
-      console.error('Error con endpoint alternativo:', err);
-    }
+    showError('Error al cargar estadísticas');
   }
 }
 
@@ -117,13 +94,8 @@ async function loadComments(status = 'all') {
   hideMessages();
 
   try {
-    let url = `${API_BASE_URL}/comments`;
+    let url = `${API_BASE_URL}/comments?size=1000`;
     
-    // Si hay filtro específico, usar endpoint por estado
-    if (status !== 'all') {
-      url = `${API_BASE_URL}/comments/status/${status}`;
-    }
-
     const response = await fetch(url, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -136,7 +108,12 @@ async function loadComments(status = 'all') {
     }
 
     const data = await response.json();
-    const comments = data.content || [];
+    let comments = data.content || [];
+
+    // Filtrar por estado si no es 'all'
+    if (status !== 'all') {
+      comments = comments.filter(c => c.status === status);
+    }
 
     hideLoading();
 
