@@ -133,7 +133,7 @@
         // Redirigir según rol
         setTimeout(() => {
           if (data.roles && (data.roles.includes('ROLE_ADMIN') || data.roles.includes('ADMIN'))) {
-            window.location.href = '../admin/dashboard.html';
+            window.location.href = 'admin.html';
           } else {
             window.location.href = '../index.html';
           }
@@ -168,7 +168,7 @@
           // Token válido, redirigir
           const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
           if (user.roles && (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ADMIN'))) {
-            window.location.href = '../admin/dashboard.html';
+            window.location.href = 'admin.html';
           } else {
             window.location.href = '../index.html';
           }

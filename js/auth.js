@@ -12,6 +12,28 @@ if (typeof window.authSystemLoaded === 'undefined') {
     let currentUser = null;
 
     /**
+     * Detecta si estamos en la raíz (index.html) o en subdirectorio (pages/*)
+     */
+    function isRootPage() {
+        const path = window.location.pathname;
+        return path.endsWith('index.html') || path.endsWith('proyecto-goats-futbol/') || path.endsWith('proyecto-goats-futbol');
+    }
+
+    /**
+     * Obtiene la ruta correcta para login.html según ubicación
+     */
+    function getLoginUrl() {
+        return isRootPage() ? 'pages/login.html' : '../pages/login.html';
+    }
+
+    /**
+     * Obtiene la ruta correcta para dashboard según ubicación
+     */
+    function getDashboardUrl() {
+        return isRootPage() ? 'pages/admin.html' : 'admin.html';
+    }
+
+    /**
      * Inicialización al cargar la página
      */
     document.addEventListener('DOMContentLoaded', function() {
@@ -113,7 +135,7 @@ if (typeof window.authSystemLoaded === 'undefined') {
                     ${isAdmin ? '<span class="badge-admin">Admin</span>' : '<span class="badge-user">Usuario</span>'}
                 </div>
                 <div class="dropdown-divider"></div>
-                ${isAdmin ? '<a href="../admin/dashboard.html" class="dropdown-item"><i class="fas fa-shield-alt"></i> Dashboard Admin</a>' : ''}
+                ${isAdmin ? `<a href="${getDashboardUrl()}" class="dropdown-item"><i class="fas fa-shield-alt"></i> Dashboard Admin</a>` : ''}
                 <a href="#" class="dropdown-item" id="btn-logout">
                     <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                 </a>
@@ -171,7 +193,7 @@ if (typeof window.authSystemLoaded === 'undefined') {
 
         // Crear enlace de navegación estándar
         const loginLink = document.createElement('li');
-        loginLink.innerHTML = `<a href="../pages/login.html">Acceder</a>`;
+        loginLink.innerHTML = `<a href="${getLoginUrl()}">Acceder</a>`;
 
         navLinks.appendChild(loginLink);
     }
