@@ -203,4 +203,28 @@ class PlayerControllerTest {
         assertEquals(1, result.getTotalElements());
         verify(playerService, times(1)).list(pageable, nameFilter, countryFilter, positionFilter);
     }
+
+    @Test
+    void testList_WithMultiplePlayers() {
+        PlayerDto player2 = new PlayerDto();
+        player2.setId(2L);
+        player2.setName("Cristiano Ronaldo");
+        player2.setCountry("Portugal");
+        player2.setPosition("Delantero");
+        
+        Pageable pageable = PageRequest.of(0, 12);
+        Page<PlayerDto> expectedPage = new PageImpl<>(Arrays.asList(testPlayer, player2));
+        
+        when(playerService.list(any(Pageable.class), any(), any(), any()))
+            .thenReturn(expectedPage);
+
+        Page<PlayerDto> result = playerController.list(pageable, Optional.empty(), 
+                                                       Optional.empty(), Optional.empty());
+
+        assertNotNull(result);
+        assertEquals(2, result.getTotalElements());
+        assertEquals("Lionel Messi", result.getContent().get(0).getName());
+        assertEquals("Cristiano Ronaldo", result.getContent().get(1).getName());
+        verify(playerService, times(1)).list(any(), any(), any(), any());
+    }
 }

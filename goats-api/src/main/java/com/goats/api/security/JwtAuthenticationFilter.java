@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -17,8 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Filtro de autenticación JWT
@@ -32,6 +29,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserDetailsMapper userDetailsMapper;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
@@ -54,24 +54,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     logger.debug("User found: " + user.getUsername() + " with " + user.getRoles().size() + " roles");
 
-                    List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                            .map(role -> new SimpleGrantedAuthority(role.getName()))
-                            .collect(Collectors.toList());
-
-                    // Crear UserDetails de Spring Security (no usar entidad User directamente)
-                    org.springframework.security.core.userdetails.User userDetails =
-                            new org.springframework.security.core.userdetails.User(
-                                    user.getUsername(),
-                                    user.getPasswordHash(),
-                                    user.getEnabled(),
-                                    true, // accountNonExpired
-                                    true, // credentialsNonExpired
-                                    true, // accountNonLocked
-                                    authorities
-                            );
+                    // Crear UserDetails de Spring Security usando mapper
+                    org.springframework.security.core.userdetails.UserDetails userDetails = userDetailsMapper.toUserDetails(user);
 
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);

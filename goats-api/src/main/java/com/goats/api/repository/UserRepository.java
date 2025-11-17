@@ -40,4 +40,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return true si existe, false en caso contrario
      */
     boolean existsByEmail(String email);
+
+    /**
+     * Busca un usuario por username o lanza excepción si no existe
+     * Método helper para evitar código duplicado
+     * @param username nombre de usuario
+     * @return User encontrado
+     * @throws RuntimeException si el usuario no existe
+     */
+    default User findByUsernameOrThrow(String username) {
+        return findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+    }
 }

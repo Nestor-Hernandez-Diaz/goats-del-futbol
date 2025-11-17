@@ -21,10 +21,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.goats.api.repository.UserRepository;
 import com.goats.api.model.User;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.goats.api.security.UserDetailsMapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Configuración de seguridad con JWT
@@ -39,6 +38,9 @@ public class SecurityConfig {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private UserDetailsMapper userDetailsMapper;
 
   /**
    * Configura la cadena de filtros de seguridad
@@ -111,19 +113,7 @@ public class SecurityConfig {
       User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
       
-      List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName()))
-        .collect(Collectors.toList());
-      
-      return new org.springframework.security.core.userdetails.User(
-        user.getUsername(),
-        user.getPasswordHash(),
-        user.getEnabled(),
-        true, // accountNonExpired
-        true, // credentialsNonExpired
-        true, // accountNonLocked
-        authorities
-      );
+      return userDetailsMapper.toUserDetails(user);
     };
   }
 }
