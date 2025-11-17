@@ -402,36 +402,6 @@ section {
   text-align: center;
 }
 
-/* Botón de login */
-.login-item {
-  margin-left: 1rem;
-}
-
-.btn-nav-login {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 20px !important;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  color: white !important;
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  transition: var(--transition-normal);
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-}
-
-.btn-nav-login:hover {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
-  box-shadow: 0 0 15px rgba(0, 115, 255, 0.5);
-  transform: translateY(-2px);
-}
-
-.btn-nav-login::after {
-  display: none;
-}
-
 /* Notificaciones de autenticación */
 .auth-notification {
   position: fixed;
@@ -1948,14 +1918,12 @@ section {
   }
   
   /* Responsive: Menú de usuario en móvil */
-  .user-menu-item,
-  .login-item {
+  .user-menu-item {
     width: 100%;
     margin: 0;
   }
 
-  .user-menu-trigger,
-  .btn-nav-login {
+  .user-menu-trigger {
     width: 100%;
     justify-content: center;
   }

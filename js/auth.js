@@ -163,22 +163,17 @@ if (typeof window.authSystemLoaded === 'undefined') {
         const navLinks = document.querySelector('.enlaces-navegacion');
         if (!navLinks) return;
 
-        // Verificar si ya existe el botón de login
+        // Verificar si ya existe el enlace de login
         let loginItem = navLinks.querySelector('.login-item');
         if (loginItem) {
             loginItem.remove();
         }
 
-        // Crear botón de login
-        const loginButton = document.createElement('li');
-        loginButton.className = 'login-item';
-        loginButton.innerHTML = `
-            <a href="../admin/login.html" class="btn-nav-login">
-                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
-            </a>
-        `;
+        // Crear enlace de navegación estándar
+        const loginLink = document.createElement('li');
+        loginLink.innerHTML = `<a href="../pages/login.html">Acceder</a>`;
 
-        navLinks.appendChild(loginButton);
+        navLinks.appendChild(loginLink);
     }
 
     /**
