@@ -16,6 +16,7 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="../js/main.js" defer></script>
   <script src="../js/player-stats.js" defer></script>
+  <script src="../js/comments.js" defer></script>
 </head>
 <body class="pagina-jugador pagina-ronaldo">
   <!-- Barra de navegación principal -->
@@ -493,6 +494,28 @@
               <div class="boton-reproducir">▶</div>
             </div>
             <h3 class="titulo-video">Hat-trick contra España en el Mundial 2018</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Comentarios -->
+    <section class="seccion-comentarios">
+      <div class="contenedor">
+        <div class="comentarios-header">
+          <h2><i class="fas fa-comments"></i> Comentarios</h2>
+          <p>Comparte tu opinión sobre Cristiano Ronaldo</p>
+        </div>
+        <div class="comentarios-container">
+          <!-- Formulario de comentario (o prompt de login) -->
+          <div id="comment-form-container"></div>
+          
+          <!-- Lista de comentarios -->
+          <div class="comentarios-lista" id="comments-list">
+            <div class="no-comments">
+              <i class="fas fa-spinner fa-spin"></i>
+              <p>Cargando comentarios...</p>
+            </div>
           </div>
         </div>
       </div>
