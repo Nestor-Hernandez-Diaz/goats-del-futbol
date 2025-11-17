@@ -3,64 +3,68 @@
  * Gestión de comentarios en páginas de jugadores
  */
 
-// Configuración
-const API_BASE_URL = 'http://localhost:8080/api';
-const PLAYER_IDS = {
-    messi: 1,
-    ronaldo: 2,
-    neymar: 3
-};
+// Verificar que no esté ya cargado
+if (typeof window.commentsSystemLoaded === 'undefined') {
+    window.commentsSystemLoaded = true;
 
-// Estado global
-let currentPlayerId = null;
-let currentUser = null;
-let commentsCache = [];
+    // Configuración
+    const API_BASE_URL = 'http://localhost:8080/api';
+    const PLAYER_IDS = {
+        messi: 1,
+        ronaldo: 2,
+        neymar: 3
+    };
 
-/**
- * Inicialización al cargar la página
- */
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('💬 Inicializando sistema de comentarios...');
-    
-    // Obtener ID del jugador desde la URL
-    currentPlayerId = getCurrentPlayerId();
-    if (!currentPlayerId) {
-        console.error('No se pudo determinar el ID del jugador');
-        return;
+    // Estado global
+    let currentPlayerId = null;
+    let currentUser = null;
+    let commentsCache = [];
+
+    /**
+     * Inicialización al cargar la página
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('💬 Inicializando sistema de comentarios...');
+        
+        // Obtener ID del jugador desde la URL
+        currentPlayerId = getCurrentPlayerId();
+        if (!currentPlayerId) {
+            console.error('No se pudo determinar el ID del jugador');
+            return;
+        }
+        
+        console.log(`📊 Cargando comentarios del jugador ID: ${currentPlayerId}`);
+        
+        // Verificar autenticación
+        checkUserAuthentication();
+        
+        // Cargar comentarios
+        loadComments();
+        
+        // Configurar eventos del formulario
+        setupCommentForm();
+    });
+
+    /**
+     * Obtiene el ID del jugador desde la URL
+     */
+    function getCurrentPlayerId() {
+        const path = window.location.pathname;
+        const filename = path.split('/').pop().split('.')[0].toLowerCase();
+        
+        console.log(`🔍 Detectando jugador desde: ${filename}`);
+        
+        if (PLAYER_IDS[filename]) {
+            return PLAYER_IDS[filename];
+        }
+        
+        return null;
     }
-    
-    console.log(`📊 Cargando comentarios del jugador ID: ${currentPlayerId}`);
-    
-    // Verificar autenticación
-    checkUserAuthentication();
-    
-    // Cargar comentarios
-    loadComments();
-    
-    // Configurar eventos del formulario
-    setupCommentForm();
-});
 
-/**
- * Obtiene el ID del jugador desde la URL
- */
-function getCurrentPlayerId() {
-    const path = window.location.pathname;
-    const filename = path.split('/').pop().split('.')[0].toLowerCase();
-    
-    console.log(`🔍 Detectando jugador desde: ${filename}`);
-    
-    if (PLAYER_IDS[filename]) {
-        return PLAYER_IDS[filename];
-    }
-    
-    return null;
-}
-
-/**
- * Verifica si el usuario está autenticado
- */
-function checkUserAuthentication() {
+    /**
+     * Verifica si el usuario está autenticado
+     */
+    function checkUserAuthentication() {
     const token = localStorage.getItem('jwtToken');
     
     if (token) {
@@ -449,3 +453,5 @@ function escapeHtml(text) {
 
 // Exponer función para eliminar comentario globalmente
 window.deleteComment = deleteComment;
+
+} // Fin de verificación de carga
