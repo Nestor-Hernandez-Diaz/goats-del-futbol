@@ -25,7 +25,7 @@ if (typeof window.commentsSystemLoaded === 'undefined') {
      * Inicialización al cargar la página
      */
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('💬 Inicializando sistema de comentarios...');
+        console.log('Inicializando sistema de comentarios...');
         
         // Obtener ID del jugador desde la URL
         currentPlayerId = getCurrentPlayerId();
@@ -34,7 +34,7 @@ if (typeof window.commentsSystemLoaded === 'undefined') {
             return;
         }
         
-        console.log(`📊 Cargando comentarios del jugador ID: ${currentPlayerId}`);
+        console.log(`Cargando comentarios del jugador ID: ${currentPlayerId}`);
         
         // Verificar autenticación
         checkUserAuthentication();
@@ -53,7 +53,7 @@ if (typeof window.commentsSystemLoaded === 'undefined') {
         const path = window.location.pathname;
         const filename = path.split('/').pop().split('.')[0].toLowerCase();
         
-        console.log(`🔍 Detectando jugador desde: ${filename}`);
+        console.log(`Detectando jugador desde: ${filename}`);
         
         if (PLAYER_IDS[filename]) {
             return PLAYER_IDS[filename];
@@ -200,7 +200,7 @@ function showCommentForm() {
     
     formContainer.innerHTML = `
         <div class="comment-form-wrapper">
-            <h3>💬 Dejar un Comentario</h3>
+            <h3>Dejar un Comentario</h3>
             <p class="comment-form-subtitle">Comparte tu opinión sobre este jugador</p>
             <form id="comment-form" class="comment-form">
                 <div class="form-group">
