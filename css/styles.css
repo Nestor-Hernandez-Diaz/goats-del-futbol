@@ -268,6 +268,225 @@ section {
 }
 
 /* ========================================
+   MENÚ DE USUARIO (AUTENTICACIÓN JWT)
+   ======================================== */
+
+/* Item de menú de usuario */
+.user-menu-item {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(0, 115, 255, 0.1);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  color: var(--color-text);
+}
+
+.user-menu-trigger:hover {
+  background: rgba(0, 115, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 115, 255, 0.4);
+}
+
+.user-menu-trigger i:first-child {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.user-menu-trigger .username {
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.user-menu-trigger i:last-child {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.user-menu-trigger:hover i:last-child {
+  transform: rotate(180deg);
+}
+
+/* Dropdown del menú de usuario */
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: var(--color-dark);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  min-width: 220px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.user-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dropdown-header strong {
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.badge-admin,
+.badge-user {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.badge-admin {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+  color: white;
+}
+
+.badge-user {
+  background: rgba(0, 115, 255, 0.2);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: var(--transition-normal);
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background: rgba(0, 115, 255, 0.1);
+  color: var(--color-primary);
+}
+
+.dropdown-item i {
+  width: 16px;
+  text-align: center;
+}
+
+/* Botón de login */
+.login-item {
+  margin-left: 1rem;
+}
+
+.btn-nav-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px !important;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white !important;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  transition: var(--transition-normal);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.btn-nav-login:hover {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+  box-shadow: 0 0 15px rgba(0, 115, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-nav-login::after {
+  display: none;
+}
+
+/* Notificaciones de autenticación */
+.auth-notification {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 191, 255, 0.2);
+  z-index: 10000;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 250px;
+}
+
+.auth-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.auth-notification i {
+  font-size: 1.25rem;
+}
+
+.auth-notification.notification-success {
+  border-left: 4px solid var(--color-success);
+}
+
+.auth-notification.notification-success i {
+  color: var(--color-success);
+}
+
+.auth-notification.notification-error {
+  border-left: 4px solid var(--color-danger);
+}
+
+.auth-notification.notification-error i {
+  color: var(--color-danger);
+}
+
+.auth-notification.notification-info {
+  border-left: 4px solid var(--color-primary);
+}
+
+.auth-notification.notification-info i {
+  color: var(--color-primary);
+}
+
+/* ========================================
    5. HERO SECTION
    ======================================== */
 
@@ -1726,6 +1945,33 @@ section {
 
   .menu-hamburguesa {
     display: block;
+  }
+  
+  /* Responsive: Menú de usuario en móvil */
+  .user-menu-item,
+  .login-item {
+    width: 100%;
+    margin: 0;
+  }
+
+  .user-menu-trigger,
+  .btn-nav-login {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .user-dropdown {
+    position: static;
+    width: 100%;
+    margin-top: 0.5rem;
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .auth-notification {
+    left: 10px;
+    right: 10px;
+    min-width: unset;
   }
   
   .titulo-hero {
