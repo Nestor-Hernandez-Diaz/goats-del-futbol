@@ -5,6 +5,7 @@
 
 // Verificar que no esté ya cargado
 if (typeof window.commentsSystemLoaded === 'undefined') {
+    console.log('🚀 Cargando sistema de comentarios...');
     window.commentsSystemLoaded = true;
 
     // Configuración
