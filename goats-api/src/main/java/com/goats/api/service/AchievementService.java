@@ -28,6 +28,9 @@ public class AchievementService {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     /**
      * Obtiene todos los logros de un jugador
      */
@@ -48,6 +51,7 @@ public class AchievementService {
 
     /**
      * Crea un nuevo logro
+     * Genera notificaciones a suscriptores del jugador
      */
     @SuppressWarnings("null")
     public AchievementDto create(AchievementDto dto) {
@@ -59,6 +63,15 @@ public class AchievementService {
         updateFromDto(achievement, dto);
 
         achievement = achievementRepository.save(achievement);
+        
+        // Notificar a suscriptores del jugador
+        try {
+            notificationService.notifyNewAchievement(player.getId(), achievement.getTitle());
+        } catch (Exception e) {
+            // Log error pero no fallar la creación
+            System.err.println("Error sending notifications: " + e.getMessage());
+        }
+        
         return toDto(achievement);
     }
 

@@ -35,6 +35,9 @@ public class CommentService {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     /**
      * Obtiene todos los comentarios (filtrado opcional por estado) - ADMIN
      */
@@ -138,6 +141,7 @@ public class CommentService {
 
     /**
      * Aprueba un comentario (solo ADMIN)
+     * Genera notificaciones a suscriptores del jugador
      */
     @SuppressWarnings("null")
     public CommentDto approve(Long id, String moderatorUsername) {
@@ -152,6 +156,15 @@ public class CommentService {
         comment.setModeratedAt(LocalDateTime.now());
 
         comment = commentRepository.save(comment);
+        
+        // Notificar a suscriptores del jugador
+        try {
+            notificationService.notifyNewComment(comment.getPlayer().getId(), comment.getContent());
+        } catch (Exception e) {
+            // Log error pero no fallar la aprobación
+            System.err.println("Error sending notifications: " + e.getMessage());
+        }
+        
         return toDto(comment);
     }
 
