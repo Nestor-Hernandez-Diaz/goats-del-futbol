@@ -203,6 +203,13 @@ section {
   display: flex;
   list-style: none;
   gap: 2rem;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.enlaces-navegacion li {
+  display: flex;
+  align-items: center;
 }
 
 .enlaces-navegacion a {
@@ -274,6 +281,10 @@ section {
 /* Item de menú de usuario */
 .user-menu-item {
   position: relative;
+  list-style: none;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 
 .user-menu-trigger {
@@ -281,37 +292,33 @@ section {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(0, 115, 255, 0.1);
-  border: 1px solid var(--color-primary);
-  border-radius: var(--border-radius);
+  background: transparent;
+  border: none;
   cursor: pointer;
   transition: var(--transition-normal);
   color: var(--color-text);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
 }
 
 .user-menu-trigger:hover {
-  background: rgba(0, 115, 255, 0.2);
-  box-shadow: 0 0 10px rgba(0, 115, 255, 0.4);
-}
-
-.user-menu-trigger i:first-child {
-  font-size: 1.5rem;
-  color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .user-menu-trigger .username {
-  font-weight: 600;
   font-size: 0.9rem;
-  text-transform: none;
-  letter-spacing: normal;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.user-menu-trigger i:last-child {
-  font-size: 0.75rem;
+.user-menu-trigger i.fa-chevron-down {
+  font-size: 0.8rem;
   transition: transform 0.3s ease;
 }
 
-.user-menu-trigger:hover i:last-child {
+.user-menu-item:hover .user-menu-trigger i.fa-chevron-down {
   transform: rotate(180deg);
 }
 
@@ -3513,4 +3520,106 @@ select:focus-visible {
 
 /* ========================================
    FIN DE ESTILOS - Mes 1, Semana 3
+   ======================================== */
+/* ========================================
+   ESTILOS ADICIONALES - Sistema Completo
+   ======================================== */
+
+/* Notificaciones badge en navegación */
+.notif-badge-container {
+  position: relative;
+  display: inline-flex;
+  margin-right: 15px;
+}
+
+.notif-link {
+  color: white;
+  font-size: 1.4rem;
+  padding: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.notif-link:hover {
+  color: var(--color-accent);
+  transform: scale(1.1);
+}
+
+.notif-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  color: white;
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 2px solid var(--color-dark);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Botones de auth en navegación */
+.auth-buttons-nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-left: auto;
+  list-style: none;
+}
+
+.btn-nav-login,
+.btn-nav-register {
+  padding: 8px 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  color: white;
+  border-bottom: 2px solid transparent;
+}
+
+.btn-nav-login:hover,
+.btn-nav-register:hover {
+  border-bottom-color: var(--color-primary);
+}
+
+/* Usuario menu en nav */
+.user-menu-item {
+  position: relative;
+  list-style: none;
+  margin-left: auto;
+}
+
+/* Responsive para navegación mejorada */
+@media (max-width: 768px) {
+  .auth-buttons-nav {
+    flex-direction: column;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .btn-nav-login,
+  .btn-nav-register {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .notif-badge-container {
+    margin-right: 0;
+  }
+}
+
+/* ========================================
+   FIN DE ESTILOS ADICIONALES
    ======================================== */

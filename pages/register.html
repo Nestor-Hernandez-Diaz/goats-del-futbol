@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Registrarse en GOATs del Fútbol" />
+  <title>Crear Cuenta | GOATs del Fútbol</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/auth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/x-icon" />
+  <script src="../js/main.js" defer></script>
+</head>
+<body>
+  <!-- Barra de navegación principal -->
+  <nav class="navegacion-principal">
+    <div class="contenedor-navegacion">
+      <div class="logotipo">
+        <a href="../index.html">GOATs del Fútbol</a>
+      </div>
+      <input type="checkbox" id="burger-toggle" class="toggle-hamburguesa">
+      <label for="burger-toggle" class="menu-hamburguesa">
+        <div class="linea1"></div>
+        <div class="linea2"></div>
+        <div class="linea3"></div>
+      </label>
+      <ul class="enlaces-navegacion">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="messi.html">Messi</a></li>
+        <li><a href="ronaldo.html">Cristiano</a></li>
+        <li><a href="neymar.html">Neymar</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Sección de Registro -->
+  <section class="seccion-auth">
+    <div class="auth-card">
+      <div class="auth-header">
+        <i class="fas fa-user-plus"></i>
+        <h1>Crear Cuenta</h1>
+        <p>Únete a la comunidad de GOATs del Fútbol</p>
+      </div>
+
+      <div id="alert" class="alert"></div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-group">
+          <label for="username">
+            <i class="fas fa-user"></i> Nombre de usuario
+          </label>
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            placeholder="Ej: futbol_fan123"
+            required
+            minlength="3"
+            maxlength="30"
+            autocomplete="username"
+          />
+          <span class="field-hint">Mínimo 3 caracteres, solo letras, números y guiones bajos</span>
+          <span class="field-error" id="usernameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">
+            <i class="fas fa-envelope"></i> Correo electrónico
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="tu@email.com"
+            required
+            autocomplete="email"
+          />
+          <span class="field-hint">Usaremos tu email para notificaciones importantes</span>
+          <span class="field-error" id="emailError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">
+            <i class="fas fa-lock"></i> Contraseña
+          </label>
+          <div class="password-input-wrapper">
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              placeholder="Mínimo 8 caracteres"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            />
+            <button type="button" class="toggle-password" id="togglePassword">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="password-strength" id="passwordStrength">
+            <div class="strength-bar">
+              <div class="strength-bar-fill" id="strengthBarFill"></div>
+            </div>
+            <span class="strength-text" id="strengthText">Sin evaluar</span>
+          </div>
+          <span class="field-hint">Mínimo 8 caracteres, incluye letras y números</span>
+          <span class="field-error" id="passwordError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">
+            <i class="fas fa-lock"></i> Confirmar contraseña
+          </label>
+          <div class="password-input-wrapper">
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              name="confirmPassword" 
+              placeholder="Repite tu contraseña"
+              required
+              autocomplete="new-password"
+            />
+            <button type="button" class="toggle-password" id="toggleConfirmPassword">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <span class="field-error" id="confirmPasswordError"></span>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              id="terms" 
+              name="terms" 
+              required
+            />
+            <span>Acepto los <a href="#" target="_blank">términos y condiciones</a></span>
+          </label>
+          <span class="field-error" id="termsError"></span>
+        </div>
+
+        <button type="submit" class="btn-auth">
+          <i class="fas fa-user-plus"></i>
+          <span id="btnText">Crear Cuenta</span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+        <a href="../index.html" class="link-back">
+          <i class="fas fa-arrow-left"></i> Volver al inicio
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const API_URL = 'http://localhost:8080/api';
+    const form = document.getElementById('registerForm');
+    const alert = document.getElementById('alert');
+    const btnText = document.getElementById('btnText');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const password = document.getElementById('password');
+      const icon = this.querySelector('i');
+      
+      if (password.type === 'password') {
+        password.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        password.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+      const confirmPassword = document.getElementById('confirmPassword');
+      const icon = this.querySelector('i');
+      
+      if (confirmPassword.type === 'password') {
+        confirmPassword.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        confirmPassword.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+
+    // Password strength checker
+    document.getElementById('password').addEventListener('input', function() {
+      const password = this.value;
+      const strengthBar = document.getElementById('strengthBarFill');
+      const strengthText = document.getElementById('strengthText');
+      
+      if (password.length === 0) {
+        strengthBar.style.width = '0%';
+        strengthBar.className = 'strength-bar-fill';
+        strengthText.textContent = 'Sin evaluar';
+        return;
+      }
+      
+      let strength = 0;
+      
+      // Criterios de fortaleza
+      if (password.length >= 8) strength += 20;
+      if (password.length >= 12) strength += 20;
+      if (/[a-z]/.test(password)) strength += 20;
+      if (/[A-Z]/.test(password)) strength += 20;
+      if (/[0-9]/.test(password)) strength += 10;
+      if (/[^a-zA-Z0-9]/.test(password)) strength += 10;
+      
+      strengthBar.style.width = strength + '%';
+      
+      if (strength < 40) {
+        strengthBar.className = 'strength-bar-fill weak';
+        strengthText.textContent = 'Débil';
+      } else if (strength < 70) {
+        strengthBar.className = 'strength-bar-fill medium';
+        strengthText.textContent = 'Media';
+      } else {
+        strengthBar.className = 'strength-bar-fill strong';
+        strengthText.textContent = 'Fuerte';
+      }
+    });
+
+    // Validación en tiempo real
+    const username = document.getElementById('username');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+
+    username.addEventListener('blur', () => validateUsername());
+    email.addEventListener('blur', () => validateEmail());
+    password.addEventListener('blur', () => validatePassword());
+    confirmPassword.addEventListener('blur', () => validateConfirmPassword());
+
+    function validateUsername() {
+      const value = username.value.trim();
+      const error = document.getElementById('usernameError');
+      
+      if (value.length === 0) {
+        showFieldError('usernameError', 'El nombre de usuario es requerido');
+        return false;
+      }
+      
+      if (value.length < 3) {
+        showFieldError('usernameError', 'Mínimo 3 caracteres');
+        return false;
+      }
+      
+      if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        showFieldError('usernameError', 'Solo letras, números y guiones bajos');
+        return false;
+      }
+      
+      clearFieldError('usernameError');
+      return true;
+    }
+
+    function validateEmail() {
+      const value = email.value.trim();
+      const error = document.getElementById('emailError');
+      
+      if (value.length === 0) {
+        showFieldError('emailError', 'El email es requerido');
+        return false;
+      }
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        showFieldError('emailError', 'Email inválido');
+        return false;
+      }
+      
+      clearFieldError('emailError');
+      return true;
+    }
+
+    function validatePassword() {
+      const value = password.value;
+      
+      if (value.length === 0) {
+        showFieldError('passwordError', 'La contraseña es requerida');
+        return false;
+      }
+      
+      if (value.length < 8) {
+        showFieldError('passwordError', 'Mínimo 8 caracteres');
+        return false;
+      }
+      
+      clearFieldError('passwordError');
+      return true;
+    }
+
+    function validateConfirmPassword() {
+      const value = confirmPassword.value;
+      const passwordValue = password.value;
+      
+      if (value.length === 0) {
+        showFieldError('confirmPasswordError', 'Debes confirmar tu contraseña');
+        return false;
+      }
+      
+      if (value !== passwordValue) {
+        showFieldError('confirmPasswordError', 'Las contraseñas no coinciden');
+        return false;
+      }
+      
+      clearFieldError('confirmPasswordError');
+      return true;
+    }
+
+    function showFieldError(id, message) {
+      const error = document.getElementById(id);
+      error.textContent = message;
+      error.style.display = 'block';
+    }
+
+    function clearFieldError(id) {
+      const error = document.getElementById(id);
+      error.textContent = '';
+      error.style.display = 'none';
+    }
+
+    // Submit form
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Validar todos los campos
+      const isUsernameValid = validateUsername();
+      const isEmailValid = validateEmail();
+      const isPasswordValid = validatePassword();
+      const isConfirmPasswordValid = validateConfirmPassword();
+      const termsChecked = document.getElementById('terms').checked;
+      
+      if (!termsChecked) {
+        showFieldError('termsError', 'Debes aceptar los términos y condiciones');
+        return;
+      } else {
+        clearFieldError('termsError');
+      }
+      
+      if (!isUsernameValid || !isEmailValid || !isPasswordValid || !isConfirmPasswordValid) {
+        showAlert('Por favor, corrige los errores del formulario', 'error');
+        return;
+      }
+      
+      // Deshabilitar botón
+      submitBtn.disabled = true;
+      btnText.textContent = 'Creando cuenta...';
+      hideAlert();
+
+      try {
+        const response = await fetch(`${API_URL}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: username.value.trim(),
+            email: email.value.trim(),
+            password: password.value
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error || 'Error al crear la cuenta');
+        }
+
+        const data = await response.json();
+        
+        showAlert('¡Cuenta creada exitosamente! Iniciando sesión...', 'success');
+        
+        // Auto-login después de registro exitoso
+        setTimeout(async () => {
+          try {
+            const loginResponse = await fetch(`${API_URL}/auth/login`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                username: username.value.trim(),
+                password: password.value
+              })
+            });
+            
+            if (loginResponse.ok) {
+              const loginData = await loginResponse.json();
+              
+              // Guardar token en localStorage
+              localStorage.setItem('jwtToken', loginData.token);
+              localStorage.setItem('currentUser', JSON.stringify({
+                id: loginData.id,
+                username: loginData.username,
+                email: loginData.email,
+                roles: loginData.roles
+              }));
+              
+              // Redirigir
+              window.location.href = '../index.html';
+            } else {
+              // Si falla el auto-login, redirigir a login
+              window.location.href = 'login.html';
+            }
+          } catch (error) {
+            window.location.href = 'login.html';
+          }
+        }, 1500);
+
+      } catch (error) {
+        console.error('Error:', error);
+        showAlert(error.message || 'Error al crear la cuenta. Intenta nuevamente.', 'error');
+        submitBtn.disabled = false;
+        btnText.textContent = 'Crear Cuenta';
+      }
+    });
+
+    function showAlert(message, type) {
+      alert.textContent = message;
+      alert.className = `alert ${type} show`;
+    }
+
+    function hideAlert() {
+      alert.className = 'alert';
+    }
+
+    // Verificar si ya hay sesión activa
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const now = Math.floor(Date.now() / 1000);
+        
+        if (payload.exp && payload.exp > now) {
+          // Ya está logueado, redirigir
+          window.location.href = '../index.html';
+        }
+      } catch (e) {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('currentUser');
+      }
+    }
+  </script>
+</body>
+</html>

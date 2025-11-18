@@ -111,7 +111,22 @@ if (typeof window.authSystemLoaded === 'undefined') {
         const navLinks = document.querySelector('.enlaces-navegacion');
         if (!navLinks) return;
 
-        // Verificar si ya existe el menú de usuario
+        // Si ya existe usuario-menu en el HTML (páginas con nuevo sistema), solo mostrarlo
+        const existingUserMenu = document.getElementById('userMenu');
+        if (existingUserMenu) {
+            existingUserMenu.style.display = 'flex';
+            const authButtons = document.getElementById('authButtons');
+            if (authButtons) authButtons.style.display = 'none';
+            
+            // Actualizar nombre de usuario
+            const usernameSpan = existingUserMenu.querySelector('#username');
+            if (usernameSpan) {
+                usernameSpan.textContent = currentUser.username;
+            }
+            return;
+        }
+
+        // Sistema antiguo: crear elemento de menú de usuario (para index.html y páginas antiguas)
         let userMenuItem = navLinks.querySelector('.user-menu-item');
         if (userMenuItem) {
             userMenuItem.remove();
@@ -123,9 +138,13 @@ if (typeof window.authSystemLoaded === 'undefined') {
         
         const isAdmin = currentUser.roles.includes('ROLE_ADMIN');
         
+        // Obtener rutas correctas para notificaciones, perfil y suscripciones
+        const notificationsUrl = isRootPage() ? 'pages/notifications.html' : 'notifications.html';
+        const profileUrl = isRootPage() ? 'pages/profile.html' : 'profile.html';
+        const subscriptionsUrl = isRootPage() ? 'pages/subscriptions.html' : 'subscriptions.html';
+        
         userMenu.innerHTML = `
             <div class="user-menu-trigger">
-                <i class="fas fa-user-circle"></i>
                 <span class="username">${escapeHtml(currentUser.username)}</span>
                 <i class="fas fa-chevron-down"></i>
             </div>
@@ -135,7 +154,11 @@ if (typeof window.authSystemLoaded === 'undefined') {
                     ${isAdmin ? '<span class="badge-admin">Admin</span>' : '<span class="badge-user">Usuario</span>'}
                 </div>
                 <div class="dropdown-divider"></div>
-                ${isAdmin ? `<a href="${getDashboardUrl()}" class="dropdown-item"><i class="fas fa-shield-alt"></i> Dashboard Admin</a>` : ''}
+                <a href="${profileUrl}" class="dropdown-item"><i class="fas fa-user"></i> Mi Perfil</a>
+                <a href="${subscriptionsUrl}" class="dropdown-item"><i class="fas fa-star"></i> Mis Suscripciones</a>
+                <a href="${notificationsUrl}" class="dropdown-item"><i class="fas fa-bell"></i> Notificaciones</a>
+                ${isAdmin ? `<div class="dropdown-divider"></div><a href="${getDashboardUrl()}" class="dropdown-item"><i class="fas fa-shield-alt"></i> Dashboard Admin</a>` : ''}
+                <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item" id="btn-logout">
                     <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                 </a>
@@ -185,17 +208,33 @@ if (typeof window.authSystemLoaded === 'undefined') {
         const navLinks = document.querySelector('.enlaces-navegacion');
         if (!navLinks) return;
 
-        // Verificar si ya existe el enlace de login
+        // Si ya existe auth-buttons en el HTML (páginas con nuevo sistema), solo mostrarlo
+        const existingAuthButtons = document.getElementById('authButtons');
+        if (existingAuthButtons) {
+            existingAuthButtons.style.display = 'flex';
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) userMenu.style.display = 'none';
+            return;
+        }
+
+        // Sistema antiguo: crear botones (para index.html y páginas antiguas)
         let loginItem = navLinks.querySelector('.login-item');
         if (loginItem) {
             loginItem.remove();
         }
 
-        // Crear enlace de navegación estándar
-        const loginLink = document.createElement('li');
-        loginLink.innerHTML = `<a href="${getLoginUrl()}">Acceder</a>`;
+        // Crear enlaces de login y register
+        const authButtons = document.createElement('li');
+        authButtons.className = 'login-item auth-buttons-nav';
+        
+        const registerUrl = isRootPage() ? 'pages/register.html' : 'register.html';
+        
+        authButtons.innerHTML = `
+            <a href="${getLoginUrl()}" class="btn-nav-login">Iniciar Sesión</a>
+            <a href="${registerUrl}" class="btn-nav-register">Registrarte</a>
+        `;
 
-        navLinks.appendChild(loginLink);
+        navLinks.appendChild(authButtons);
     }
 
     /**
@@ -217,6 +256,39 @@ if (typeof window.authSystemLoaded === 'undefined') {
         setTimeout(function() {
             window.location.reload();
         }, 1000);
+    }
+
+    /**
+     * Actualizar contador de notificaciones no leídas
+     */
+    async function updateNotificationBadge() {
+        const badge = document.getElementById('notifBadge');
+        if (!badge) return;
+
+        try {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) return;
+
+            const response = await fetch('http://localhost:8080/api/notifications/unread/count', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const count = await response.json();
+                
+                if (count > 0) {
+                    badge.textContent = count > 99 ? '99+' : count;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching notification count:', error);
+        }
     }
 
     /**
@@ -252,6 +324,11 @@ if (typeof window.authSystemLoaded === 'undefined') {
                 }
             }
         }, 5 * 60 * 1000); // 5 minutos
+        
+        // Actualizar badge de notificaciones cada 30 segundos
+        if (localStorage.getItem('jwtToken')) {
+            setInterval(updateNotificationBadge, 30000);
+        }
     }
 
     /**

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Mis Suscripciones - GOATs del Fútbol" />
+  <title>Mis Suscripciones | GOATs del Fútbol</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/user-menu.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/x-icon" />
+  <script src="../js/main.js" defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/subscriptions.js" defer></script>
+  <script src="../js/guest-menu.js" defer></script>
+</head>
+<body>
+  <!-- Barra de navegación principal -->
+  <nav class="navegacion-principal">
+    <div class="contenedor-navegacion">
+      <div class="logotipo">
+        <a href="../index.html">GOATs del Fútbol</a>
+      </div>
+      <input type="checkbox" id="burger-toggle" class="toggle-hamburguesa">
+      <label for="burger-toggle" class="menu-hamburguesa">
+        <div class="linea1"></div>
+        <div class="linea2"></div>
+        <div class="linea3"></div>
+      </label>
+      <ul class="enlaces-navegacion">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="messi.html">Messi</a></li>
+        <li><a href="ronaldo.html">Cristiano</a></li>
+        <li><a href="neymar.html">Neymar</a></li>
+        
+        <!-- Enlaces para usuario no autenticado -->
+        <li class="auth-buttons" id="authButtons">
+          <a href="login.html" class="btn-login">Iniciar Sesión</a>
+          <a href="register.html" class="btn-register">Registrarte</a>
+        </li>
+        
+        <!-- Menú de usuario autenticado -->
+        <li class="usuario-menu" id="userMenu" style="display: none;">
+          <div class="dropdown-usuario">
+            <button class="btn-usuario" id="userDropdown">
+              <span id="username">Usuario</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="profile.html">
+                <i class="fas fa-user"></i> Mi Perfil
+              </a>
+              <a href="subscriptions.html" class="activo">
+                <i class="fas fa-star"></i> Mis Suscripciones
+              </a>
+              <a href="notifications.html">
+                <i class="fas fa-bell"></i> Notificaciones
+              </a>
+              <hr>
+              <a href="#" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contenido Principal -->
+  <main class="main-subscriptions">
+    <div class="contenedor">
+      <div class="subscriptions-header">
+        <h2 class="titulo-seccion">Mis Suscripciones</h2>
+        <p class="subtitle">Jugadores que sigues y sus actualizaciones</p>
+      </div>
+
+      <!-- Estadísticas -->
+      <div class="stats-cards">
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <div class="stat-info">
+            <h3 id="totalSubscriptions">0</h3>
+            <p>Jugadores seguidos</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-bell"></i>
+          <div class="stat-info">
+            <h3 id="notificationsEnabled">0</h3>
+            <p>Con notificaciones</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Cargando suscripciones...</p>
+      </div>
+
+      <!-- Grid de jugadores suscritos -->
+      <div id="subscriptionsGrid" class="subscriptions-grid">
+        <!-- Se llenará dinámicamente -->
+      </div>
+
+      <!-- Estado vacío -->
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <i class="fas fa-user-slash"></i>
+        <h3>Aún no sigues a ningún jugador</h3>
+        <p>Suscríbete a tus jugadores favoritos para recibir notificaciones sobre sus logros y actualizaciones.</p>
+        <a href="../index.html" class="btn-primary">
+          <i class="fas fa-search"></i> Descubrir jugadores
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="pie-principal">
+    <div class="contenedor">
+      <div class="contenido-pie">
+        <div class="logotipo-pie">
+          <h3>GOATs del Fútbol</h3>
+          <p>Explorando el legado de las leyendas</p>
+        </div>
+        <div class="enlaces-pie">
+          <h4>Enlaces Rápidos</h4>
+          <ul>
+            <li><a href="../index.html">Inicio</a></li>
+            <li><a href="messi.html">Messi</a></li>
+            <li><a href="ronaldo.html">Cristiano</a></li>
+            <li><a href="neymar.html">Neymar</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pie-inferior">
+        <p>&copy; 2025 GOATs del Fútbol. Proyecto académico para el curso de LP2.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Mi Perfil - GOATs del Fútbol" />
+  <title>Mi Perfil | GOATs del Fútbol</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/user-menu.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/x-icon" />
+  <script src="../js/main.js" defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/guest-menu.js" defer></script>
+</head>
+<body>
+  <!-- Barra de navegación principal -->
+  <nav class="navegacion-principal">
+    <div class="contenedor-navegacion">
+      <div class="logotipo">
+        <a href="../index.html">GOATs del Fútbol</a>
+      </div>
+      <input type="checkbox" id="burger-toggle" class="toggle-hamburguesa">
+      <label for="burger-toggle" class="menu-hamburguesa">
+        <div class="linea1"></div>
+        <div class="linea2"></div>
+        <div class="linea3"></div>
+      </label>
+      <ul class="enlaces-navegacion">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="messi.html">Messi</a></li>
+        <li><a href="ronaldo.html">Cristiano</a></li>
+        <li><a href="neymar.html">Neymar</a></li>
+        
+        <!-- Enlaces para usuario no autenticado -->
+        <li class="auth-buttons" id="authButtons">
+          <a href="login.html" class="btn-login">Iniciar Sesión</a>
+          <a href="register.html" class="btn-register">Registrarte</a>
+        </li>
+        
+        <!-- Menú de usuario autenticado -->
+        <li class="usuario-menu" id="userMenu" style="display: none;">
+          <div class="dropdown-usuario">
+            <button class="btn-usuario" id="userDropdown">
+              <span id="username">Usuario</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="profile.html" class="activo">
+                <i class="fas fa-user"></i> Mi Perfil
+              </a>
+              <a href="subscriptions.html">
+                <i class="fas fa-star"></i> Mis Suscripciones
+              </a>
+              <a href="notifications.html">
+                <i class="fas fa-bell"></i> Notificaciones
+              </a>
+              <hr>
+              <a href="#" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contenido Principal -->
+  <main class="main-profile">
+    <div class="contenedor">
+      <h2 class="titulo-seccion">Mi Perfil</h2>
+      
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="profile-info">
+          <h3 id="profileUsername">Usuario</h3>
+          <p id="profileEmail">email@example.com</p>
+          <span class="profile-badge" id="profileRole">Usuario</span>
+        </div>
+      </div>
+
+      <div class="profile-content">
+        <!-- Información General -->
+        <section class="profile-section">
+          <h2><i class="fas fa-info-circle"></i> Información General</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Nombre de usuario</label>
+              <p id="infoUsername">-</p>
+            </div>
+            <div class="info-item">
+              <label>Correo electrónico</label>
+              <p id="infoEmail">-</p>
+            </div>
+            <div class="info-item">
+              <label>Miembro desde</label>
+              <p id="infoMemberSince">-</p>
+            </div>
+            <div class="info-item">
+              <label>Rol</label>
+              <p id="infoRole">-</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Estadísticas -->
+        <section class="profile-section">
+          <h2><i class="fas fa-chart-bar"></i> Mi Actividad</h2>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <i class="fas fa-comments"></i>
+              <h3 id="statsComments">0</h3>
+              <p>Comentarios</p>
+            </div>
+            <div class="stat-box">
+              <i class="fas fa-star"></i>
+              <h3 id="statsSubscriptions">0</h3>
+              <p>Suscripciones</p>
+            </div>
+            <div class="stat-box">
+              <i class="fas fa-bell"></i>
+              <h3 id="statsNotifications">0</h3>
+              <p>Notificaciones</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Acciones -->
+        <section class="profile-section">
+          <h2><i class="fas fa-cog"></i> Configuración</h2>
+          <div class="actions-list">
+            <p class="note">
+              <i class="fas fa-info-circle"></i>
+              Próximamente podrás cambiar tu contraseña y actualizar tu información personal.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="pie-principal">
+    <div class="contenedor">
+      <div class="contenido-pie">
+        <div class="logotipo-pie">
+          <h3>GOATs del Fútbol</h3>
+          <p>Explorando el legado de las leyendas</p>
+        </div>
+        <div class="enlaces-pie">
+          <h4>Enlaces Rápidos</h4>
+          <ul>
+            <li><a href="../index.html">Inicio</a></li>
+            <li><a href="messi.html">Messi</a></li>
+            <li><a href="ronaldo.html">Cristiano</a></li>
+            <li><a href="neymar.html">Neymar</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pie-inferior">
+        <p>&copy; 2025 GOATs del Fútbol. Proyecto académico para el curso de LP2.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const API_URL = 'http://localhost:8080/api';
+    
+    // Cargar datos del perfil
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const token = localStorage.getItem('jwtToken');
+      
+      if (!token || !user.id) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Mostrar información básica
+      document.getElementById('profileUsername').textContent = user.username;
+      document.getElementById('profileEmail').textContent = user.email;
+      document.getElementById('infoUsername').textContent = user.username;
+      document.getElementById('infoEmail').textContent = user.email;
+      
+      const role = user.roles && user.roles.includes('ADMIN') ? 'Administrador' : 'Usuario';
+      document.getElementById('profileRole').textContent = role;
+      document.getElementById('infoRole').textContent = role;
+      
+      // Fecha de registro (simulada por ahora)
+      const memberSince = new Date().toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('infoMemberSince').textContent = memberSince;
+      
+      // Cargar estadísticas
+      try {
+        // Suscripciones
+        const subsResponse = await fetch(`${API_URL}/subscriptions/user/${user.id}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (subsResponse.ok) {
+          const subs = await subsResponse.json();
+          document.getElementById('statsSubscriptions').textContent = subs.length || 0;
+        }
+        
+        // Notificaciones
+        const notifsResponse = await fetch(`${API_URL}/notifications/unread/count`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (notifsResponse.ok) {
+          const count = await notifsResponse.json();
+          document.getElementById('statsNotifications').textContent = count || 0;
+        }
+        
+        // Comentarios (placeholder)
+        document.getElementById('statsComments').textContent = '0';
+        
+      } catch (error) {
+        console.error('Error cargando estadísticas:', error);
+      }
+    });
+  </script>
+</body>
+</html>
