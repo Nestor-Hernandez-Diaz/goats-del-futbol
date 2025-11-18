@@ -44,15 +44,6 @@ public class Achievement {
         createdAt = LocalDateTime.now();
     }
 
-    // Enum para tipos de logros
-    public enum AchievementType {
-        INDIVIDUAL,      // Balón de Oro, Bota de Oro, etc.
-        CLUB,           // Champions League, Liga, etc.
-        NATIONAL_TEAM,  // Mundial, Copa América, Eurocopa, etc.
-        RECORD,         // Récords personales
-        OTHER
-    }
-
     // Constructores
     public Achievement() {
     }

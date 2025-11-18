@@ -1,7 +1,7 @@
 package com.goats.api.controller;
 
 import com.goats.api.dto.CommentDto;
-import com.goats.api.model.Comment.ModerationStatus;
+import com.goats.api.model.ModerationStatus;
 import com.goats.api.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,16 +33,11 @@ public class CommentController {
     private CommentService commentService;
 
     @GetMapping
-    // @PreAuthorize("hasRole('ADMIN')") // Deshabilitado - ver issue #6
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Listar todos los comentarios (ADMIN)",
                description = "Obtiene todos los comentarios sin filtro (requiere rol ADMIN)")
     public Page<CommentDto> getAll(@RequestParam(required = false) ModerationStatus status,
                                     @PageableDefault(size = 1000) Pageable pageable) {
-        // Verificar manualmente si es ADMIN (workaround de @PreAuthorize)
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            throw new org.springframework.security.access.AccessDeniedException("Requiere rol ADMIN");
-        }
         return commentService.getAll(status, pageable);
     }
 
@@ -83,7 +77,7 @@ public class CommentController {
     }
 
     @PostMapping
-    // @PreAuthorize("isAuthenticated()") // Temporalmente deshabilitado para debugging
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Crear comentario",
                description = "Crea un nuevo comentario (requiere autenticación, estado PENDING)")
     public ResponseEntity<CommentDto> create(@Valid @RequestBody CommentDto dto) {
@@ -95,7 +89,7 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    // @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Actualizar comentario",
                description = "Actualiza el contenido de un comentario propio (requiere autenticación)")
     public ResponseEntity<CommentDto> update(@PathVariable Long id,
@@ -107,20 +101,21 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    // @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Eliminar comentario",
                description = "Elimina un comentario propio o cualquiera si es ADMIN")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        boolean isAdmin = auth.getAuthorities().stream()
+            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
         
         commentService.delete(id, username, isAdmin);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/approve")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Aprobar comentario (ADMIN)",
                description = "Aprueba un comentario pendiente (requiere rol ADMIN)")
     public ResponseEntity<CommentDto> approve(@PathVariable Long id) {
@@ -131,7 +126,7 @@ public class CommentController {
     }
 
     @PostMapping("/{id}/reject")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Rechazar comentario (ADMIN)",
                description = "Rechaza un comentario con motivo (requiere rol ADMIN)")
     public ResponseEntity<CommentDto> reject(@PathVariable Long id,

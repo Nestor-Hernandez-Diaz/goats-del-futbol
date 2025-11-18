@@ -1,7 +1,7 @@
 package com.goats.api.dto;
 
-import com.goats.api.model.Achievement.AchievementType;
-import com.goats.api.model.Comment.ModerationStatus;
+import com.goats.api.model.AchievementType;
+import com.goats.api.model.ModerationStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

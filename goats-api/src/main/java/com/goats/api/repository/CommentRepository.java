@@ -1,7 +1,9 @@
 package com.goats.api.repository;
 
 import com.goats.api.model.Comment;
-import com.goats.api.model.Comment.ModerationStatus;
+import com.goats.api.model.ModerationStatus;
+import com.goats.api.model.Player;
+import com.goats.api.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

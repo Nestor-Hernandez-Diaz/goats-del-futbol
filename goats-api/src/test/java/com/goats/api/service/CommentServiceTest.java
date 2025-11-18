@@ -2,7 +2,7 @@ package com.goats.api.service;
 
 import com.goats.api.dto.CommentDto;
 import com.goats.api.model.Comment;
-import com.goats.api.model.Comment.ModerationStatus;
+import com.goats.api.model.ModerationStatus;
 import com.goats.api.model.Player;
 import com.goats.api.model.User;
 import com.goats.api.repository.CommentRepository;

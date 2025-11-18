@@ -1,7 +1,8 @@
 package com.goats.api.model;
 
-import com.goats.api.model.Achievement.AchievementType;
-import com.goats.api.model.Comment.ModerationStatus;
+import com.goats.api.model.AchievementType;
+import com.goats.api.model.ModerationStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -238,8 +239,8 @@ class ModelTests {
         assertEquals(ModerationStatus.REJECTED, rejected.getStatus());
         
         Comment edited = new Comment();
-        edited.setStatus(Comment.ModerationStatus.EDITED);
-        assertEquals(Comment.ModerationStatus.EDITED, edited.getStatus());
+        edited.setStatus(ModerationStatus.EDITED);
+        assertEquals(ModerationStatus.EDITED, edited.getStatus());
     }
 
     @Test

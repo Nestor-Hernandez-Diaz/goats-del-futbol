@@ -1,6 +1,6 @@
 package com.goats.api.dto;
 
-import com.goats.api.model.Comment.ModerationStatus;
+import com.goats.api.model.ModerationStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

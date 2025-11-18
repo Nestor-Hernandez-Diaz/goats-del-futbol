@@ -1,7 +1,7 @@
 package com.goats.api.repository;
 
 import com.goats.api.model.Achievement;
-import com.goats.api.model.Achievement.AchievementType;
+import com.goats.api.model.AchievementType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

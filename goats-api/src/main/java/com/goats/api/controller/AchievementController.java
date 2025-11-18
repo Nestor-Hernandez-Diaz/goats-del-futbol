@@ -1,7 +1,7 @@
 package com.goats.api.controller;
 
 import com.goats.api.dto.AchievementDto;
-import com.goats.api.model.Achievement.AchievementType;
+import com.goats.api.model.AchievementType;
 import com.goats.api.service.AchievementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

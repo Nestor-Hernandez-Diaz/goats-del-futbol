@@ -1,6 +1,6 @@
 package com.goats.api.dto;
 
-import com.goats.api.model.Achievement.AchievementType;
+import com.goats.api.model.AchievementType;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

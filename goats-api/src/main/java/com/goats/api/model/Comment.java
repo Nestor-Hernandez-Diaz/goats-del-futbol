@@ -46,14 +46,6 @@ public class Comment {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    // Enum para estado de moderación
-    public enum ModerationStatus {
-        PENDING,    // Pendiente de moderación
-        APPROVED,   // Aprobado por moderador
-        REJECTED,   // Rechazado por moderador
-        EDITED      // Editado después de aprobación
-    }
-
     // Lifecycle callbacks
     @PrePersist
     protected void onCreate() {

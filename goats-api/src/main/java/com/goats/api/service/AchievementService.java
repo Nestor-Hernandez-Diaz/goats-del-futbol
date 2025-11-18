@@ -2,7 +2,7 @@ package com.goats.api.service;
 
 import com.goats.api.dto.AchievementDto;
 import com.goats.api.model.Achievement;
-import com.goats.api.model.Achievement.AchievementType;
+import com.goats.api.model.AchievementType;
 import com.goats.api.model.Player;
 import com.goats.api.repository.AchievementRepository;
 import com.goats.api.repository.PlayerRepository;
