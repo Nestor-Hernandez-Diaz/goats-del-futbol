@@ -16,26 +16,50 @@ const PLAYER_IDS = {
  * Obtiene el ID del jugador basado en la URL actual
  */
 function getCurrentPlayerId() {
+  // Primero intentar obtener desde el parámetro ?id (player.html dinámico)
+  const urlParams = new URLSearchParams(window.location.search);
+  const idParam = urlParams.get('id');
+  
+  if (idParam) {
+    const parsedId = parseInt(idParam, 10);
+    console.log(`📊 Stats: Detectando jugador desde URL param: ${parsedId}`);
+    return parsedId;
+  }
+  
+  // Fallback: detectar desde nombre de archivo (páginas estáticas)
   const path = window.location.pathname;
   const filename = path.substring(path.lastIndexOf('/') + 1).replace('.html', '');
-  return PLAYER_IDS[filename];
+  
+  if (PLAYER_IDS[filename]) {
+    console.log(`📊 Stats: Detectando jugador desde filename: ${filename}`);
+    return PLAYER_IDS[filename];
+  }
+  
+  // Si no se pudo determinar, intentar desde window.currentPlayerId
+  if (window.currentPlayerId) {
+    console.log(`📊 Stats: Detectando jugador desde window.currentPlayerId: ${window.currentPlayerId}`);
+    return window.currentPlayerId;
+  }
+  
+  return null;
 }
 
 /**
  * Carga las estadísticas del jugador desde el backend
  */
-async function loadPlayerStats() {
-  const playerId = getCurrentPlayerId();
+async function loadPlayerStats(playerId = null) {
+  const targetPlayerId = playerId || getCurrentPlayerId();
   
-  if (!playerId) {
+  if (!targetPlayerId) {
     console.warn('No se pudo determinar el ID del jugador');
     return;
   }
 
   try {
-    console.log(`📊 Cargando estadísticas del jugador ID: ${playerId}`);
+    console.log(`🎯 Inicializando carga de estadísticas dinámicas...`);
+    console.log(`📊 Cargando estadísticas del jugador ID: ${targetPlayerId}`);
     
-    const response = await fetch(`${API_BASE_URL}/stats/player/${playerId}`);
+    const response = await fetch(`${API_BASE_URL}/stats/player/${targetPlayerId}`);
     
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -48,13 +72,25 @@ async function loadPlayerStats() {
     updateStatsCards(stats);
     
     // Actualizar logros si existen
-    await loadPlayerAchievements(playerId);
+    await loadPlayerAchievements(targetPlayerId);
     
   } catch (error) {
     console.error('Error cargando estadísticas:', error);
     showStatsFallback();
   }
 }
+
+/**
+ * Escuchar evento playerLoaded para páginas dinámicas (player.html)
+ */
+window.addEventListener('playerLoaded', function(event) {
+  console.log('🎯 Stats: Detectado evento playerLoaded');
+  const playerId = event.detail.id;
+  
+  if (playerId) {
+    loadPlayerStats(playerId);
+  }
+});
 
 /**
  * Actualiza las tarjetas de estadísticas en el DOM

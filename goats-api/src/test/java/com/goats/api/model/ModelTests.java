@@ -65,10 +65,12 @@ class ModelTests {
         achievement.setTitle("Ballon d'Or");
         
         player.addAchievement(achievement);
+        assertEquals(1, player.getAchievements().size());
         assertTrue(player.getAchievements().contains(achievement));
         assertEquals(player, achievement.getPlayer());
         
         player.removeAchievement(achievement);
+        assertEquals(0, player.getAchievements().size());
         assertFalse(player.getAchievements().contains(achievement));
         assertNull(achievement.getPlayer());
     }

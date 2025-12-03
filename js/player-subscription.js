@@ -17,8 +17,31 @@ const PAGE_TO_PLAYER_ID = {
  * Obtener ID del jugador según la página actual
  */
 function getCurrentPlayerId() {
+  // Primero intentar obtener desde el parámetro ?id (player.html dinámico)
+  const urlParams = new URLSearchParams(window.location.search);
+  const idParam = urlParams.get('id');
+  
+  if (idParam) {
+    const parsedId = parseInt(idParam, 10);
+    console.log(`🔔 Subscription: Detectando jugador desde URL param: ${parsedId}`);
+    return parsedId;
+  }
+  
+  // Fallback: detectar desde nombre de archivo (páginas estáticas)
   const currentPage = window.location.pathname.split('/').pop();
-  return PAGE_TO_PLAYER_ID[currentPage] || null;
+  
+  if (PAGE_TO_PLAYER_ID[currentPage]) {
+    console.log(`🔔 Subscription: Detectando jugador desde filename: ${currentPage}`);
+    return PAGE_TO_PLAYER_ID[currentPage];
+  }
+  
+  // Si no se pudo determinar, intentar desde window.currentPlayerId
+  if (window.currentPlayerId) {
+    console.log(`🔔 Subscription: Detectando jugador desde window.currentPlayerId: ${window.currentPlayerId}`);
+    return window.currentPlayerId;
+  }
+  
+  return null;
 }
 
 /**
@@ -26,6 +49,7 @@ function getCurrentPlayerId() {
  */
 async function checkSubscriptionStatus(playerId) {
   try {
+    console.log(`🔍 Verificando suscripción al jugador ${playerId}...`);
     const response = await fetch(`${API_URL}/subscriptions/player/${playerId}/check`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -34,11 +58,14 @@ async function checkSubscriptionStatus(playerId) {
     });
 
     if (response.ok) {
-      return await response.json(); // true o false
+      const isSubscribed = await response.json();
+      console.log(`${isSubscribed ? '✅' : '❌'} Usuario ${isSubscribed ? 'SÍ' : 'NO'} está suscrito al jugador ${playerId}`);
+      return isSubscribed;
     }
+    console.log(`⚠️ Error al verificar suscripción: ${response.status}`);
     return false;
   } catch (error) {
-    console.error('Error checking subscription:', error);
+    console.error('❌ Error checking subscription:', error);
     return false;
   }
 }
@@ -116,22 +143,36 @@ async function unsubscribeFromPlayer(playerId) {
  * Toggle suscripción
  */
 async function toggleSubscription(playerId) {
+  console.log(`🎯 Toggle suscripción para jugador ${playerId}`);
+  
   const btn = document.getElementById('subscribeBtn');
-  if (!btn) return;
+  if (!btn) {
+    console.error('❌ Botón de suscripción no encontrado');
+    return;
+  }
 
   const isSubscribed = btn.dataset.subscribed === 'true';
+  console.log(`📊 Estado actual: ${isSubscribed ? 'Suscrito' : 'No suscrito'}`);
 
   // Deshabilitar botón temporalmente
   btn.disabled = true;
 
   if (isSubscribed) {
     // Desuscribirse
+    console.log('🗑️ Intentando desuscribirse...');
     const success = await unsubscribeFromPlayer(playerId);
     if (success) {
+      console.log('✅ Desuscripción exitosa');
       updateSubscribeButton(false, playerId);
       showToast('Dejaste de seguir a este jugador', 'info');
       updateSubscriberCount(playerId);
+      
+      // Disparar evento para sincronizar otras páginas
+      window.dispatchEvent(new CustomEvent('subscriptionChanged', { 
+        detail: { playerId, action: 'unsubscribe' } 
+      }));
     } else {
+      console.error('❌ Fallo al desuscribirse');
       showToast('Error al cancelar suscripción', 'error');
     }
   } else {
@@ -144,12 +185,20 @@ async function toggleSubscription(playerId) {
     }
 
     // Suscribirse
+    console.log('⭐ Intentando suscribirse...');
     const success = await subscribeToPlayer(playerId);
     if (success) {
+      console.log('✅ Suscripción exitosa');
       updateSubscribeButton(true, playerId);
       showToast('¡Te suscribiste exitosamente! Recibirás notificaciones de sus logros.', 'success');
       updateSubscriberCount(playerId);
+      
+      // Disparar evento para sincronizar otras páginas
+      window.dispatchEvent(new CustomEvent('subscriptionChanged', { 
+        detail: { playerId, action: 'subscribe' } 
+      }));
     } else {
+      console.error('❌ Fallo al suscribirse');
       showToast('Error al suscribirte', 'error');
     }
   }
@@ -220,7 +269,12 @@ function showToast(message, type = 'info') {
  */
 function insertSubscribeButton() {
   const playerId = getCurrentPlayerId();
-  if (!playerId) return;
+  console.log(`🎮 Insertando botón de suscripción para jugador ${playerId}...`);
+  
+  if (!playerId) {
+    console.log('⚠️ No se pudo determinar el ID del jugador');
+    return;
+  }
 
   // Buscar el contenedor del título del héroe
   const heroText = document.querySelector('.texto-hero-jugador');
@@ -379,12 +433,17 @@ function addSubscriptionStyles() {
  * Inicializar estado de suscripción
  */
 async function initializeSubscriptionState(playerId) {
+  console.log(`🔄 Inicializando estado de suscripción para jugador ${playerId}...`);
+  
   // Actualizar contador de suscriptores
   await updateSubscriberCount(playerId);
 
   // Verificar si el usuario está autenticado
   const token = localStorage.getItem('jwtToken');
-  if (!token) return;
+  if (!token) {
+    console.log('⚠️ Usuario no autenticado, no se verifica suscripción');
+    return;
+  }
 
   // Verificar si está suscrito
   const isSubscribed = await checkSubscriptionStatus(playerId);
@@ -397,6 +456,34 @@ if (document.readyState === 'loading') {
 } else {
   insertSubscribeButton();
 }
+
+/**
+ * Escuchar evento playerLoaded para páginas dinámicas (player.html)
+ */
+window.addEventListener('playerLoaded', function(event) {
+  console.log('🎯 Subscription: Detectado evento playerLoaded');
+  const playerId = event.detail.id;
+  
+  if (playerId) {
+    // Re-insertar botón con el nuevo playerId
+    const existingContainer = document.getElementById('subscriptionContainer');
+    if (existingContainer) {
+      existingContainer.remove();
+    }
+    insertSubscribeButton();
+  }
+});
+
+// Escuchar cambios de suscripción desde otras páginas
+window.addEventListener('subscriptionChanged', (event) => {
+  console.log('🔔 Evento subscriptionChanged recibido en página de jugador:', event.detail);
+  const playerId = getCurrentPlayerId();
+  if (playerId && event.detail.playerId === playerId) {
+    console.log(`🔄 Actualizando estado para jugador ${playerId}...`);
+    // Si el cambio es del jugador actual, actualizar estado
+    initializeSubscriptionState(playerId);
+  }
+});
 
 // Exponer funciones globales
 window.PlayerSubscription = {

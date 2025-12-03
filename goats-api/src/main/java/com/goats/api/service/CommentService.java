@@ -97,7 +97,7 @@ public class CommentService {
         comment.setUser(user);
         comment.setPlayer(player);
         comment.setContent(dto.getContent());
-        comment.setStatus(ModerationStatus.PENDING);
+        comment.setStatus(ModerationStatus.PENDING); // Los comentarios requieren moderación
 
         comment = commentRepository.save(comment);
         return toDto(comment);

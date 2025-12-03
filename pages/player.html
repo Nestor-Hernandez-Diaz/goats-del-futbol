@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" id="page-description" content="Cargando información del jugador..." />
+  <meta name="keywords" id="page-keywords" content="GOATs del Fútbol, jugador, biografía" />
+  <meta name="author" content="Nestor Hernández Díaz" />
+  <title id="page-title">Cargando... | GOATs del Fútbol</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <!-- Font Awesome para iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/x-icon" />
+  <!-- jQuery 3.7.1 -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="../js/main.js" defer></script>
+  <script src="../js/auth.js?v=2.0" defer></script>
+  <script src="../js/player-loader.js?v=2.0" defer></script>
+  <script src="../js/player-stats.js" defer></script>
+  <script src="../js/comments.js?v=2.4" defer></script>
+  <script src="../js/player-subscription.js?v=1.2" defer></script>
+</head>
+<body class="pagina-jugador" id="player-page">
+  <!-- Barra de navegación principal -->
+  <nav class="navegacion-principal">
+    <div class="contenedor-navegacion">
+      <div class="logotipo">
+        <a href="../index.html">GOATs del Fútbol</a>
+      </div>
+      <input type="checkbox" id="burger-toggle" class="toggle-hamburguesa">
+      <label for="burger-toggle" class="menu-hamburguesa">
+        <div class="linea1"></div>
+        <div class="linea2"></div>
+        <div class="linea3"></div>
+      </label>
+      <ul class="enlaces-navegacion">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="player.html?id=1">Messi</a></li>
+        <li><a href="player.html?id=2">Cristiano</a></li>
+        <li><a href="player.html?id=3">Neymar</a></li>
+        <!-- Enlace admin (solo visible para ADMIN) -->
+        <li id="admin-nav-link" style="display:none;">
+          <a href="admin-players.html">⚙️ Admin</a>
+        </li>
+      </ul>
+      <!-- Widget de autenticación -->
+      <div id="auth-widget"></div>
+    </div>
+  </nav>
+
+  <!-- Skeleton Loader (visible durante carga) -->
+  <div id="skeleton-loader" class="skeleton-loader" style="display:block;">
+    <!-- Skeleton loader se renderizará con CSS existente -->
+  </div>
+
+  <!-- Hero Section dinámico (IDÉNTICO a messi.html pero con IDs dinámicos) -->
+  <header class="seccion-hero-jugador" id="player-hero" style="display:none;">
+    <div class="contenido-hero-jugador">
+      <div class="texto-hero-jugador">
+        <h1 class="titulo-hero-jugador" id="player-name">Cargando...</h1>
+        <p class="subtitulo-hero-jugador">
+          <span id="player-nickname-display">"..."</span> | 
+          <span id="player-subtitle">Leyenda del fútbol</span>
+        </p>
+        <div class="info-hero-jugador" id="hero-info">
+          <!-- Se llenará dinámicamente con: Nacimiento, Nacionalidad, Posición, Clubes -->
+        </div>
+        <div class="cita-hero-jugador" id="player-quote-container" style="display:none;">
+          <blockquote id="player-quote"></blockquote>
+        </div>
+      </div>
+      <div class="imagen-hero-jugador" id="player-hero-image">
+        <!-- Imagen se cargará dinámicamente -->
+      </div>
+    </div>
+    <div class="superposicion-hero"></div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="contenido-jugador" id="main-content" style="display:none;">
+    
+    <!-- Sección de Biografía (IDÉNTICA a messi.html) -->
+    <section class="seccion-biografia">
+      <div class="contenedor">
+        <h2 class="titulo-seccion">Biografía</h2>
+        <div class="contenido-biografia">
+          <div class="texto-biografia" id="player-biography">
+            <!-- La biografía se cargará dinámicamente desde BD -->
+          </div>
+          <div class="barra-lateral-biografia">
+            <div class="tarjeta-perfil-jugador">
+              <div class="imagen-perfil" id="player-profile-image">
+                <!-- Imagen de perfil se cargará dinámicamente -->
+              </div>
+              <div class="detalles-perfil">
+                <h3>Perfil del Jugador</h3>
+                <ul class="estadisticas-perfil" id="player-profile-stats">
+                  <!-- Se llenará dinámicamente -->
+                </ul>
+              </div>
+            </div>
+            <div class="destacados-carrera" id="career-highlights">
+              <h3>Momentos Clave</h3>
+              <ul class="lista-destacados" id="highlights-list">
+                <!-- Se llenará dinámicamente -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Estilo de Juego (NUEVA - IDÉNTICA a messi.html) -->
+    <section class="seccion-estilo-juego" id="playing-style-section">
+      <div class="contenedor">
+        <h2 class="titulo-seccion">Estilo de Juego</h2>
+        <div class="contenido-estilo">
+          <div class="descripcion-estilo" id="playing-style-description">
+            <!-- Descripción del estilo se cargará dinámicamente -->
+          </div>
+          <div class="atributos-estilo" id="player-attributes">
+            <!-- Atributos (Regate, Visión, etc.) se cargarán dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Logros (NUEVA - IDÉNTICA a messi.html) -->
+    <section class="seccion-logros" id="achievements-section">
+      <div class="contenedor">
+        <h2 class="titulo-seccion">Palmarés y Logros</h2>
+        <div class="contenido-logros">
+          <div class="logros-clubes" id="club-achievements">
+            <h3>Títulos de Club</h3>
+            <!-- Logros de clubes se cargarán dinámicamente -->
+          </div>
+          <div class="logros-nacionales" id="national-achievements">
+            <h3>Títulos con Selección</h3>
+            <!-- Logros nacionales se cargarán dinámicamente -->
+          </div>
+          <div class="logros-individuales" id="individual-achievements">
+            <h3>Premios Individuales</h3>
+            <ul class="lista-logros" id="individual-awards-list">
+              <!-- Premios individuales se cargarán dinámicamente -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Estadísticas (MEJORADA - IDÉNTICA a messi.html) -->
+    <section class="seccion-estadisticas" id="stats-section">
+      <div class="contenedor">
+        <h2 class="titulo-seccion">Estadísticas de Carrera</h2>
+        <div class="contenido-estadisticas">
+          <div class="resumen-estadisticas" id="stats-summary">
+            <!-- Tarjetas de estadísticas se cargarán dinámicamente -->
+          </div>
+          <div class="detalles-estadisticas" id="stats-details">
+            <h3>Rendimiento por Temporada</h3>
+            <table class="tabla-estadisticas" id="stats-table">
+              <thead>
+                <tr>
+                  <th>Temporada</th>
+                  <th>Club</th>
+                  <th>Partidos</th>
+                  <th>Goles</th>
+                  <th>Asistencias</th>
+                </tr>
+              </thead>
+              <tbody id="stats-table-body">
+                <!-- Filas de estadísticas se cargarán dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Galería (NUEVA - IDÉNTICA a messi.html) -->
+    <section class="seccion-galeria-jugador" id="gallery-section">
+      <div class="contenedor">
+        <h2 class="titulo-seccion">Galería de Imágenes</h2>
+        <div class="cuadricula-galeria" id="gallery-grid">
+          <!-- Imágenes se cargarán dinámicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Legado (NUEVA - IDÉNTICA a messi.html) -->
+    <section class="seccion-legado" id="legacy-section">
+      <div class="contenedor">
+        <h2 class="titulo-seccion">Legado e Impacto</h2>
+        <div class="contenido-legado">
+          <div class="texto-legado" id="legacy-text">
+            <!-- Texto de legado se cargará dinámicamente -->
+          </div>
+          <div class="citas-legado" id="legacy-quotes">
+            <h3>Lo que dicen de él</h3>
+            <div id="quotes-container">
+              <!-- Citas se cargarán dinámicamente -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Videos Destacados (NUEVA - IDÉNTICA a messi.html) -->
+    <section class="seccion-videos" id="videos-section">
+      <div class="contenedor">
+        <h2 class="titulo-seccion">Videos Destacados</h2>
+        <p class="descripcion-seccion" id="videos-description">Algunos de los momentos más memorables</p>
+        <div class="cuadricula-videos" id="videos-grid">
+          <!-- Videos se cargarán dinámicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Comentarios (IDÉNTICA a messi.html) -->
+    <section class="seccion-comentarios">
+      <div class="contenedor">
+        <h2 class="titulo-seccion">Comentarios</h2>
+        <p class="descripcion-seccion" id="comments-description">Comparte tu opinión</p>
+        <div class="comentarios-container">
+          <!-- Formulario de comentario (o prompt de login) -->
+          <div id="comment-form-container"></div>
+          
+          <!-- Lista de comentarios -->
+          <div class="comentarios-lista" id="comments-list">
+            <div class="no-comments">
+              <i class="fas fa-spinner fa-spin"></i>
+              <p>Cargando comentarios...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Error 404 (oculto por defecto) -->
+  <div id="error-404" class="error-404-container" style="display:none;">
+    <h1>404</h1>
+    <h2>Jugador no encontrado</h2>
+    <p>Lo sentimos, el jugador que buscas no existe o ha sido eliminado.</p>
+    <a href="../index.html" class="btn-home">
+      <i class="fas fa-home"></i> Volver al inicio
+    </a>
+  </div>
+
+  <!-- Footer (IDÉNTICO a messi.html) -->
+  <footer class="pie-principal">
+    <div class="contenedor">
+      <div class="contenido-pie">
+        <div class="logotipo-pie">
+          <h3>GOATs del Fútbol</h3>
+          <p>Explorando el legado de las leyendas</p>
+        </div>
+        <div class="enlaces-pie">
+          <h4>Enlaces Rápidos</h4>
+          <ul>
+            <li><a href="../index.html">Inicio</a></li>
+            <li><a href="player.html?id=1">Messi</a></li>
+            <li><a href="player.html?id=2">Cristiano</a></li>
+            <li><a href="player.html?id=3">Neymar</a></li>
+            <li><a href="../index.html#comparacion">Comparativa</a></li>
+          </ul>
+        </div>
+        <div class="recursos-pie">
+          <h4>Recursos</h4>
+          <ul>
+            <li><a href="#">Fuentes de Información</a></li>
+            <li><a href="#">Galería Completa</a></li>
+            <li><a href="#">Estadísticas Detalladas</a></li>
+            <li><a href="#">Momentos Históricos</a></li>
+          </ul>
+        </div>
+        <div class="newsletter-pie">
+          <h4>Mantente Informado</h4>
+          <p>Suscríbete para recibir actualizaciones sobre el mundo del fútbol</p>
+          <form class="formulario-newsletter">
+            <input type="email" placeholder="Tu correo electrónico" required />
+            <button type="submit">Suscribirse</button>
+          </form>
+        </div>
+      </div>
+      <div class="pie-inferior">
+        <p>&copy; 2025 GOATs del Fútbol. Proyecto académico para el curso de LP2.</p>
+        <p>Todas las marcas y logotipos pertenecen a sus respectivos dueños.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

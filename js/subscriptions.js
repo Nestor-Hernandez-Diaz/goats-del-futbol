@@ -10,17 +10,17 @@ const API_URL = 'http://localhost:8080/api';
 const PLAYER_DATA = {
   1: {
     name: 'Lionel Messi',
-    image: '../assets/images/messi-hero.jpg',
+    image: '../assets/images/messi-hero.png',
     page: 'messi.html'
   },
   2: {
     name: 'Cristiano Ronaldo',
-    image: '../assets/images/ronaldo-hero.jpg',
+    image: '../assets/images/ronaldo-hero.png',
     page: 'ronaldo.html'
   },
   3: {
     name: 'Neymar Jr',
-    image: '../assets/images/neymar-hero.jpg',
+    image: '../assets/images/neymar-hero.png',
     page: 'neymar.html'
   }
 };
@@ -29,30 +29,52 @@ const PLAYER_DATA = {
  * Cargar suscripciones del usuario
  */
 async function loadSubscriptions() {
+  console.log('📡 Cargando suscripciones desde API...');
+  
   const loadingSpinner = document.getElementById('loadingSpinner');
   const subscriptionsGrid = document.getElementById('subscriptionsGrid');
   const emptyState = document.getElementById('emptyState');
+  
+  if (!subscriptionsGrid) {
+    console.error('❌ No se encontró elemento subscriptionsGrid');
+    return;
+  }
   
   loadingSpinner.style.display = 'flex';
   subscriptionsGrid.innerHTML = '';
   emptyState.style.display = 'none';
 
   try {
-    const user = window.AuthModule.getCurrentUser();
-    if (!user) {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      console.log('❌ No hay token en loadSubscriptions');
       window.location.href = 'login.html';
       return;
     }
 
-    const response = await window.AuthModule.fetchWithAuth(
-      `${API_URL}/subscriptions/user/${user.id}`
-    );
+    // Obtener información del usuario desde el token
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const userId = payload.userId;
+    
+    console.log(`📨 Solicitando suscripciones ACTIVAS del usuario ${userId}...`);
+
+    const response = await fetch(`${API_URL}/subscriptions/user/${userId}?active=true`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
 
     if (!response.ok) {
+      console.error(`❌ Error en respuesta: ${response.status}`);
       throw new Error('Error al cargar suscripciones');
     }
 
-    const subscriptions = await response.json();
+    const subscriptionsData = await response.json();
+    // El endpoint devuelve un objeto Page con content array
+    const subscriptions = subscriptionsData.content || [];
+    
+    console.log(`✅ Suscripciones cargadas: ${subscriptions.length}`);
     
     loadingSpinner.style.display = 'none';
 
@@ -62,8 +84,13 @@ async function loadSubscriptions() {
       return;
     }
 
-    // Contar notificaciones habilitadas
+    // Contar notificaciones habilitadas (jugadores con notif activada)
     const notificationsEnabled = subscriptions.filter(s => s.notificationsEnabled).length;
+    
+    console.log(`📢 Estadísticas:`);
+    console.log(`   • Total suscripciones activas: ${subscriptions.length}`);
+    console.log(`   • Jugadores con notificaciones ON: ${notificationsEnabled}`);
+    
     updateStats(subscriptions.length, notificationsEnabled);
 
     // Renderizar suscripciones
@@ -94,7 +121,8 @@ function createSubscriptionCard(subscription) {
     page: '#'
   };
 
-  const subscriptionDate = new Date(subscription.createdAt).toLocaleDateString('es-ES', {
+  // Usar subscribedAt en lugar de createdAt
+  const subscriptionDate = new Date(subscription.subscribedAt).toLocaleDateString('es-ES', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -108,11 +136,20 @@ function createSubscriptionCard(subscription) {
       Desde ${subscriptionDate}
     </span>
     <div class="subscription-actions">
-      <button class="btn-unsubscribe" onclick="unsubscribe(${subscription.playerId}, ${subscription.id})">
+      <button class="btn-unsubscribe" data-player-id="${subscription.playerId}" data-subscription-id="${subscription.id}">
         <i class="fas fa-times"></i> Dejar de seguir
       </button>
     </div>
   `;
+
+  // Event listener para el botón de desuscribirse
+  const unsubscribeBtn = card.querySelector('.btn-unsubscribe');
+  unsubscribeBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Evitar que se active el click de la tarjeta
+    const playerId = parseInt(e.currentTarget.dataset.playerId);
+    const subscriptionId = parseInt(e.currentTarget.dataset.subscriptionId);
+    handleUnsubscribe(playerId, subscriptionId);
+  });
 
   // Click en la tarjeta para ir a la página del jugador
   card.style.cursor = 'pointer';
@@ -128,44 +165,50 @@ function createSubscriptionCard(subscription) {
 /**
  * Desuscribirse de un jugador
  */
-async function unsubscribe(playerId, subscriptionId) {
+async function handleUnsubscribe(playerId, subscriptionId) {
+  console.log(`🗑️ Intentando desuscribirse del jugador ${playerId}, subscription ${subscriptionId}`);
+  
   if (!confirm('¿Estás seguro que deseas dejar de seguir a este jugador?')) {
+    console.log('❌ Usuario canceló la desuscripción');
     return;
   }
 
   try {
-    const response = await window.AuthModule.fetchWithAuth(
-      `${API_URL}/subscriptions/player/${playerId}`,
-      { method: 'DELETE' }
-    );
+    const token = localStorage.getItem('jwtToken');
+    
+    console.log(`📡 DELETE ${API_URL}/subscriptions/player/${playerId}`);
+    
+    const response = await fetch(`${API_URL}/subscriptions/player/${playerId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    console.log(`📨 Respuesta del servidor: ${response.status}`);
 
     if (response.ok) {
-      // Remover tarjeta de la UI
-      const card = document.querySelector(`[data-id="${subscriptionId}"]`);
-      if (card) {
-        card.style.animation = 'slideOutRight 0.3s ease-out';
-        setTimeout(() => {
-          card.remove();
-          
-          // Verificar si quedaron suscripciones
-          const remainingCards = document.querySelectorAll('.subscription-card');
-          if (remainingCards.length === 0) {
-            document.getElementById('emptyState').style.display = 'block';
-            updateStats(0, 0);
-          } else {
-            // Actualizar estadísticas
-            const total = remainingCards.length;
-            updateStats(total, total); // Simplificado, recalcular si es necesario
-          }
-        }, 300);
-      }
-
+      console.log('✅ Desuscripción exitosa');
       showToast('Dejaste de seguir al jugador', 'success');
+      
+      // Disparar evento para sincronizar otras páginas
+      window.dispatchEvent(new CustomEvent('subscriptionChanged', { 
+        detail: { playerId, action: 'unsubscribe' } 
+      }));
+      
+      // Recargar la lista completa desde el servidor
+      setTimeout(() => {
+        console.log('🔄 Recargando lista de suscripciones...');
+        loadSubscriptions();
+      }, 300);
     } else {
+      const errorText = await response.text();
+      console.error(`❌ Error en desuscripción: ${errorText}`);
       throw new Error('Error al cancelar suscripción');
     }
   } catch (error) {
-    console.error('Error unsubscribing:', error);
+    console.error('❌ Error unsubscribing:', error);
     showToast('Error al cancelar suscripción', 'error');
   }
 }
@@ -213,18 +256,20 @@ function showToast(message, type = 'info') {
  * Inicializar página de suscripciones
  */
 function initSubscriptions() {
+  console.log('🎯 Inicializando página de suscripciones...');
+  
   // Verificar autenticación
-  if (!window.AuthModule.isAuthenticated()) {
+  const token = localStorage.getItem('jwtToken');
+  if (!token) {
+    console.log('❌ No hay token, redirigiendo a login');
     window.location.href = 'login.html';
     return;
   }
 
+  console.log('✅ Usuario autenticado, cargando suscripciones...');
   // Cargar suscripciones
   loadSubscriptions();
 }
-
-// Exponer funciones globales
-window.unsubscribe = unsubscribe;
 
 // Inicializar cuando el DOM esté listo
 if (document.readyState === 'loading') {
@@ -232,3 +277,13 @@ if (document.readyState === 'loading') {
 } else {
   initSubscriptions();
 }
+
+// Escuchar cambios en suscripciones desde otras páginas
+window.addEventListener('subscriptionChanged', () => {
+  console.log('🔔 Evento subscriptionChanged recibido');
+  // Recargar suscripciones si estamos en la página de suscripciones
+  if (window.location.pathname.includes('subscriptions.html')) {
+    console.log('🔄 Recargando suscripciones por evento...');
+    loadSubscriptions();
+  }
+});

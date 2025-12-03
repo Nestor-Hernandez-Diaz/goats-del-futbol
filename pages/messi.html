@@ -15,10 +15,10 @@
   <!-- jQuery 3.7.1 -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="../js/main.js" defer></script>
-  <script src="../js/auth.js" defer></script>
+  <script src="../js/auth.js?v=2.0" defer></script>
   <script src="../js/player-stats.js" defer></script>
-  <script src="../js/comments.js" defer></script>
-  <script src="../js/player-subscription.js" defer></script>
+  <script src="../js/comments.js?v=2.4" defer></script>
+  <script src="../js/player-subscription.js?v=1.2" defer></script>
 </head>
 <body class="pagina-jugador pagina-messi">
   <!-- Barra de navegación principal -->
@@ -35,10 +35,16 @@
       </label>
       <ul class="enlaces-navegacion">
         <li><a href="../index.html">Inicio</a></li>
-        <li><a href="messi.html" class="activo">Messi</a></li>
-        <li><a href="ronaldo.html">Cristiano</a></li>
-        <li><a href="neymar.html">Neymar</a></li>
+        <li><a href="player.html?id=1" class="activo">Messi</a></li>
+        <li><a href="player.html?id=2">Cristiano</a></li>
+        <li><a href="player.html?id=3">Neymar</a></li>
+        <!-- Enlace admin (solo visible para ADMIN) -->
+        <li id="admin-nav-link" style="display:none;">
+          <a href="admin-players.html">⚙️ Admin</a>
+        </li>
       </ul>
+      <!-- Widget de autenticación -->
+      <div id="auth-widget"></div>
     </div>
   </nav>
 

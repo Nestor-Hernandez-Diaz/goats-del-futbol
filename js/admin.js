@@ -1,6 +1,7 @@
 /**
  * Admin Dashboard - Moderación de Comentarios
  * GOATs del Fútbol
+ * Version: 1.4 - 2025 (Logs de moderación completos)
  */
 
 // Configuración
@@ -10,6 +11,8 @@ let currentCommentId = null;
 
 // Verificar autenticación al cargar
 document.addEventListener('DOMContentLoaded', async () => {
+  console.log('🚀 Iniciando Admin Panel v1.4...');
+  
   const isAuthenticated = await checkAuthentication();
   if (isAuthenticated) {
     await loadStatistics();
@@ -111,31 +114,48 @@ function disableDashboard() {
  * Cargar estadísticas generales
  */
 async function loadStatistics() {
+  console.log('📊 Cargando estadísticas...');
   const token = localStorage.getItem('jwtToken');
-  if (!token) return;
+  if (!token) {
+    console.error('❌ No hay token JWT');
+    return;
+  }
 
   try {
+    console.log('📡 GET /comments?size=1000');
     const response = await fetch(`${API_BASE_URL}/comments?size=1000`, {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
     });
     
+    console.log(`📨 Respuesta: ${response.status} ${response.statusText}`);
+    
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Error en respuesta:', errorText);
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
     
     const data = await response.json();
+    console.log('✅ Datos recibidos:', data);
     
     const comments = data.content || [];
+    console.log(`📝 Total comentarios en BD: ${comments.length}`);
+    
     const pending = comments.filter(c => c.status === 'PENDING').length;
     const approved = comments.filter(c => c.status === 'APPROVED').length;
     const rejected = comments.filter(c => c.status === 'REJECTED').length;
+    
+    console.log(`📊 Estadísticas: Pending=${pending}, Approved=${approved}, Rejected=${rejected}`);
     
     document.getElementById('total-comments').textContent = comments.length;
     document.getElementById('pending-comments').textContent = pending;
     document.getElementById('approved-comments').textContent = approved;
     document.getElementById('rejected-comments').textContent = rejected;
   } catch (error) {
-    console.error('Error cargando estadísticas:', error);
+    console.error('❌ Error cargando estadísticas:', error);
     
     // Si es 403, el token es inválido o expiró
     if (error.message.includes('403')) {
@@ -159,14 +179,26 @@ async function loadStatistics() {
  * Cargar comentarios con filtro
  */
 async function loadComments(status = 'all') {
+  console.log(`🔍 Cargando comentarios con filtro: ${status}`);
   const token = localStorage.getItem('jwtToken');
-  if (!token) return;
+  if (!token) {
+    console.error('❌ No hay token JWT');
+    return;
+  }
 
   showLoading();
   hideMessages();
 
   try {
+    // Construir URL con parámetros
     let url = `${API_BASE_URL}/comments?size=1000`;
+    
+    // Si el status no es 'all', agregarlo como parámetro
+    if (status !== 'all') {
+      url += `&status=${status}`;
+    }
+    
+    console.log('📡 Solicitando:', url);
     
     const response = await fetch(url, {
       headers: {
@@ -175,23 +207,27 @@ async function loadComments(status = 'all') {
       }
     });
 
+    console.log(`📨 Respuesta: ${response.status} ${response.statusText}`);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Error en respuesta:', errorText);
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log('✅ Datos recibidos:', data);
+    
     let comments = data.content || [];
-
-    // Filtrar por estado si no es 'all'
-    if (status !== 'all') {
-      comments = comments.filter(c => c.status === status);
-    }
+    console.log(`📝 ${comments.length} comentarios cargados con filtro "${status}"`);
 
     hideLoading();
 
     if (comments.length === 0) {
+      console.log('ℹ️ No hay comentarios, mostrando estado vacío');
       showEmptyState();
     } else {
+      console.log('✅ Renderizando comentarios...');
       renderComments(comments);
     }
   } catch (error) {
@@ -216,19 +252,71 @@ async function loadComments(status = 'all') {
  * Renderizar lista de comentarios
  */
 function renderComments(comments) {
+  console.log(`🎨 Renderizando ${comments.length} comentarios...`);
+  
   const container = document.getElementById('comments-list');
+  
+  if (!container) {
+    console.error('❌ Elemento #comments-list no encontrado en el DOM');
+    return;
+  }
+  
   container.innerHTML = '';
   
-  comments.forEach(comment => {
+  comments.forEach((comment, index) => {
+    console.log(`  📄 Comentario ${index + 1}:`, {
+      id: comment.id,
+      status: comment.status,
+      username: comment.username,
+      player: comment.playerName,
+      content: comment.content?.substring(0, 50) + '...'
+    });
+    
     const card = createCommentCard(comment);
     container.appendChild(card);
+    
+    // Verificar que se agregó al DOM
+    const cardInDOM = document.querySelector(`[data-comment-id="${comment.id}"]`);
+    if (cardInDOM) {
+      console.log(`  ✅ Comentario ${comment.id} insertado en DOM con clases:`, cardInDOM.className);
+    } else {
+      console.error(`  ❌ Comentario ${comment.id} NO se insertó en el DOM`);
+    }
   });
+  
+  console.log(`✅ ${comments.length} comentarios renderizados exitosamente en el DOM`);
+  
+  // 🔍 DIAGNÓSTICO CSS
+  const computedStyles = window.getComputedStyle(container);
+  console.log('🎨 Estilos aplicados a #comments-list:', {
+    display: computedStyles.display,
+    gap: computedStyles.gap,
+    visibility: computedStyles.visibility,
+    opacity: computedStyles.opacity,
+    height: container.offsetHeight + 'px',
+    children: container.children.length
+  });
+  
+  if (container.children.length > 0) {
+    const firstCard = container.children[0];
+    const cardStyles = window.getComputedStyle(firstCard);
+    console.log('🎨 Estilos de primera tarjeta:', {
+      display: cardStyles.display,
+      visibility: cardStyles.visibility,
+      opacity: cardStyles.opacity,
+      height: firstCard.offsetHeight + 'px',
+      backgroundColor: cardStyles.backgroundColor,
+      border: cardStyles.border
+    });
+  }
 }
 
 /**
  * Crear tarjeta de comentario
  */
 function createCommentCard(comment) {
+  console.log(`  🏗️ Creando tarjeta para comentario ID ${comment.id}`);
+  
   const card = document.createElement('div');
   card.className = `comment-card ${comment.status.toLowerCase()}`;
   card.setAttribute('data-comment-id', comment.id);
@@ -279,6 +367,8 @@ function createCommentCard(comment) {
       </button>
     </div>
   `;
+  
+  console.log(`  ✅ Tarjeta creada para comentario ID ${comment.id}`);
 
   return card;
 }
@@ -287,12 +377,22 @@ function createCommentCard(comment) {
  * Aprobar comentario
  */
 async function approveComment(commentId) {
+  console.log(`✅ Iniciando aprobación de comentario ID ${commentId}...`);
+  
   const token = localStorage.getItem('jwtToken');
-  if (!token) return;
+  if (!token) {
+    console.error('❌ No hay token JWT');
+    return;
+  }
 
-  if (!confirm('¿Estás seguro de aprobar este comentario?')) return;
+  if (!confirm('¿Estás seguro de aprobar este comentario?')) {
+    console.log('⚠️ Aprobación cancelada por el usuario');
+    return;
+  }
 
   try {
+    console.log(`📡 POST /comments/${commentId}/approve`);
+    
     const response = await fetch(`${API_BASE_URL}/comments/${commentId}/approve`, {
       method: 'POST',
       headers: {
@@ -301,15 +401,24 @@ async function approveComment(commentId) {
       }
     });
 
+    console.log(`📨 Respuesta: ${response.status} ${response.statusText}`);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Error en respuesta:', errorText);
       throw new Error('Error al aprobar comentario');
     }
 
+    const data = await response.json();
+    console.log('✅ Comentario aprobado:', data);
+    
     showSuccess('Comentario aprobado exitosamente');
+    console.log('🔄 Recargando estadísticas y comentarios...');
     await loadStatistics();
     await loadComments(currentFilter);
+    console.log('✅ Aprobación completada');
   } catch (error) {
-    console.error('Error:', error);
+    console.error('❌ Error al aprobar:', error);
     showError('Error al aprobar comentario. Por favor, intenta de nuevo.');
   }
 }
@@ -327,17 +436,27 @@ function openRejectModal(commentId) {
  * Rechazar comentario
  */
 async function rejectComment() {
+  console.log(`🚫 Iniciando rechazo de comentario ID ${currentCommentId}...`);
+  
   const token = localStorage.getItem('jwtToken');
-  if (!token || !currentCommentId) return;
+  if (!token || !currentCommentId) {
+    console.error('❌ No hay token o ID de comentario');
+    return;
+  }
 
   const reason = document.getElementById('reject-reason').value.trim();
   
   if (!reason) {
+    console.warn('⚠️ Motivo de rechazo vacío');
     alert('Por favor, indica el motivo del rechazo');
     return;
   }
 
+  console.log(`📝 Motivo: "${reason}"`);
+
   try {
+    console.log(`📡 POST /comments/${currentCommentId}/reject`);
+    
     const response = await fetch(`${API_BASE_URL}/comments/${currentCommentId}/reject`, {
       method: 'POST',
       headers: {
@@ -347,14 +466,23 @@ async function rejectComment() {
       body: JSON.stringify({ reason })
     });
 
+    console.log(`📨 Respuesta: ${response.status} ${response.statusText}`);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Error en respuesta:', errorText);
       throw new Error('Error al rechazar comentario');
     }
 
+    const data = await response.json();
+    console.log('✅ Comentario rechazado:', data);
+
     closeRejectModal();
     showSuccess('Comentario rechazado exitosamente');
+    console.log('🔄 Recargando estadísticas y comentarios...');
     await loadStatistics();
     await loadComments(currentFilter);
+    console.log('✅ Rechazo completado');
   } catch (error) {
     console.error('Error:', error);
     showError('Error al rechazar comentario. Por favor, intenta de nuevo.');
@@ -373,12 +501,22 @@ function closeRejectModal() {
  * Eliminar comentario
  */
 async function deleteComment(commentId) {
+  console.log(`🗑️ Iniciando eliminación de comentario ID ${commentId}...`);
+  
   const token = localStorage.getItem('jwtToken');
-  if (!token) return;
+  if (!token) {
+    console.error('❌ No hay token JWT');
+    return;
+  }
 
-  if (!confirm('¿Estás seguro de eliminar este comentario? Esta acción no se puede deshacer.')) return;
+  if (!confirm('¿Estás seguro de eliminar este comentario? Esta acción no se puede deshacer.')) {
+    console.log('⚠️ Eliminación cancelada por el usuario');
+    return;
+  }
 
   try {
+    console.log(`📡 DELETE /comments/${commentId}`);
+    
     const response = await fetch(`${API_BASE_URL}/comments/${commentId}`, {
       method: 'DELETE',
       headers: {
@@ -386,15 +524,23 @@ async function deleteComment(commentId) {
       }
     });
 
+    console.log(`📨 Respuesta: ${response.status} ${response.statusText}`);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Error en respuesta:', errorText);
       throw new Error('Error al eliminar comentario');
     }
 
+    console.log('✅ Comentario eliminado exitosamente');
+    
     showSuccess('Comentario eliminado exitosamente');
+    console.log('🔄 Recargando estadísticas y comentarios...');
     await loadStatistics();
     await loadComments(currentFilter);
+    console.log('✅ Eliminación completada');
   } catch (error) {
-    console.error('Error:', error);
+    console.error('❌ Error al eliminar:', error);
     showError('Error al eliminar comentario. Por favor, intenta de nuevo.');
   }
 }

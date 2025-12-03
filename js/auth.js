@@ -20,17 +20,30 @@ if (typeof window.authSystemLoaded === 'undefined') {
     }
 
     /**
+     * Detecta si estamos en el subdirectorio pages/
+     */
+    function isInPagesDirectory() {
+        const path = window.location.pathname;
+        return path.includes('/pages/');
+    }
+
+    /**
      * Obtiene la ruta correcta para login.html según ubicación
      */
     function getLoginUrl() {
-        return isRootPage() ? 'pages/login.html' : '../pages/login.html';
+        return isRootPage() ? 'pages/login.html' : 'login.html';
     }
 
     /**
      * Obtiene la ruta correcta para dashboard según ubicación
      */
     function getDashboardUrl() {
-        return isRootPage() ? 'pages/admin.html' : 'admin.html';
+        if (isRootPage()) {
+            return 'pages/admin.html';
+        } else if (isInPagesDirectory()) {
+            return 'admin.html';
+        }
+        return 'pages/admin.html';
     }
 
     /**
@@ -123,6 +136,16 @@ if (typeof window.authSystemLoaded === 'undefined') {
             if (usernameSpan) {
                 usernameSpan.textContent = currentUser.username;
             }
+
+            // Mostrar enlace de Dashboard Admin si es ADMIN
+            const isAdmin = currentUser.roles.includes('ROLE_ADMIN');
+            const adminDashboardLink = document.getElementById('adminDashboardLink');
+            const adminDivider = document.getElementById('adminDivider');
+            if (adminDashboardLink && isAdmin) {
+                adminDashboardLink.style.display = 'block';
+                if (adminDivider) adminDivider.style.display = 'block';
+            }
+            
             return;
         }
 

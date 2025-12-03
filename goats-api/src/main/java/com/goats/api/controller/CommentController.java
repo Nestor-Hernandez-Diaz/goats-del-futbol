@@ -6,6 +6,8 @@ import com.goats.api.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,8 @@ import java.util.Map;
 @RequestMapping("/api/comments")
 @Tag(name = "Comments", description = "Endpoints para comentarios con moderación")
 public class CommentController {
+
+    private static final Logger log = LoggerFactory.getLogger(CommentController.class);
 
     @Autowired
     private CommentService commentService;
@@ -77,14 +81,34 @@ public class CommentController {
     }
 
     @PostMapping
-    @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()") // TEMPORAL: Removido para debugging
     @Operation(summary = "Crear comentario",
                description = "Crea un nuevo comentario (requiere autenticación, estado PENDING)")
     public ResponseEntity<CommentDto> create(@Valid @RequestBody CommentDto dto) {
+        log.info("=== POST /api/comments - Intento de crear comentario ===");
+        
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (auth == null) {
+            log.error("Authentication es NULL");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        
+        log.info("Authentication presente: {}", auth.getClass().getName());
+        log.info("Is Authenticated: {}", auth.isAuthenticated());
+        log.info("Username: {}", auth.getName());
+        log.info("Authorities: {}", auth.getAuthorities());
+        
+        // Si es anonymous, rechazar
+        if (auth instanceof org.springframework.security.authentication.AnonymousAuthenticationToken) {
+            log.warn("Usuario anónimo intentando crear comentario");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        
         String username = auth.getName();
         
         CommentDto created = commentService.create(dto, username);
+        log.info("Comentario creado exitosamente para user: {}", username);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 

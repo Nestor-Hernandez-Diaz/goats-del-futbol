@@ -35,12 +35,18 @@ async function loadNotifications(page = 0) {
     
     // Aplicar filtro
     if (currentFilter === 'unread') {
-      url = `${API_URL}/notifications/unread?page=${page}&size=10`;
+      url = `${API_URL}/notifications?unreadOnly=true&page=${page}&size=10`;
     } else if (currentFilter !== 'all') {
       url = `${API_URL}/notifications/type/${currentFilter}?page=${page}&size=10`;
     }
 
-    const response = await window.AuthModule.fetchWithAuth(url);
+    const token = localStorage.getItem('jwtToken');
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
 
     if (!response.ok) {
       throw new Error('Error al cargar notificaciones');
@@ -124,9 +130,16 @@ function createNotificationCard(notification) {
  */
 async function markAsRead(notificationId) {
   try {
-    const response = await window.AuthModule.fetchWithAuth(
+    const token = localStorage.getItem('jwtToken');
+    const response = await fetch(
       `${API_URL}/notifications/${notificationId}/read`,
-      { method: 'PATCH' }
+      {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
     );
 
     if (response.ok) {
@@ -138,8 +151,7 @@ async function markAsRead(notificationId) {
         if (actions) actions.remove();
       }
 
-      // Actualizar badge
-      await window.AuthModule.updateNotificationBadge();
+      console.log('✅ Notificación marcada como leída');
     }
   } catch (error) {
     console.error('Error marking notification as read:', error);
@@ -151,17 +163,21 @@ async function markAsRead(notificationId) {
  */
 async function markAllAsRead() {
   try {
-    const response = await window.AuthModule.fetchWithAuth(
+    const token = localStorage.getItem('jwtToken');
+    const response = await fetch(
       `${API_URL}/notifications/read-all`,
-      { method: 'PATCH' }
+      {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
     );
 
     if (response.ok) {
       // Recargar notificaciones
       await loadNotifications(currentPage);
-      
-      // Actualizar badge
-      await window.AuthModule.updateNotificationBadge();
       
       showToast('Todas las notificaciones marcadas como leídas', 'success');
     }
@@ -257,7 +273,8 @@ function showToast(message, type = 'info') {
  */
 function initNotifications() {
   // Verificar autenticación
-  if (!window.AuthModule.isAuthenticated()) {
+  const token = localStorage.getItem('jwtToken');
+  if (!token) {
     window.location.href = 'login.html';
     return;
   }

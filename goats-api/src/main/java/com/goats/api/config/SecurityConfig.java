@@ -60,7 +60,13 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.GET, "/api/stats/**").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/achievements/**").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/subscriptions/*/count").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/subscriptions/player/*/count").permitAll()
+        // POST de comentarios - permitir (la autenticación se valida en el controller)
+        .requestMatchers(HttpMethod.POST, "/api/comments").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/comments/*/replies").permitAll()
+        // Subscriptions y Notifications - permitir con autenticación en controller
+        .requestMatchers("/api/subscriptions/**").permitAll()
+        .requestMatchers("/api/notifications/**").permitAll()
         // Todo lo demás requiere autenticación
         .anyRequest().authenticated()
       )
@@ -76,9 +82,9 @@ public class SecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration c = new CorsConfiguration();
-    c.setAllowedOrigins(List.of("http://localhost", "http://127.0.0.1"));
+    c.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*", "http://localhost", "http://127.0.0.1"));
     c.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    c.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+    c.setAllowedHeaders(List.of("*")); // Permitir todos los headers
     c.setExposedHeaders(List.of("Authorization"));
     c.setAllowCredentials(true);
     c.setMaxAge(3600L);

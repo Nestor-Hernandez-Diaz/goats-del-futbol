@@ -25,6 +25,43 @@ public class Player {
   @Column(columnDefinition = "TEXT")
   private String biography;
 
+  // Nuevos campos JSON para player.html extendido
+  @Column(name = "hero_info", columnDefinition = "JSON")
+  private String heroInfo;
+
+  @Column(name = "profile_image", length = 255)
+  private String profileImage;
+
+  @Column(name = "profile_stats", columnDefinition = "JSON")
+  private String profileStats;
+
+  @Column(name = "career_highlights", columnDefinition = "JSON")
+  private String careerHighlights;
+
+  @Column(name = "playing_style", columnDefinition = "JSON")
+  private String playingStyle;
+
+  @Column(name = "achievements", columnDefinition = "JSON")
+  private String achievementsJson;
+
+  @Column(name = "stats_data", columnDefinition = "JSON")
+  private String statsData;
+  
+  @Column(name = "stats", columnDefinition = "JSON")
+  private String statsJson;
+
+  @Column(name = "season_stats", columnDefinition = "JSON")
+  private String seasonStats;
+
+  @Column(name = "gallery", columnDefinition = "JSON")
+  private String gallery;
+
+  @Column(name = "legacy", columnDefinition = "JSON")
+  private String legacy;
+
+  @Column(name = "videos", columnDefinition = "JSON")
+  private String videos;
+
   // Relación OneToOne con PlayerStats
   @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private PlayerStats stats;
@@ -54,6 +91,32 @@ public class Player {
   public void setPosition(String position) { this.position = position; }
   public String getBiography() { return biography; }
   public void setBiography(String biography) { this.biography = biography; }
+
+  // Getters y Setters de campos JSON extendidos
+  public String getHeroInfo() { return heroInfo; }
+  public void setHeroInfo(String heroInfo) { this.heroInfo = heroInfo; }
+  public String getProfileImage() { return profileImage; }
+  public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
+  public String getProfileStats() { return profileStats; }
+  public void setProfileStats(String profileStats) { this.profileStats = profileStats; }
+  public String getCareerHighlights() { return careerHighlights; }
+  public void setCareerHighlights(String careerHighlights) { this.careerHighlights = careerHighlights; }
+  public String getPlayingStyle() { return playingStyle; }
+  public void setPlayingStyle(String playingStyle) { this.playingStyle = playingStyle; }
+  public String getAchievementsJson() { return achievementsJson; }
+  public void setAchievementsJson(String achievementsJson) { this.achievementsJson = achievementsJson; }
+  public String getStatsData() { return statsData; }
+  public void setStatsData(String statsData) { this.statsData = statsData; }
+  public String getStatsJson() { return statsJson; }
+  public void setStatsJson(String statsJson) { this.statsJson = statsJson; }
+  public String getSeasonStats() { return seasonStats; }
+  public void setSeasonStats(String seasonStats) { this.seasonStats = seasonStats; }
+  public String getGallery() { return gallery; }
+  public void setGallery(String gallery) { this.gallery = gallery; }
+  public String getLegacy() { return legacy; }
+  public void setLegacy(String legacy) { this.legacy = legacy; }
+  public String getVideos() { return videos; }
+  public void setVideos(String videos) { this.videos = videos; }
 
   // Getters y Setters de relaciones
   public PlayerStats getStats() { return stats; }

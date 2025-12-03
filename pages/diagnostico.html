@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico JWT - GOATs del Fútbol</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #121212;
+            color: #fff;
+        }
+        .section {
+            background: #1e1e1e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #0073ff;
+        }
+        h2 {
+            color: #0073ff;
+            margin-top: 0;
+        }
+        .info {
+            margin: 10px 0;
+            padding: 10px;
+            background: #2a2a2a;
+            border-radius: 4px;
+        }
+        .label {
+            color: #00bfff;
+            font-weight: bold;
+        }
+        .value {
+            color: #f5f5f5;
+            word-break: break-all;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.valid {
+            background: #4caf50;
+            color: white;
+        }
+        .status.expired {
+            background: #f44336;
+            color: white;
+        }
+        .status.missing {
+            background: #ff9800;
+            color: white;
+        }
+        button {
+            background: #0073ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #002594;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .test-result.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+        }
+        .test-result.error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Diagnóstico de Autenticación JWT</h1>
+
+    <div class="section">
+        <h2>Estado del Token</h2>
+        <div id="token-status"></div>
+    </div>
+
+    <div class="section">
+        <h2>Detalles del Token</h2>
+        <div id="token-details"></div>
+    </div>
+
+    <div class="section">
+        <h2>Pruebas de Endpoints</h2>
+        <button onclick="testCommentEndpoint()">Probar POST /api/comments</button>
+        <button onclick="testSubscriptionCount()">Probar GET /api/subscriptions/player/1/count</button>
+        <button onclick="testProfile()">Probar GET /api/auth/me</button>
+        <div id="test-results" style="margin-top: 20px;"></div>
+    </div>
+
+    <div class="section">
+        <h2>Acciones</h2>
+        <button onclick="clearSession()">Limpiar Sesión</button>
+        <button onclick="location.href='login.html'">Ir a Login</button>
+        <button onclick="location.href='../index.html'">Ir a Inicio</button>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api';
+
+        function analyzeToken() {
+            const token = localStorage.getItem('jwtToken');
+            const tokenStatus = document.getElementById('token-status');
+            const tokenDetails = document.getElementById('token-details');
+
+            if (!token) {
+                tokenStatus.innerHTML = '<span class="status missing">TOKEN NO ENCONTRADO</span>';
+                tokenDetails.innerHTML = '<p>No hay token JWT en localStorage. Por favor inicia sesión.</p>';
+                return null;
+            }
+
+            try {
+                const parts = token.split('.');
+                if (parts.length !== 3) {
+                    tokenStatus.innerHTML = '<span class="status expired">TOKEN INVÁLIDO</span>';
+                    tokenDetails.innerHTML = '<p>El token no tiene el formato correcto (debe tener 3 partes separadas por puntos).</p>';
+                    return null;
+                }
+
+                const payload = JSON.parse(atob(parts[1]));
+                const now = Math.floor(Date.now() / 1000);
+                const isExpired = payload.exp && payload.exp < now;
+
+                tokenStatus.innerHTML = `<span class="status ${isExpired ? 'expired' : 'valid'}">${isExpired ? 'TOKEN EXPIRADO' : 'TOKEN VÁLIDO'}</span>`;
+
+                let html = '';
+                html += `<div class="info"><span class="label">Username:</span> <span class="value">${payload.sub || 'No disponible'}</span></div>`;
+                html += `<div class="info"><span class="label">User ID:</span> <span class="value">${payload.userId || 'No disponible'}</span></div>`;
+                html += `<div class="info"><span class="label">Roles:</span> <span class="value">${JSON.stringify(payload.roles || payload.authorities || [])}</span></div>`;
+                
+                const issuedAt = payload.iat ? new Date(payload.iat * 1000).toLocaleString() : 'No disponible';
+                html += `<div class="info"><span class="label">Emitido:</span> <span class="value">${issuedAt}</span></div>`;
+                
+                const expiresAt = payload.exp ? new Date(payload.exp * 1000).toLocaleString() : 'No disponible';
+                html += `<div class="info"><span class="label">Expira:</span> <span class="value">${expiresAt}</span></div>`;
+                
+                if (payload.exp) {
+                    const timeLeft = payload.exp - now;
+                    const hoursLeft = Math.floor(timeLeft / 3600);
+                    const minutesLeft = Math.floor((timeLeft % 3600) / 60);
+                    html += `<div class="info"><span class="label">Tiempo restante:</span> <span class="value">${isExpired ? 'EXPIRADO' : `${hoursLeft}h ${minutesLeft}m`}</span></div>`;
+                }
+
+                html += `<div class="info"><span class="label">Token (primeros 50 chars):</span> <span class="value">${token.substring(0, 50)}...</span></div>`;
+
+                tokenDetails.innerHTML = html;
+
+                return { token, payload, isExpired };
+            } catch (error) {
+                tokenStatus.innerHTML = '<span class="status expired">ERROR AL DECODIFICAR</span>';
+                tokenDetails.innerHTML = `<p>Error: ${error.message}</p>`;
+                return null;
+            }
+        }
+
+        async function testCommentEndpoint() {
+            const results = document.getElementById('test-results');
+            const analysis = analyzeToken();
+            
+            if (!analysis || analysis.isExpired) {
+                results.innerHTML = '<div class="test-result error">❌ No se puede probar: Token inválido o expirado</div>';
+                return;
+            }
+
+            results.innerHTML = '<div class="test-result">⏳ Probando POST /api/comments...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${analysis.token}`
+                    },
+                    body: JSON.stringify({
+                        playerId: 1,
+                        content: 'Test de diagnóstico - ' + new Date().toISOString()
+                    })
+                });
+
+                let html = '';
+                html += `<div class="test-result ${response.ok ? 'success' : 'error'}">`;
+                html += `<strong>POST /api/comments</strong><br>`;
+                html += `Status: ${response.status} ${response.statusText}<br>`;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    html += `✅ Comentario creado exitosamente<br>`;
+                    html += `ID: ${data.id} | Estado: ${data.status}`;
+                } else {
+                    try {
+                        const errorData = await response.json();
+                        html += `❌ Error: ${JSON.stringify(errorData)}`;
+                    } catch {
+                        const errorText = await response.text();
+                        html += `❌ Error: ${errorText || 'Sin mensaje de error'}`;
+                    }
+                }
+                html += `</div>`;
+                results.innerHTML = html;
+            } catch (error) {
+                results.innerHTML = `<div class="test-result error">❌ Error de conexión: ${error.message}</div>`;
+            }
+        }
+
+        async function testSubscriptionCount() {
+            const results = document.getElementById('test-results');
+            
+            results.innerHTML = '<div class="test-result">⏳ Probando GET /api/subscriptions/player/1/count...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/subscriptions/player/1/count`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                let html = '';
+                html += `<div class="test-result ${response.ok ? 'success' : 'error'}">`;
+                html += `<strong>GET /api/subscriptions/player/1/count</strong><br>`;
+                html += `Status: ${response.status} ${response.statusText}<br>`;
+                
+                if (response.ok) {
+                    const count = await response.json();
+                    html += `✅ Suscriptores: ${count}`;
+                } else {
+                    html += `❌ Error al obtener contador`;
+                }
+                html += `</div>`;
+                results.innerHTML = html;
+            } catch (error) {
+                results.innerHTML = `<div class="test-result error">❌ Error de conexión: ${error.message}</div>`;
+            }
+        }
+
+        async function testProfile() {
+            const results = document.getElementById('test-results');
+            const analysis = analyzeToken();
+            
+            if (!analysis || analysis.isExpired) {
+                results.innerHTML = '<div class="test-result error">❌ No se puede probar: Token inválido o expirado</div>';
+                return;
+            }
+
+            results.innerHTML = '<div class="test-result">⏳ Probando GET /api/auth/me...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${analysis.token}`
+                    }
+                });
+
+                let html = '';
+                html += `<div class="test-result ${response.ok ? 'success' : 'error'}">`;
+                html += `<strong>GET /api/auth/me</strong><br>`;
+                html += `Status: ${response.status} ${response.statusText}<br>`;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    html += `✅ Perfil obtenido<br>`;
+                    html += `Username: ${data.username} | Roles: ${data.roles?.join(', ')}`;
+                } else {
+                    html += `❌ Error al obtener perfil`;
+                }
+                html += `</div>`;
+                results.innerHTML = html;
+            } catch (error) {
+                results.innerHTML = `<div class="test-result error">❌ Error de conexión: ${error.message}</div>`;
+            }
+        }
+
+        function clearSession() {
+            if (confirm('¿Estás seguro de que quieres limpiar la sesión?')) {
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('currentUser');
+                alert('Sesión limpiada. Recarga la página para ver los cambios.');
+                location.reload();
+            }
+        }
+
+        // Ejecutar análisis al cargar
+        window.addEventListener('DOMContentLoaded', analyzeToken);
+    </script>
+</body>
+</html>

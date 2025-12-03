@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Player Loader - GOATs del Fútbol</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 4px solid #2196F3;
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #2196F3;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        button {
+            padding: 12px 24px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button.error {
+            background: #f44336;
+        }
+        button.error:hover {
+            background: #da190b;
+        }
+        button.warning {
+            background: #ff9800;
+        }
+        button.warning:hover {
+            background: #e68900;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .error-msg {
+            color: #f44336;
+            font-weight: bold;
+        }
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .status.running {
+            background: #4CAF50;
+            color: white;
+        }
+        .status.stopped {
+            background: #f44336;
+            color: white;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        .code-inline {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Player Loader System</h1>
+        
+        <div class="info-box">
+            <h3>📋 Estado del Sistema</h3>
+            <p><strong>Player Loader:</strong> <span class="status running">LOADED</span></p>
+            <p><strong>Backend API:</strong> <span id="backend-status" class="status stopped">CHECKING...</span></p>
+            <p><strong>Version:</strong> <code class="code-inline">1.0</code></p>
+        </div>
+
+        <!-- Test 1: URLs Válidas -->
+        <div class="test-section">
+            <h2>✅ Test 1: Cargar Jugadores Válidos</h2>
+            <p>Prueba la carga de jugadores existentes desde la API.</p>
+            <div class="button-group">
+                <button onclick="openPlayer(1)">🇦🇷 Cargar Messi (ID: 1)</button>
+                <button onclick="openPlayer(2)">🇵🇹 Cargar Ronaldo (ID: 2)</button>
+                <button onclick="openPlayer(3)">🇧🇷 Cargar Neymar (ID: 3)</button>
+            </div>
+        </div>
+
+        <!-- Test 2: Errores 404 -->
+        <div class="test-section">
+            <h2>❌ Test 2: Errores 404</h2>
+            <p>Prueba el manejo de jugadores inexistentes.</p>
+            <div class="button-group">
+                <button class="error" onclick="openPlayer(999)">ID Inexistente (999)</button>
+                <button class="error" onclick="openPlayer('abc')">ID Inválido (abc)</button>
+                <button class="error" onclick="window.open('player.html', '_blank')">Sin parámetro ?id</button>
+            </div>
+        </div>
+
+        <!-- Test 3: API Backend -->
+        <div class="test-section">
+            <h2>🔌 Test 3: Verificar Backend</h2>
+            <p>Comprueba la conectividad con el servidor Spring Boot.</p>
+            <div class="button-group">
+                <button class="warning" onclick="checkBackend()">🔍 Verificar API</button>
+                <button class="warning" onclick="testAllPlayers()">📊 Listar Todos</button>
+            </div>
+            <div id="backend-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 4: Debugging -->
+        <div class="test-section">
+            <h2>🐛 Test 4: Debugging Tools</h2>
+            <p>Herramientas de depuración del sistema.</p>
+            <div class="button-group">
+                <button onclick="showCurrentPlayer()">👤 Ver Jugador Actual</button>
+                <button onclick="reloadPlayer()">🔄 Recargar Jugador</button>
+                <button onclick="window.open('player.html?id=1', '_blank')">🚀 Abrir player.html</button>
+            </div>
+            <div id="debug-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 5: Integración Scripts -->
+        <div class="test-section">
+            <h2>🔗 Test 5: Scripts Integrados</h2>
+            <p>Verifica la carga de scripts dependientes.</p>
+            <div id="scripts-status"></div>
+        </div>
+
+        <!-- Documentación -->
+        <div class="info-box" style="margin-top: 40px;">
+            <h3>📖 Documentación de Testing</h3>
+            <p><strong>URLs de prueba:</strong></p>
+            <pre>
+✅ Válidas:
+   http://localhost/proyecto-goats-futbol/pages/player.html?id=1
+   http://localhost/proyecto-goats-futbol/pages/player.html?id=2
+   http://localhost/proyecto-goats-futbol/pages/player.html?id=3
+
+❌ Errores esperados:
+   player.html?id=999  → Error 404 (jugador no encontrado)
+   player.html?id=abc  → Error 404 (ID inválido)
+   player.html         → Error 404 (sin parámetro)
+
+🔌 API Endpoints:
+   GET http://localhost:8080/api/players/{id}
+   GET http://localhost:8080/api/players
+            </pre>
+
+            <p><strong>Console API (F12):</strong></p>
+            <pre>
+// Recargar jugador actual
+window.PlayerLoader.reload()
+
+// Ver datos del jugador
+window.PlayerLoader.getCurrentPlayer()
+
+// Ver ID actual
+window.currentPlayerId
+
+// Ver datos completos
+window.currentPlayerData
+
+// Escuchar evento de carga
+window.addEventListener('playerLoaded', (e) => {
+    console.log('Jugador cargado:', e.detail);
+});
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        // Función para abrir player.html con un ID específico
+        function openPlayer(id) {
+            const url = `player.html?id=${id}`;
+            window.open(url, '_blank');
+        }
+
+        // Verificar estado del backend
+        async function checkBackend() {
+            const resultDiv = document.getElementById('backend-result');
+            const statusSpan = document.getElementById('backend-status');
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<p>⏳ Verificando conexión con API...</p>';
+
+            try {
+                const response = await fetch('http://localhost:8080/api/players/1', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    statusSpan.className = 'status running';
+                    statusSpan.textContent = 'RUNNING';
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ Backend conectado correctamente</p>
+                        <p><strong>Endpoint:</strong> http://localhost:8080/api/players/1</p>
+                        <p><strong>Status:</strong> ${response.status} OK</p>
+                        <p><strong>Datos recibidos:</strong></p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusSpan.className = 'status stopped';
+                statusSpan.textContent = 'OFFLINE';
+                resultDiv.innerHTML = `
+                    <p class="error-msg">❌ Error de conexión</p>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Posibles causas:</strong></p>
+                    <ul>
+                        <li>El backend Spring Boot no está corriendo</li>
+                        <li>El servidor no está escuchando en puerto 8080</li>
+                        <li>Problema de CORS</li>
+                    </ul>
+                    <p><strong>Solución:</strong></p>
+                    <pre>cd c:\\xampp\\htdocs\\proyecto-goats-futbol\\goats-api
+mvnw spring-boot:run</pre>
+                `;
+            }
+        }
+
+        // Listar todos los jugadores
+        async function testAllPlayers() {
+            const resultDiv = document.getElementById('backend-result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<p>⏳ Obteniendo lista de jugadores...</p>';
+
+            try {
+                const response = await fetch('http://localhost:8080/api/players', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ Lista obtenida correctamente</p>
+                        <p><strong>Total de jugadores:</strong> ${data.content ? data.content.length : 'N/A'}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error-msg">❌ Error al listar jugadores</p>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+            }
+        }
+
+        // Ver jugador actual (solo funciona si window.currentPlayerData existe)
+        function showCurrentPlayer() {
+            const resultDiv = document.getElementById('debug-result');
+            resultDiv.style.display = 'block';
+
+            if (window.currentPlayerData) {
+                resultDiv.innerHTML = `
+                    <p class="success">✅ Jugador actual encontrado</p>
+                    <pre>${JSON.stringify(window.currentPlayerData, null, 2)}</pre>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <p class="error-msg">⚠️ No hay jugador cargado</p>
+                    <p>Esta función solo funciona después de cargar un jugador en player.html</p>
+                `;
+            }
+        }
+
+        // Recargar jugador (solo funciona en player.html)
+        function reloadPlayer() {
+            const resultDiv = document.getElementById('debug-result');
+            resultDiv.style.display = 'block';
+
+            if (window.PlayerLoader) {
+                window.PlayerLoader.reload();
+                resultDiv.innerHTML = '<p class="success">✅ Recargando jugador...</p>';
+            } else {
+                resultDiv.innerHTML = `
+                    <p class="error-msg">⚠️ PlayerLoader no disponible</p>
+                    <p>Esta función solo funciona dentro de player.html</p>
+                `;
+            }
+        }
+
+        // Verificar scripts cargados
+        function checkScripts() {
+            const scriptsDiv = document.getElementById('scripts-status');
+            const scripts = [
+                { name: 'auth.js', loaded: typeof window.authSystemLoaded !== 'undefined' },
+                { name: 'player-loader.js', loaded: typeof window.PlayerLoader !== 'undefined' },
+                { name: 'main.js', loaded: true }, // Siempre cargado
+            ];
+
+            let html = '<ul>';
+            scripts.forEach(script => {
+                const status = script.loaded ? '✅' : '❌';
+                const color = script.loaded ? 'success' : 'error-msg';
+                html += `<li><span class="${color}">${status} ${script.name}</span></li>`;
+            });
+            html += '</ul>';
+            
+            scriptsDiv.innerHTML = html;
+        }
+
+        // Inicialización
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('%c[Test Suite] Sistema de pruebas cargado', 'color: #4CAF50; font-weight: bold');
+            checkScripts();
+            checkBackend(); // Verificar backend automáticamente
+        });
+    </script>
+</body>
+</html>

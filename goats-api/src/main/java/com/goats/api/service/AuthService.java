@@ -113,8 +113,8 @@ public class AuthService {
         User user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Generar token JWT
-        String token = tokenProvider.generateToken(authentication);
+        // Generar token JWT con userId incluido
+        String token = tokenProvider.generateTokenFromUser(user);
 
         // Extraer nombres de roles
         Set<String> roleNames = user.getRoles().stream()
